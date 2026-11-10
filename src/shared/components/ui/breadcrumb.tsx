@@ -2,7 +2,7 @@
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { cn } from "cn";
+import { css, cx } from "styled-system/css";
 
 import type * as React from "react";
 
@@ -24,8 +24,17 @@ export function BreadcrumbList({
 }: React.ComponentProps<"ol">): React.ReactElement {
   return (
     <ol
-      className={cn(
-        "wrap-break-word flex flex-wrap items-center gap-1.5 text-muted-foreground text-sm sm:gap-2.5",
+      className={cx(
+        css({
+          display: "flex",
+          flexWrap: "wrap",
+          overflowWrap: "break-word",
+          alignItems: "center",
+          gap: "1.5",
+          color: "var(--muted-foreground)",
+          fontSize: "sm",
+          "@media (min-width: 40rem)": { gap: "2.5" },
+        }),
         className,
       )}
       data-slot="breadcrumb-list"
@@ -40,7 +49,7 @@ export function BreadcrumbItem({
 }: React.ComponentProps<"li">): React.ReactElement {
   return (
     <li
-      className={cn("inline-flex items-center gap-1.5", className)}
+      className={cx(css({ display: "inline-flex", alignItems: "center", gap: "1.5" }), className)}
       data-slot="breadcrumb-item"
       {...props}
     />
@@ -53,7 +62,13 @@ export function BreadcrumbLink({
   ...props
 }: useRender.ComponentProps<"a">): React.ReactElement {
   const defaultProps = {
-    className: cn("transition-colors hover:text-foreground", className),
+    className: cx(
+      css({
+        transitionProperty: "color",
+        "&:hover": { color: "var(--foreground)" },
+      }),
+      className,
+    ),
     "data-slot": "breadcrumb-link",
   };
 
@@ -71,7 +86,7 @@ export function BreadcrumbPage({
   return (
     <span
       aria-current="page"
-      className={cn("font-normal text-foreground", className)}
+      className={cx(css({ fontWeight: "normal", color: "var(--foreground)" }), className)}
       data-slot="breadcrumb-page"
       {...props}
     />
@@ -86,7 +101,10 @@ export function BreadcrumbSeparator({
   return (
     <li
       aria-hidden="true"
-      className={cn("opacity-80 [&>svg]:size-4", className)}
+      className={cx(
+        css({ opacity: 0.8, "& > svg": { width: "1rem", height: "1rem" } }),
+        className,
+      )}
       data-slot="breadcrumb-separator"
       role="presentation"
       {...props}
@@ -108,8 +126,8 @@ export function BreadcrumbEllipsis({
       role="presentation"
       {...props}
     >
-      <Icon icon={MoreHorizontalIcon} className="size-4" />
-      <span className="sr-only">More</span>
+      <Icon icon={MoreHorizontalIcon} className={css({ width: "1rem", height: "1rem" })} />
+      <span className={css({ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0, 0, 0, 0)", whiteSpace: "nowrap", borderWidth: 0 })}>More</span>
     </span>
   );
 }
