@@ -1,43 +1,96 @@
 "use client";
 
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "cn";
+import { cva, cx } from "styled-system/css";
 
 import type React from "react";
 
-export const toggleVariants = cva(
-  "relative inline-flex shrink-0 cursor-pointer select-none items-center justify-center gap-2 whitespace-nowrap rounded-lg border font-medium text-base text-foreground outline-none transition-shadow before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] pointer-coarse:after:absolute pointer-coarse:after:size-full pointer-coarse:after:min-h-11 pointer-coarse:after:min-w-11 hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-64 data-pressed:bg-input/64 data-pressed:text-accent-foreground sm:text-sm [&_svg:not([class*='opacity-'])]:opacity-80 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:-mx-0.5 [&_svg]:shrink-0",
-  {
-    defaultVariants: {
-      size: "default",
-      variant: "default",
+export type ToggleSize = "default" | "lg" | "sm";
+export type ToggleVariant = "default" | "outline";
+export type ToggleVariantProps = {
+  size?: ToggleSize;
+  variant?: ToggleVariant;
+};
+
+export const toggleVariants = cva({
+  base: {
+    position: "relative",
+    display: "inline-flex",
+    flexShrink: "0",
+    cursor: "pointer",
+    userSelect: "none",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "2",
+    whiteSpace: "nowrap",
+    rounded: "lg",
+    borderWidth: "1px",
+    fontWeight: "medium",
+    fontSize: "md",
+    color: "foreground",
+    outline: "none",
+    transition: "box-shadow 150ms",
+    _before: {
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+      inset: "0",
+      rounded: "calc(var(--radius-lg) - 1px)",
     },
-    variants: {
-      size: {
-        default: "h-9 min-w-9 px-[calc(--spacing(2)-1px)] sm:h-8 sm:min-w-8",
-        lg: "h-10 min-w-10 px-[calc(--spacing(2.5)-1px)] sm:h-9 sm:min-w-9",
-        sm: "h-8 min-w-8 px-[calc(--spacing(1.5)-1px)] sm:h-7 sm:min-w-7",
-      },
-      variant: {
-        default: "border-transparent",
-        outline:
-          "border-input bg-background not-dark:bg-clip-padding shadow-xs/5 not-disabled:not-active:not-data-pressed:before:shadow-[0_1px_--theme(--color-black/4%)] dark:bg-input/32 dark:data-pressed:bg-input dark:hover:bg-input/64 dark:not-disabled:not-active:not-data-pressed:before:shadow-[0_-1px_--theme(--color-white/6%)] dark:not-disabled:not-data-pressed:before:shadow-[0_-1px_--theme(--color-white/2%)] [:disabled,:active,[data-pressed]]:shadow-none",
+    "&:hover": { bg: "accent" },
+    "&:focus-visible": {
+      boxShadow: "0 0 0 2px var(--ring), 0 0 0 3px var(--background)",
+    },
+    "&:disabled": { pointerEvents: "none", opacity: "0.64" },
+    "&[data-pressed]": { bg: "color-mix(in srgb, var(--input) 64%, transparent)", color: "accent.foreground" },
+    "& svg:not([class*=opacity-])": { opacity: "0.8" },
+    "& svg:not([class*=size-])": { width: "1.125rem", height: "1.125rem" },
+    "& svg": { pointerEvents: "none", mx: "-0.125rem", flexShrink: "0" },
+    "@media (pointer: coarse)": {
+      "&::after": { content: '""', position: "absolute", size: "full", minH: "2.75rem", minW: "2.75rem" },
+    },
+    "@media (min-width: 640px)": {
+      fontSize: "sm",
+      "& svg:not([class*=size-])": { width: "1rem", height: "1rem" },
+    },
+  },
+  variants: {
+    size: {
+      default: { h: "2.25rem", minW: "2.25rem", px: "calc(0.5rem - 1px)", "@media (min-width: 640px)": { h: "2rem", minW: "2rem" } },
+      lg: { h: "2.5rem", minW: "2.5rem", px: "calc(0.625rem - 1px)", "@media (min-width: 640px)": { h: "2.25rem", minW: "2.25rem" } },
+      sm: { h: "2rem", minW: "2rem", px: "calc(0.375rem - 1px)", "@media (min-width: 640px)": { h: "1.75rem", minW: "1.75rem" } },
+    },
+    variant: {
+      default: { borderColor: "transparent" },
+      outline: {
+        borderColor: "input",
+        bg: "background",
+        backgroundClip: "padding-box",
+        boxShadow: "0 1px 2px rgb(0 0 0 / 5%)",
+        "&:not(:disabled):not(:active):not([data-pressed])::before": { boxShadow: "0 1px rgb(0 0 0 / 4%)" },
+        _dark: {
+          bg: "color-mix(in srgb, var(--input) 32%, transparent)",
+          "&[data-pressed]": { bg: "input" },
+          "&:hover": { bg: "color-mix(in srgb, var(--input) 64%, transparent)" },
+          "&:not(:disabled):not(:active):not([data-pressed])::before": { boxShadow: "0 -1px rgb(255 255 255 / 6%)" },
+          "&:not(:disabled):not([data-pressed])::before": { boxShadow: "0 -1px rgb(255 255 255 / 2%)" },
+        },
+        "&:is(:disabled,:active,[data-pressed])": { boxShadow: "none" },
       },
     },
   },
-);
+  defaultVariants: { size: "default", variant: "default" },
+});
 
 export function Toggle({
   className,
   variant,
   size,
   ...props
-}: TogglePrimitive.Props &
-  VariantProps<typeof toggleVariants>): React.ReactElement {
+}: TogglePrimitive.Props & ToggleVariantProps): React.ReactElement {
   return (
     <TogglePrimitive
-      className={cn(toggleVariants({ className, size, variant }))}
+      className={cx(toggleVariants({ className, size, variant }))}
       data-slot="toggle"
       {...props}
     />
