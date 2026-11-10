@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs";
-import { cx, css } from "styled-system/css";
+import { cx, css } from "../../../../styled-system/css";
 import * as React from "react";
 
 import {
