@@ -65,9 +65,6 @@ Working branch: `codex/panda-css-migration`
 
 ### Remaining (14)
 
-- [ ] `otp-field.tsx`
-- [ ] `pagination.tsx`
-- [ ] `popover.tsx`
 - [ ] `preview-card.tsx`
 - [ ] `scroll-area.tsx`
 - [ ] `segmented-control.tsx`
