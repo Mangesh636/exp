@@ -1,7 +1,8 @@
 "use client";
 
 import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group";
-import { cx, css } from "../../../../styled-system/css";
+import { css } from "../../../../styled-system/css";
+import { cx } from "@/shared/lib/cx";
 import * as React from "react";
 
 import type { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
