@@ -15,7 +15,7 @@ Working branch: `codex/panda-css-migration`
 
 ## Component inventory
 
-### Migrated to Panda CSS (46 implementations; parity still needs local validation)
+### Migrated to Panda CSS (49 implementations; parity still needs local validation)
 
 - [x] `alert.tsx`
 - [x] `badge.tsx`
@@ -63,17 +63,20 @@ Working branch: `codex/panda-css-migration`
 - [x] `select.tsx`
 - [x] `sheet.tsx`
 - [x] `slider.tsx`
+- [x] `table.tsx`
+- [x] `tabs.tsx`
+- [x] `textarea.tsx`
 
 ### Audited; no Tailwind styling to migrate (2)
 
 - [x] `form.tsx` (passes through caller-provided className; contains no Tailwind utilities)
 - [x] `icon.tsx` (icon wrapper has no Tailwind utilities or component styling)
 
-### Remaining (8)
+### Remaining (5)
 
-- [ ] `table.tsx`
-- [ ] `tabs.tsx`
-- [ ] `textarea.tsx`
+- [x] `table.tsx`
+- [x] `tabs.tsx`
+- [x] `textarea.tsx`
 - [ ] `toast.tsx`
 - [ ] `toggle-group.tsx`
 - [ ] `toggle.tsx`
@@ -99,3 +102,5 @@ Working branch: `codex/panda-css-migration`
 - Batch completed: `preview-card.tsx`, `scroll-area.tsx`, and `segmented-control.tsx` now use Panda CSS `css`/`cx`. Preview-card positioning, popup animation and light/dark surface; Scroll Area overflow, conditional overscroll/gutter, fade masks and scrollbar interactions; and Segmented Control sizing, active states, animated indicator measurement/observers and public class-name exports were retained in the conversion. Generated-CSS, type, runtime, and visual parity checks remain pending.
 
 - Batch completed: `select.tsx`, `sheet.tsx`, and `slider.tsx` now use Panda CSS `css`/`cx`/`cva`. Select trigger sizing, popup positioning, scrolling arrows, item states and public exports; Sheet side/inset variants, backdrop and panel composition; and Slider orientation, multi-thumb rendering, focus and dragging states were retained. Generated-CSS, type, runtime interaction, and visual parity checks remain pending.
+
+- Batch completed: `table.tsx`, `tabs.tsx`, and `textarea.tsx` now use Panda CSS `css`/`cx`. Table default/card variants, nested row/cell states, selected/hover treatments, checkbox alignment, and public render API; Tabs orientation, underline/default indicators, size context, and segmented-control shared class exports; and Textarea `unstyled`, size variants, field integration, focus/invalid/disabled states, and ref/value handling were retained. Generated-CSS, type, runtime, and visual parity checks remain pending.
