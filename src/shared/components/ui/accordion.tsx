@@ -10,9 +10,7 @@ import { Icon } from "@/shared/components/ui/icon";
 
 const itemStyle = css({
   borderBottomWidth: "1px",
-  "&:last-child": {
-    borderBottomWidth: 0,
-  },
+  "&:last-child": { borderBottomWidth: 0 },
 });
 
 const triggerStyle = css({
@@ -29,15 +27,12 @@ const triggerStyle = css({
   fontWeight: "medium",
   fontSize: "sm",
   outline: "none",
-  transition: "all",
+  transitionProperty: "all",
   "&:focus-visible": {
     outline: "none",
     boxShadow: "0 0 0 3px var(--ring)",
   },
-  "&:disabled": {
-    pointerEvents: "none",
-    opacity: 0.64,
-  },
+  "&:disabled": { pointerEvents: "none", opacity: 0.64 },
   "&[data-panel-open] [data-slot='accordion-indicator']": {
     transform: "rotate(180deg)",
   },
@@ -50,7 +45,9 @@ const indicatorStyle = css({
   flexShrink: 0,
   transform: "translateY(0.125rem)",
   opacity: 0.8,
-  transition: "transform 200ms ease-in-out",
+  transitionProperty: "transform",
+  transitionDuration: "200ms",
+  transitionTimingFunction: "ease-in-out",
 });
 
 const panelStyle = css({
@@ -58,10 +55,10 @@ const panelStyle = css({
   overflow: "hidden",
   color: "var(--muted-foreground)",
   fontSize: "sm",
-  transition: "height 200ms ease-in-out",
-  "&[data-ending-style], &[data-starting-style]": {
-    height: 0,
-  },
+  transitionProperty: "height",
+  transitionDuration: "200ms",
+  transitionTimingFunction: "ease-in-out",
+  "&[data-ending-style], &[data-starting-style]": { height: 0 },
 });
 
 export function Accordion(
