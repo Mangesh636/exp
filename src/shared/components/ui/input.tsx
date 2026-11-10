@@ -121,7 +121,7 @@ export function Input({
     >
       {nativeInput ? (
         <input
-          className={cx(inputClassName, typeof className === "function" ? className : undefined)}
+          className={inputClassName}
           data-slot="input"
           size={typeof size === "number" ? size : undefined}
           style={typeof style === "function" ? undefined : style}
