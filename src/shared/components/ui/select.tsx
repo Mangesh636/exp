@@ -26,7 +26,7 @@ export const selectTriggerVariants = cva({
     transition: "box-shadow 150ms",
     _before: { content: '""', pointerEvents: "none", position: "absolute", inset: "0", rounded: "calc(var(--radius-lg) - 1px)", boxShadow: "0 1px rgb(0 0 0 / 4%)" },
     _focusVisible: { borderColor: "ring", boxShadow: "0 0 0 3px color-mix(in srgb, var(--ring) 24%, transparent)" },
-    _disabled: { pointerEvents: "none", opacity: 0.64 },
+    "&[data-disabled]": { pointerEvents: "none", opacity: 0.64 },
     "&[aria-invalid]": { borderColor: "color-mix(in srgb, var(--destructive) 36%, transparent)" },
     "&:focus-visible[aria-invalid]": { borderColor: "color-mix(in srgb, var(--destructive) 64%, transparent)", boxShadow: "0 0 0 3px color-mix(in srgb, var(--destructive) 16%, transparent)" },
     "& svg:not([class*='opacity-'])": { opacity: 0.8 },
@@ -48,7 +48,7 @@ export const selectTriggerVariants = cva({
   defaultVariants: { size: "default" },
 });
 
-export const selectTriggerIconClassName = css({ me: "-1", w: "4.5", h: "4.5", opacity: 0.8, "@media (min-width: 640px)": { w: "4", h: "4" } });
+export const selectTriggerIconClassName = css({ marginInlineEnd: "-0.25rem", w: "4.5", h: "4.5", opacity: 0.8, "@media (min-width: 640px)": { w: "4", h: "4" } });
 
 export interface SelectButtonProps extends useRender.ComponentProps<"button"> {
   size?: RecipeVariantProps<typeof selectTriggerVariants>["size"];
@@ -85,11 +85,11 @@ export function SelectPopup({ className, children, side = "bottom", sideOffset =
   return <SelectPrimitive.Portal {...portalProps}>
     <SelectPrimitive.Positioner align={align} alignItemWithTrigger={alignItemWithTrigger} alignOffset={alignOffset} anchor={anchor} className={css({ zIndex: "50", userSelect: "none" })} data-slot="select-positioner" side={side} sideOffset={sideOffset}>
       <SelectPrimitive.Popup className={css({ transformOrigin: "var(--transform-origin)", color: "foreground", outline: "none" })} data-slot="select-popup" {...props}>
-        <SelectPrimitive.ScrollUpArrow className={css({ position: "relative", top: "0", zIndex: "50", display: "flex", h: "6", w: "full", cursor: "default", alignItems: "center", justifyContent: "center", _before: { content: '""', pointerEvents: "none", position: "absolute", insetX: "1px", top: "1px", h: "200%", roundedTop: "calc(var(--radius-lg) - 1px)", background: "linear-gradient(to bottom, var(--popover) 50%, transparent)" } })} data-slot="select-scroll-up-arrow"><Icon icon={ChevronUpIcon} className={css({ position: "relative", w: "4.5", h: "4.5", "@media (min-width: 640px)": { w: "4", h: "4" } })} /></SelectPrimitive.ScrollUpArrow>
+        <SelectPrimitive.ScrollUpArrow className={css({ position: "relative", top: "0", zIndex: "50", display: "flex", h: "6", w: "full", cursor: "default", alignItems: "center", justifyContent: "center", _before: { content: '""', pointerEvents: "none", position: "absolute", insetInline: "1px", top: "1px", h: "200%", borderTopLeftRadius: "calc(var(--radius-lg) - 1px)", borderTopRightRadius: "calc(var(--radius-lg) - 1px)", background: "linear-gradient(to bottom, var(--popover) 50%, transparent)" } })} data-slot="select-scroll-up-arrow"><Icon icon={ChevronUpIcon} className={css({ position: "relative", w: "4.5", h: "4.5", "@media (min-width: 640px)": { w: "4", h: "4" } })} /></SelectPrimitive.ScrollUpArrow>
         <div className={css({ position: "relative", h: "full", minW: "var(--anchor-width)", rounded: "lg", borderWidth: "1px", bg: "popover", boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.05)", _before: { content: '""', pointerEvents: "none", position: "absolute", inset: "0", rounded: "calc(var(--radius-lg) - 1px)", boxShadow: "0 1px rgb(0 0 0 / 4%)" }, _dark: { _before: { boxShadow: "0 -1px rgb(255 255 255 / 6%)" } } })}>
           <SelectPrimitive.List className={cx(css({ maxH: "var(--available-height)", overflowY: "auto", p: "1" }), className)} data-slot="select-list">{children}</SelectPrimitive.List>
         </div>
-        <SelectPrimitive.ScrollDownArrow className={css({ position: "relative", bottom: "0", zIndex: "50", display: "flex", h: "6", w: "full", cursor: "default", alignItems: "center", justifyContent: "center", _before: { content: '""', pointerEvents: "none", position: "absolute", insetX: "1px", bottom: "1px", h: "200%", roundedBottom: "calc(var(--radius-lg) - 1px)", background: "linear-gradient(to top, var(--popover) 50%, transparent)" } })} data-slot="select-scroll-down-arrow"><Icon icon={ChevronDownIcon} className={css({ position: "relative", w: "4.5", h: "4.5", "@media (min-width: 640px)": { w: "4", h: "4" } })} /></SelectPrimitive.ScrollDownArrow>
+        <SelectPrimitive.ScrollDownArrow className={css({ position: "relative", bottom: "0", zIndex: "50", display: "flex", h: "6", w: "full", cursor: "default", alignItems: "center", justifyContent: "center", _before: { content: '""', pointerEvents: "none", position: "absolute", insetX: "1px", bottom: "1px", h: "200%", borderBottomLeftRadius: "calc(var(--radius-lg) - 1px)", borderBottomRightRadius: "calc(var(--radius-lg) - 1px)", background: "linear-gradient(to top, var(--popover) 50%, transparent)" } })} data-slot="select-scroll-down-arrow"><Icon icon={ChevronDownIcon} className={css({ position: "relative", w: "4.5", h: "4.5", "@media (min-width: 640px)": { w: "4", h: "4" } })} /></SelectPrimitive.ScrollDownArrow>
       </SelectPrimitive.Popup>
     </SelectPrimitive.Positioner>
   </SelectPrimitive.Portal>;
