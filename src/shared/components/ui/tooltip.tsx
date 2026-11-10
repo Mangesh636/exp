@@ -1,7 +1,7 @@
 "use client";
 
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
-import { css, cx } from "styled-system/css";
+import { css, cx } from "../../../../styled-system/css";
 
 import type React from "react";
 
