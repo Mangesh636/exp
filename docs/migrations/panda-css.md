@@ -41,7 +41,7 @@ Working branch: `codex/panda-css-migration`
 - [x] `alert.tsx`
 - [ ] `autocomplete.tsx`
 - [ ] `avatar.tsx`
-- [ ] `breadcrumb.tsx`
+- [x] `breadcrumb.tsx`
 - [x] `button.tsx`
 - [ ] `calendar.tsx`
 - [ ] `card.tsx`
