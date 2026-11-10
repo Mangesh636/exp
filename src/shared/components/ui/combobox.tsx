@@ -414,7 +414,7 @@ export function ComboboxPopup({
         side={side}
         sideOffset={sideOffset}
       >
-        <span className={cx(popupSurfaceStyle, className)}>
+        <span className={popupSurfaceStyle}>
           <ComboboxPrimitive.Popup className={popupContentStyle} data-slot="combobox-popup" {...props}>
             {children}
           </ComboboxPrimitive.Popup>
