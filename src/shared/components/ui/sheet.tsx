@@ -27,8 +27,9 @@ export function SheetBackdrop({ className, ...props }: SheetPrimitive.Backdrop.P
 }
 
 export function SheetViewport({ className, side, variant = "default", ...props }: SheetPrimitive.Viewport.Props & { side?: "right" | "left" | "top" | "bottom"; variant?: "default" | "inset" }): React.ReactElement {
-  const sideStyles = side === "bottom" ? { display: "grid", gridTemplateRows: "1fr auto", pt: "12" } : side === "top" ? { display: "grid", gridTemplateRows: "auto 1fr", pb: "12" } : side === "left" ? { display: "flex", justifyContent: "flex-start" } : side === "right" ? { display: "flex", justifyContent: "flex-end" } : {};
-  return <SheetPrimitive.Viewport className={cx(css({ position: "fixed", inset: "0", zIndex: "50", display: "grid", ...(sideStyles as object), ...(variant === "inset" ? { "@media (min-width: 640px)": { p: "4" } } : {}) }), className)} data-slot="sheet-viewport" {...props} />;
+  const sideClassName = side === "bottom" ? css({ gridTemplateRows: "1fr auto", pt: "12" }) : side === "top" ? css({ gridTemplateRows: "auto 1fr", pb: "12" }) : side === "left" ? css({ display: "flex", justifyContent: "flex-start" }) : side === "right" ? css({ display: "flex", justifyContent: "flex-end" }) : undefined;
+  const insetClassName = variant === "inset" ? css({ "@media (min-width: 640px)": { p: "4" } }) : undefined;
+  return <SheetPrimitive.Viewport className={cx(css({ position: "fixed", inset: "0", zIndex: "50", display: "grid" }), sideClassName, insetClassName, className)} data-slot="sheet-viewport" {...props} />;
 }
 
 export function SheetPopup({ className, children, showCloseButton = true, side = "right", variant = "default", closeProps, portalProps, ...props }: SheetPrimitive.Popup.Props & { showCloseButton?: boolean; side?: "right" | "left" | "top" | "bottom"; variant?: "default" | "inset"; closeProps?: SheetPrimitive.Close.Props; portalProps?: SheetPrimitive.Portal.Props }): React.ReactElement {
