@@ -90,7 +90,7 @@ export function Toggle({
 }: TogglePrimitive.Props & ToggleVariantProps): React.ReactElement {
   return (
     <TogglePrimitive
-      className={cx(toggleVariants({ className, size, variant }))}
+      className={cx(toggleVariants({ size, variant }), className)}
       data-slot="toggle"
       {...props}
     />
