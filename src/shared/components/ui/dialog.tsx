@@ -78,8 +78,8 @@ const popupStyle = css({
       "@media (prefers-reduced-motion: no-preference)": { scale: "0.98" },
     },
   },
-  ".dark &::before": {
-    boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
+  _dark: {
+    "&::before": { boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)" },
   },
   ":where(html:not(.dark)) &": { backgroundClip: "padding-box" },
 });
