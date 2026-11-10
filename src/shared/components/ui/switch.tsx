@@ -59,10 +59,9 @@ export function Switch({
             translate: "calc(var(--thumb-size) - 4px) 0",
           },
           _activeLabel: {
-              scale: "1.1 1",
-              borderRadius:
-                "var(--thumb-size) / calc(var(--thumb-size) * 1.1)",
-            },
+            scale: "1.1 1",
+            borderRadius: "var(--thumb-size) / calc(var(--thumb-size) * 1.1)",
+          },
           _directionRtl: {
             transformOrigin: "right center",
             "&[data-checked]": {
