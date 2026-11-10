@@ -1,22 +1,65 @@
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "cn";
+import { cva, css, cx } from "styled-system/css";
 
 import type React from "react";
 
-const emptyMediaVariants = cva(
-  "flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0",
-  {
-    defaultVariants: {
-      variant: "default",
+const emptyMediaVariants = cva({
+  base: {
+    display: "flex",
+    flexShrink: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    "& svg": {
+      pointerEvents: "none",
+      flexShrink: 0,
     },
-    variants: {
-      variant: {
-        default: "bg-transparent",
-        icon: "relative flex size-9 shrink-0 items-center justify-center rounded-md border bg-card not-dark:bg-clip-padding text-foreground shadow-sm/5 before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-md)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] dark:before:shadow-[0_-1px_--theme(--color-white/6%)] [&_svg:not([class*='size-'])]:size-4.5",
+  },
+  variants: {
+    variant: {
+      default: {
+        backgroundColor: "transparent",
+      },
+      icon: {
+        position: "relative",
+        display: "flex",
+        width: "2.25rem",
+        height: "2.25rem",
+        flexShrink: 0,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: "md",
+        borderWidth: "1px",
+        borderColor: "var(--border)",
+        backgroundColor: "var(--card)",
+        backgroundClip: "padding-box",
+        color: "var(--foreground)",
+        boxShadow: "0 1px 2px rgb(0 0 0 / 0.05)",
+        "&:before": {
+          content: '""',
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          borderRadius: "calc(var(--radius-md) - 1px)",
+          boxShadow: "0 1px 0 color-mix(in srgb, black 4%, transparent)",
+        },
+        "& svg:not([class*='size-'])": {
+          width: "1.125rem",
+          height: "1.125rem",
+        },
+        _dark: {
+          backgroundClip: "border-box",
+          "&:before": {
+            boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
+          },
+        },
       },
     },
   },
-);
+  defaultVariants: {
+    variant: "default",
+  },
+});
+
+type EmptyMediaVariant = "default" | "icon";
 
 export function Empty({
   className,
@@ -24,8 +67,21 @@ export function Empty({
 }: React.ComponentProps<"div">): React.ReactElement {
   return (
     <div
-      className={cn(
-        "flex min-w-0 flex-1 flex-col items-center justify-center gap-6 text-balance px-6 py-12 text-center md:py-20",
+      className={cx(
+        css({
+          display: "flex",
+          minWidth: 0,
+          flex: "1",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "6",
+          paddingX: "6",
+          paddingY: "12",
+          textAlign: "center",
+          textWrap: "balance",
+          "@media (min-width: 48rem)": { paddingY: "20" },
+        }),
         className,
       )}
       data-slot="empty"
@@ -40,8 +96,14 @@ export function EmptyHeader({
 }: React.ComponentProps<"div">): React.ReactElement {
   return (
     <div
-      className={cn(
-        "flex max-w-sm flex-col items-center text-center",
+      className={cx(
+        css({
+          display: "flex",
+          maxWidth: "sm",
+          flexDirection: "column",
+          alignItems: "center",
+          textAlign: "center",
+        }),
         className,
       )}
       data-slot="empty-header"
@@ -54,11 +116,14 @@ export function EmptyMedia({
   className,
   variant = "default",
   ...props
-}: React.ComponentProps<"div"> &
-  VariantProps<typeof emptyMediaVariants>): React.ReactElement {
+}: React.ComponentProps<"div"> & {
+  variant?: EmptyMediaVariant;
+}): React.ReactElement {
+  const mediaClass = emptyMediaVariants({ variant });
+
   return (
     <div
-      className={cn("relative mb-6", className)}
+      className={cx(css({ position: "relative", marginBottom: "6" }), className)}
       data-slot="empty-media"
       data-variant={variant}
       {...props}
@@ -67,24 +132,41 @@ export function EmptyMedia({
         <>
           <div
             aria-hidden="true"
-            className={cn(
-              emptyMediaVariants({ className, variant }),
-              "pointer-events-none absolute bottom-px origin-bottom-left -translate-x-0.5 -rotate-10 scale-84 shadow-none",
+            className={cx(
+              mediaClass,
+              css({
+                position: "absolute",
+                bottom: "1px",
+                transformOrigin: "bottom left",
+                translate: "-0.125rem 0",
+                rotate: "-10deg",
+                scale: "0.84",
+                boxShadow: "none",
+                pointerEvents: "none",
+              }),
+              className,
             )}
           />
           <div
             aria-hidden="true"
-            className={cn(
-              emptyMediaVariants({ className, variant }),
-              "pointer-events-none absolute bottom-px origin-bottom-right translate-x-0.5 rotate-10 scale-84 shadow-none",
+            className={cx(
+              mediaClass,
+              css({
+                position: "absolute",
+                bottom: "1px",
+                transformOrigin: "bottom right",
+                translate: "0.125rem 0",
+                rotate: "10deg",
+                scale: "0.84",
+                boxShadow: "none",
+                pointerEvents: "none",
+              }),
+              className,
             )}
           />
         </>
       )}
-      <div
-        className={cn(emptyMediaVariants({ className, variant }))}
-        {...props}
-      />
+      <div className={cx(mediaClass, className)} {...props} />
     </div>
   );
 }
@@ -95,7 +177,14 @@ export function EmptyTitle({
 }: React.ComponentProps<"div">): React.ReactElement {
   return (
     <div
-      className={cn("font-bold font-sans text-xl", className)}
+      className={cx(
+        css({
+          fontWeight: "bold",
+          fontFamily: "sans",
+          fontSize: "xl",
+        }),
+        className,
+      )}
       data-slot="empty-title"
       {...props}
     />
@@ -108,8 +197,17 @@ export function EmptyDescription({
 }: React.ComponentProps<"p">): React.ReactElement {
   return (
     <div
-      className={cn(
-        "text-muted-foreground text-sm [&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4 [[data-slot=empty-title]+&]:mt-1",
+      className={cx(
+        css({
+          color: "var(--muted-foreground)",
+          fontSize: "sm",
+          "& > a": {
+            textDecorationLine: "underline",
+            textUnderlineOffset: "4px",
+          },
+          "& > a:hover": { color: "var(--primary)" },
+          "[data-slot='empty-title'] + &": { marginTop: "1" },
+        }),
         className,
       )}
       data-slot="empty-description"
@@ -124,8 +222,18 @@ export function EmptyContent({
 }: React.ComponentProps<"div">): React.ReactElement {
   return (
     <div
-      className={cn(
-        "flex w-full min-w-0 max-w-sm flex-col items-center gap-4 text-balance text-sm",
+      className={cx(
+        css({
+          display: "flex",
+          width: "100%",
+          minWidth: 0,
+          maxWidth: "sm",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "4",
+          textWrap: "balance",
+          fontSize: "sm",
+        }),
         className,
       )}
       data-slot="empty-content"
