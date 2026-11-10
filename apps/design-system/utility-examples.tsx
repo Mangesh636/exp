@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 import { css } from "../../styled-system/css";
 import { Search01Icon } from "@/shared/components/icons/interface-icon";
@@ -22,7 +22,7 @@ import { Button } from "@/shared/components/ui/button";
 const cardStyle = css({ overflow: "hidden", minWidth: "0", borderWidth: "1px", borderColor: "var(--border)", borderRadius: "xl", background: "var(--card)" });
 const previewStyle = css({ display: "flex", minHeight: "9rem", alignItems: "center", justifyContent: "center", padding: "5", borderBottomWidth: "1px", borderColor: "var(--border)" });
 
-function Example({ name, description, children }: { name: string; description: string; children: React.ReactNode }) {
+function Example({ name, description, children }: { name: string; description: string; children: ReactNode }) {
   return (
     <article className={cardStyle}>
       <div className={previewStyle}>{children}</div>
