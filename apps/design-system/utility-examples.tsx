@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { Suspense, useState, type ReactNode } from "react";
 
 import { css } from "../../styled-system/css";
 import { Search01Icon } from "@/shared/components/icons/interface-icon";
@@ -73,7 +73,9 @@ export function UtilityExamples() {
       </div>
       <div className={css({ display: "grid", gridTemplateColumns: { base: "1fr", xl: "repeat(2, minmax(0, 1fr))" }, gap: "4" })}>
         <Example name="Calendar" description="Month navigation and single-date selection." code={'<Calendar mode="single" />'}>
-          <Calendar mode="single" className={css({ "--cell-size": "2rem" })} />
+          <Suspense fallback={<div className={css({ color: "var(--muted-foreground)", fontSize: "sm" })}>Loading calendar…</div>}>
+            <Calendar mode="single" className={css({ "--cell-size": "2rem" })} />
+          </Suspense>
         </Example>
 
         <Example name="Checkbox group" description="Select multiple values from a related set." code={'<CheckboxGroup defaultValue={["docs"]}>\\n  <Checkbox value="docs">Documentation</Checkbox>\\n  <Checkbox value="videos">Videos</Checkbox>\\n</CheckboxGroup>'}>
