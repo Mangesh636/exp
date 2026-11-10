@@ -1,12 +1,140 @@
 "use client";
 
 import { ContextMenu as ContextMenuPrimitive } from "@base-ui/react/context-menu";
-import { cn } from "cn";
+import { css, cx } from "styled-system/css";
 
 import type * as React from "react";
 
 import { ChevronRightIcon } from "@/shared/components/icons/interface-icon";
 import { Icon } from "@/shared/components/ui/icon";
+
+const popupStyle = css({
+  position: "relative",
+  display: "flex",
+  minWidth: "8rem",
+  transformOrigin: "var(--transform-origin)",
+  borderWidth: "1px",
+  borderRadius: "lg",
+  backgroundColor: "var(--popover)",
+  boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.05)",
+  outline: "none",
+  "&:not([class*='w-'])": { minWidth: "8rem" },
+  "&::before": {
+    content: '""',
+    pointerEvents: "none",
+    position: "absolute",
+    inset: 0,
+    borderRadius: "calc(var(--radius-lg) - 1px)",
+    boxShadow: "0 1px 0 color-mix(in srgb, black 4%, transparent)",
+  },
+  "&:focus": { outline: "none" },
+  ".dark &::before": {
+    boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
+  },
+  ":where(html:not(.dark)) &": { backgroundClip: "padding-box" },
+});
+
+const popupContentStyle = css({
+  width: "100%",
+  maxHeight: "var(--available-height)",
+  overflowY: "auto",
+  padding: "0.25rem",
+});
+
+const menuItemStyle = css({
+  display: "flex",
+  minHeight: "2rem",
+  cursor: "default",
+  userSelect: "none",
+  alignItems: "center",
+  gap: "0.5rem",
+  borderRadius: "sm",
+  paddingInline: "0.5rem",
+  paddingBlock: "0.25rem",
+  color: "var(--foreground)",
+  fontSize: "base",
+  outline: "none",
+  "&[data-disabled]": { pointerEvents: "none", opacity: 0.64 },
+  "&[data-highlighted]": {
+    backgroundColor: "var(--accent)",
+    color: "var(--accent-foreground)",
+  },
+  "&[data-inset]": { paddingInlineStart: "2rem" },
+  "&[data-variant='destructive']": { color: "var(--destructive-foreground)" },
+  "& > svg:not([class*='opacity-'])": { opacity: 0.8 },
+  "& > svg:not([class*='size-'])": { width: "1.125rem", height: "1.125rem" },
+  "& > svg": { pointerEvents: "none", marginInline: "-0.125rem", flexShrink: 0 },
+  "@media (min-width: 40rem)": { minHeight: "1.75rem", fontSize: "sm", "& > svg:not([class*='size-'])": { width: "1rem", height: "1rem" } },
+});
+
+const gridItemBase = css({
+  display: "grid",
+  minHeight: "2rem",
+  cursor: "default",
+  alignItems: "center",
+  gap: "0.5rem",
+  borderRadius: "sm",
+  paddingBlock: "0.25rem",
+  paddingInlineStart: "0.5rem",
+  color: "var(--foreground)",
+  fontSize: "base",
+  outline: "none",
+  ":where([data-side='none']) &": { minWidth: "calc(var(--anchor-width) + 1.25rem)" },
+  "&[data-disabled]": { pointerEvents: "none", opacity: 0.64 },
+  "&[data-highlighted]": {
+    backgroundColor: "var(--accent)",
+    color: "var(--accent-foreground)",
+  },
+  "& svg:not([class*='size-'])": { width: "1.125rem", height: "1.125rem" },
+  "& svg": { pointerEvents: "none", flexShrink: 0 },
+  "@media (min-width: 40rem)": { minHeight: "1.75rem", fontSize: "sm", "& svg:not([class*='size-'])": { width: "1rem", height: "1rem" } },
+});
+
+const checkboxSwitchStyle = css({
+  position: "relative",
+  display: "inline-flex",
+  height: "calc(var(--thumb-size) + 2px)",
+  width: "calc(var(--thumb-size) * 2 - 2px)",
+  flexShrink: 0,
+  alignItems: "center",
+  borderRadius: "full",
+  padding: "1px",
+  outline: "none",
+  boxShadow: "inset 0 1px 0 color-mix(in srgb, black 4%, transparent)",
+  transition: "background-color 200ms, box-shadow 200ms",
+  "--thumb-size": "1rem",
+  "&:focus-visible": { outline: "none", boxShadow: "0 0 0 2px var(--ring), 0 0 0 3px var(--background)" },
+  "&[data-checked]": { backgroundColor: "var(--primary)" },
+  "&[data-unchecked]": { backgroundColor: "var(--input)" },
+  "&[data-disabled]": { opacity: 0.64 },
+  "@media (min-width: 40rem)": { "--thumb-size": "0.75rem" },
+});
+
+const switchThumbStyle = css({
+  pointerEvents: "none",
+  display: "block",
+  aspectRatio: "1",
+  height: "100%",
+  transformOrigin: "left center",
+  borderRadius: "var(--thumb-size)",
+  backgroundColor: "var(--background)",
+  boxShadow: "0 1px 2px rgb(0 0 0 / 0.05)",
+  willChange: "transform",
+  transition: "translate 150ms, border-radius 150ms, scale 100ms 100ms, transform-origin 150ms",
+  ":where([data-slot='context-menu-checkbox-item'][data-checked]) &": {
+    transformOrigin: "var(--thumb-size) 50%",
+    translate: "calc(var(--thumb-size) - 4px) 0",
+  },
+  ":where([data-slot='context-menu-checkbox-item']:active:not([data-disabled])) &": {
+    scale: "1.1 1",
+    borderRadius: "var(--thumb-size) / calc(var(--thumb-size) * 1.1)",
+  },
+  ":where([dir='rtl']) &": { transformOrigin: "right center" },
+  ":where([dir='rtl'] [data-slot='context-menu-checkbox-item'][data-checked]) &": {
+    transformOrigin: "left center",
+    translate: "calc((var(--thumb-size) - 4px) * -1) 0",
+  },
+});
 
 export const ContextMenu: typeof ContextMenuPrimitive.Root =
   ContextMenuPrimitive.Root;
@@ -54,22 +182,17 @@ export function ContextMenuPopup({
         align={align}
         alignOffset={alignOffset}
         anchor={anchor}
-        className="z-50"
+        className={css({ zIndex: 50 })}
         data-slot="context-menu-positioner"
         side={side}
         sideOffset={sideOffset}
       >
         <ContextMenuPrimitive.Popup
-          className={cn(
-            "relative flex not-[class*='w-']:min-w-32 origin-(--transform-origin) rounded-lg border bg-popover not-dark:bg-clip-padding shadow-lg/5 outline-none before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] focus:outline-none dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
-            className,
-          )}
+          className={cx(popupStyle, className)}
           data-slot="context-menu-popup"
           {...props}
         >
-          <div className="max-h-(--available-height) w-full overflow-y-auto p-1">
-            {children}
-          </div>
+          <div className={popupContentStyle}>{children}</div>
         </ContextMenuPrimitive.Popup>
       </ContextMenuPrimitive.Positioner>
     </ContextMenuPortal>
@@ -79,9 +202,7 @@ export function ContextMenuPopup({
 export function ContextMenuGroup(
   props: ContextMenuPrimitive.Group.Props,
 ): React.ReactElement {
-  return (
-    <ContextMenuPrimitive.Group data-slot="context-menu-group" {...props} />
-  );
+  return <ContextMenuPrimitive.Group data-slot="context-menu-group" {...props} />;
 }
 
 export function ContextMenuItem({
@@ -95,10 +216,7 @@ export function ContextMenuItem({
 }): React.ReactElement {
   return (
     <ContextMenuPrimitive.Item
-      className={cn(
-        "flex min-h-8 cursor-default select-none items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none data-disabled:pointer-events-none data-highlighted:bg-accent data-inset:ps-8 data-[variant=destructive]:text-destructive-foreground data-highlighted:text-accent-foreground data-disabled:opacity-64 sm:min-h-7 sm:text-sm [&>svg:not([class*='opacity-'])]:opacity-80 [&>svg:not([class*='size-'])]:size-4.5 sm:[&>svg:not([class*='size-'])]:size-4 [&>svg]:pointer-events-none [&>svg]:-mx-0.5 [&>svg]:shrink-0",
-        className,
-      )}
+      className={cx(menuItemStyle, className)}
       data-inset={inset}
       data-slot="context-menu-item"
       data-variant={variant}
@@ -119,10 +237,7 @@ export function ContextMenuLinkItem({
 }): React.ReactElement {
   return (
     <ContextMenuPrimitive.LinkItem
-      className={cn(
-        "flex min-h-8 cursor-default select-none items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none data-disabled:pointer-events-none data-highlighted:bg-accent data-inset:ps-8 data-[variant=destructive]:text-destructive-foreground data-highlighted:text-accent-foreground data-disabled:opacity-64 sm:min-h-7 sm:text-sm [&>svg:not([class*='opacity-'])]:opacity-80 [&>svg:not([class*='size-'])]:size-4.5 sm:[&>svg:not([class*='size-'])]:size-4 [&>svg]:pointer-events-none [&>svg]:-mx-0.5 [&>svg]:shrink-0",
-        className,
-      )}
+      className={cx(menuItemStyle, className)}
       closeOnClick={closeOnClick}
       data-inset={inset}
       data-slot="context-menu-link-item"
@@ -144,45 +259,32 @@ export function ContextMenuCheckboxItem({
   return (
     <ContextMenuPrimitive.CheckboxItem
       checked={checked}
-      className={cn(
-        "grid min-h-8 in-data-[side=none]:min-w-[calc(var(--anchor-width)+1.25rem)] cursor-default items-center gap-2 rounded-sm py-1 ps-2 text-base text-foreground outline-none data-disabled:pointer-events-none data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:opacity-64 sm:min-h-7 sm:text-sm [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
-        variant === "switch"
-          ? "grid-cols-[1fr_auto] gap-4 pe-1.5"
-          : "grid-cols-[.75rem_1fr] pe-4",
-        className,
-      )}
+      className={cx(gridItemBase, css({
+        ...(variant === "switch"
+          ? { gridTemplateColumns: "1fr auto", gap: "1rem", paddingInlineEnd: "0.375rem" }
+          : { gridTemplateColumns: "0.75rem 1fr", paddingInlineEnd: "1rem" }),
+      }), className)}
       data-slot="context-menu-checkbox-item"
       {...props}
     >
       {variant === "switch" ? (
         <>
-          <span className="col-start-1">{children}</span>
+          <span style={{ gridColumnStart: 1 }}>{children}</span>
           <ContextMenuPrimitive.CheckboxItemIndicator
-            className="inset-shadow-[0_1px_--theme(--color-black/4%)] inline-flex h-[calc(var(--thumb-size)+2px)] w-[calc(var(--thumb-size)*2-2px)] shrink-0 items-center rounded-full p-px outline-none transition-[background-color,box-shadow] duration-200 [--thumb-size:--spacing(4)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background data-checked:bg-primary data-unchecked:bg-input data-disabled:opacity-64 sm:[--thumb-size:--spacing(3)]"
+            className={checkboxSwitchStyle}
             keepMounted
           >
-            <span className="pointer-events-none block aspect-square h-full in-[[data-slot=context-menu-checkbox-item][data-checked]]:origin-[var(--thumb-size)_50%] origin-left in-[[data-slot=context-menu-checkbox-item][data-checked]]:translate-x-[calc(var(--thumb-size)-4px)] in-[[data-slot=context-menu-checkbox-item]:active]:not-data-disabled:scale-x-110 in-[[data-slot=context-menu-checkbox-item]:active]:rounded-[var(--thumb-size)/calc(var(--thumb-size)*1.10)] rounded-(--thumb-size) bg-background shadow-sm/5 will-change-transform [transition:translate_.15s,border-radius_.15s,scale_.1s_.1s,transform-origin_.15s] rtl:in-[[data-slot=context-menu-checkbox-item][data-checked]]:origin-left rtl:origin-right rtl:in-[[data-slot=context-menu-checkbox-item][data-checked]]:-translate-x-[calc(var(--thumb-size)-4px)]" />
+            <span className={switchThumbStyle} />
           </ContextMenuPrimitive.CheckboxItemIndicator>
         </>
       ) : (
         <>
-          <ContextMenuPrimitive.CheckboxItemIndicator className="col-start-1 -ms-0.5">
-            <svg
-              aria-hidden="true"
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+          <ContextMenuPrimitive.CheckboxItemIndicator className={css({ gridColumnStart: 1, marginInlineStart: "-0.125rem" })}>
+            <svg aria-hidden="true" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
               <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
             </svg>
           </ContextMenuPrimitive.CheckboxItemIndicator>
-          <span className="col-start-2">{children}</span>
+          <span style={{ gridColumnStart: 2 }}>{children}</span>
         </>
       )}
     </ContextMenuPrimitive.CheckboxItem>
@@ -192,12 +294,7 @@ export function ContextMenuCheckboxItem({
 export function ContextMenuRadioGroup(
   props: ContextMenuPrimitive.RadioGroup.Props,
 ): React.ReactElement {
-  return (
-    <ContextMenuPrimitive.RadioGroup
-      data-slot="context-menu-radio-group"
-      {...props}
-    />
-  );
+  return <ContextMenuPrimitive.RadioGroup data-slot="context-menu-radio-group" {...props} />;
 }
 
 export function ContextMenuRadioItem({
@@ -207,30 +304,16 @@ export function ContextMenuRadioItem({
 }: ContextMenuPrimitive.RadioItem.Props): React.ReactElement {
   return (
     <ContextMenuPrimitive.RadioItem
-      className={cn(
-        "grid min-h-8 in-data-[side=none]:min-w-[calc(var(--anchor-width)+1.25rem)] cursor-default grid-cols-[.75rem_1fr] items-center gap-2 rounded-sm py-1 ps-2 pe-4 text-base text-foreground outline-none data-disabled:pointer-events-none data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:opacity-64 sm:min-h-7 sm:text-sm [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
-        className,
-      )}
+      className={cx(gridItemBase, css({ gridTemplateColumns: "0.75rem 1fr", paddingInlineEnd: "1rem" }), className)}
       data-slot="context-menu-radio-item"
       {...props}
     >
-      <ContextMenuPrimitive.RadioItemIndicator className="col-start-1 -ms-0.5">
-        <svg
-          aria-hidden="true"
-          fill="none"
-          height="24"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-          width="24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+      <ContextMenuPrimitive.RadioItemIndicator className={css({ gridColumnStart: 1, marginInlineStart: "-0.125rem" })}>
+        <svg aria-hidden="true" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
           <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
         </svg>
       </ContextMenuPrimitive.RadioItemIndicator>
-      <span className="col-start-2">{children}</span>
+      <span style={{ gridColumnStart: 2 }}>{children}</span>
     </ContextMenuPrimitive.RadioItem>
   );
 }
@@ -244,10 +327,15 @@ export function ContextMenuGroupLabel({
 }): React.ReactElement {
   return (
     <ContextMenuPrimitive.GroupLabel
-      className={cn(
-        "px-2 py-1.5 font-medium text-muted-foreground text-xs data-inset:ps-9 sm:data-inset:ps-8",
-        className,
-      )}
+      className={cx(css({
+        paddingInline: "0.5rem",
+        paddingBlock: "0.375rem",
+        fontWeight: "medium",
+        color: "var(--muted-foreground)",
+        fontSize: "xs",
+        "&[data-inset]": { paddingInlineStart: "2.25rem" },
+        "@media (min-width: 40rem)": { "&[data-inset]": { paddingInlineStart: "2rem" } },
+      }), className)}
       data-inset={inset}
       data-slot="context-menu-label"
       {...props}
@@ -261,7 +349,7 @@ export function ContextMenuSeparator({
 }: ContextMenuPrimitive.Separator.Props): React.ReactElement {
   return (
     <ContextMenuPrimitive.Separator
-      className={cn("mx-2 my-1 h-px bg-border", className)}
+      className={cx(css({ marginInline: "0.5rem", marginBlock: "0.25rem", height: "1px", backgroundColor: "var(--border)" }), className)}
       data-slot="context-menu-separator"
       {...props}
     />
@@ -274,10 +362,14 @@ export function ContextMenuShortcut({
 }: React.ComponentProps<"kbd">): React.ReactElement {
   return (
     <kbd
-      className={cn(
-        "ms-auto font-medium font-sans text-muted-foreground/72 text-xs tracking-widest",
-        className,
-      )}
+      className={cx(css({
+        marginInlineStart: "auto",
+        fontWeight: "medium",
+        fontFamily: "var(--font-sans)",
+        color: "color-mix(in srgb, var(--muted-foreground) 72%, transparent)",
+        fontSize: "xs",
+        letterSpacing: "0.1em",
+      }), className)}
       data-slot="context-menu-shortcut"
       {...props}
     />
@@ -287,9 +379,7 @@ export function ContextMenuShortcut({
 export function ContextMenuSub(
   props: ContextMenuPrimitive.SubmenuRoot.Props,
 ): React.ReactElement {
-  return (
-    <ContextMenuPrimitive.SubmenuRoot data-slot="context-menu-sub" {...props} />
-  );
+  return <ContextMenuPrimitive.SubmenuRoot data-slot="context-menu-sub" {...props} />;
 }
 
 export function ContextMenuSubTrigger({
@@ -302,16 +392,16 @@ export function ContextMenuSubTrigger({
 }): React.ReactElement {
   return (
     <ContextMenuPrimitive.SubmenuTrigger
-      className={cn(
-        "flex min-h-8 items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none data-disabled:pointer-events-none data-highlighted:bg-accent data-popup-open:bg-accent data-inset:ps-8 data-highlighted:text-accent-foreground data-popup-open:text-accent-foreground data-disabled:opacity-64 sm:min-h-7 sm:text-sm [&>svg:not(:last-child)]:-mx-0.5 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none",
-        className,
-      )}
+      className={cx(menuItemStyle, css({
+        "&[data-popup-open]": { backgroundColor: "var(--accent)", color: "var(--accent-foreground)" },
+        "& > svg:not(:last-child)": { marginInline: "-0.125rem" },
+      }), className)}
       data-inset={inset}
       data-slot="context-menu-sub-trigger"
       {...props}
     >
       {children}
-      <Icon icon={ChevronRightIcon} className="ms-auto -me-0.5 opacity-80" />
+      <Icon icon={ChevronRightIcon} className={css({ marginInlineStart: "auto", marginInlineEnd: "-0.125rem", opacity: 0.8 })} />
     </ContextMenuPrimitive.SubmenuTrigger>
   );
 }
