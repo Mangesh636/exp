@@ -1,4 +1,4 @@
-import { cva, css, cx } from "styled-system/css";
+import { cva, css, cx } from "../../../../styled-system/css";
 
 import type React from "react";
 
