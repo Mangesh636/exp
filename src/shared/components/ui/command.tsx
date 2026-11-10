@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog as CommandDialogPrimitive } from "@base-ui/react/dialog";
-import { cn } from "cn";
+import { css, cx } from "styled-system/css";
 
 import type * as React from "react";
 
@@ -18,6 +18,104 @@ import {
   AutocompleteSeparator,
 } from "@/shared/components/ui/autocomplete";
 import { Icon } from "@/shared/components/ui/icon";
+
+const backdropStyle = css({
+  position: "fixed",
+  inset: 0,
+  zIndex: 50,
+  backgroundColor: "rgb(0 0 0 / 0.32)",
+  backdropFilter: "blur(4px)",
+  transition: "all 200ms",
+  "&[data-ending-style], &[data-starting-style]": { opacity: 0 },
+  "@supports (-webkit-touch-callout: none)": { position: "absolute" },
+});
+
+const viewportStyle = css({
+  position: "fixed",
+  inset: 0,
+  zIndex: 50,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  paddingInline: "1rem",
+  paddingBlock: "max(1rem, 4vh)",
+  "@media (min-width: 40rem)": { paddingBlock: "10vh" },
+});
+
+const popupStyle = css({
+  position: "relative",
+  gridRowStart: 2,
+  display: "flex",
+  width: "100%",
+  minWidth: 0,
+  minHeight: 0,
+  maxWidth: "36rem",
+  maxHeight: "26.25rem",
+  flexDirection: "column",
+  transform: "translateY(calc(-1.25rem * var(--nested-dialogs))) scale(calc(1 - 0.1 * var(--nested-dialogs)))",
+  borderWidth: "1px",
+  borderRadius: "1rem",
+  backgroundColor: "var(--popover)",
+  color: "var(--popover-foreground)",
+  opacity: "calc(1 - 0.1 * var(--nested-dialogs))",
+  boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.05)",
+  outline: "none",
+  transition: "scale 200ms ease-in-out, opacity 200ms ease-in-out, translate 200ms ease-in-out",
+  willChange: "transform",
+  "&::before": {
+    content: '""',
+    pointerEvents: "none",
+    position: "absolute",
+    inset: 0,
+    borderRadius: "calc(var(--radius-2xl) - 1px)",
+    backgroundColor: "color-mix(in srgb, var(--muted) 72%, transparent)",
+    boxShadow: "0 1px 0 color-mix(in srgb, black 4%, transparent)",
+  },
+  "&[data-nested][data-ending-style], &[data-nested][data-starting-style]": {
+    translate: "0 2rem",
+  },
+  "&[data-nested-dialog-open]": { transformOrigin: "top" },
+  "&[data-ending-style], &[data-starting-style]": {
+    scale: "0.98",
+    opacity: 0,
+  },
+  "& .\[\*\*\:data-\[slot\=scroll-area-viewport\]\:data-has-overflow-y\:pe-1\]": {
+    paddingInlineEnd: "0.25rem",
+  },
+  "&::before": {
+    content: '""',
+  },
+  ".dark &::before": {
+    boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
+  },
+  ":where(html:not(.dark)) &": { backgroundClip: "padding-box" },
+});
+
+const panelStyle = css({
+  position: "relative",
+  marginInline: "-1px",
+  minHeight: 0,
+  borderWidth: "1px",
+  borderBottomWidth: 0,
+  borderTopLeftRadius: "var(--radius-xl)",
+  backgroundColor: "var(--popover)",
+  backgroundClip: "padding-box",
+  boxShadow: "0 1px 2px rgb(0 0 0 / 0.05)",
+  clipPath: "inset(0 1px)",
+  "&:not(:has(+ [data-slot='command-footer']))": {
+    marginBottom: "-1px",
+    borderBottomRightRadius: "var(--radius-2xl)",
+    clipPath: "inset(0 1px 1px 1px round 0 0 calc(var(--radius-2xl) - 1px) calc(var(--radius-2xl) - 1px))",
+  },
+  "&::before": {
+    content: '""',
+    pointerEvents: "none",
+    position: "absolute",
+    inset: 0,
+    borderTopLeftRadius: "calc(var(--radius-xl) - 1px)",
+  },
+  "& [data-slot='scroll-area-scrollbar']": { marginTop: "0.5rem" },
+});
 
 export const CommandDialog: typeof CommandDialogPrimitive.Root =
   CommandDialogPrimitive.Root;
@@ -45,10 +143,7 @@ export function CommandDialogBackdrop({
 }: CommandDialogPrimitive.Backdrop.Props): React.ReactElement {
   return (
     <CommandDialogPrimitive.Backdrop
-      className={cn(
-        "fixed inset-0 z-50 bg-black/32 backdrop-blur-sm transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-[-webkit-touch-callout:none]:absolute",
-        className,
-      )}
+      className={cx(backdropStyle, className)}
       data-slot="command-dialog-backdrop"
       {...props}
     />
@@ -61,10 +156,7 @@ export function CommandDialogViewport({
 }: CommandDialogPrimitive.Viewport.Props): React.ReactElement {
   return (
     <CommandDialogPrimitive.Viewport
-      className={cn(
-        "fixed inset-0 z-50 flex flex-col items-center px-4 py-[max(--spacing(4),4vh)] sm:py-[10vh]",
-        className,
-      )}
+      className={cx(viewportStyle, className)}
       data-slot="command-dialog-viewport"
       {...props}
     />
@@ -84,10 +176,7 @@ export function CommandDialogPopup({
       <CommandDialogBackdrop />
       <CommandDialogViewport>
         <CommandDialogPrimitive.Popup
-          className={cn(
-            "relative row-start-2 flex max-h-105 min-h-0 w-full min-w-0 max-w-xl translate-y-[calc(-1.25rem*var(--nested-dialogs))] scale-[calc(1-0.1*var(--nested-dialogs))] flex-col rounded-2xl border bg-popover not-dark:bg-clip-padding text-popover-foreground opacity-[calc(1-0.1*var(--nested-dialogs))] shadow-lg/5 outline-none transition-[scale,opacity,translate] duration-200 ease-in-out will-change-transform before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-2xl)-1px)] before:bg-muted/72 before:shadow-[0_1px_--theme(--color-black/4%)] data-nested:data-ending-style:translate-y-8 data-nested:data-starting-style:translate-y-8 data-nested-dialog-open:origin-top data-ending-style:scale-98 data-starting-style:scale-98 data-ending-style:opacity-0 data-starting-style:opacity-0 **:data-[slot=scroll-area-viewport]:data-has-overflow-y:pe-1 dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
-            className,
-          )}
+          className={cx(popupStyle, className)}
           data-slot="command-dialog-popup"
           {...props}
         >
@@ -120,13 +209,16 @@ export function CommandInput({
   ...props
 }: React.ComponentProps<typeof AutocompleteInput>): React.ReactElement {
   return (
-    <div className="px-2.5 py-1.5">
+    <div className={css({ paddingInline: "0.625rem", paddingBlock: "0.375rem" })}>
       <AutocompleteInput
         autoFocus
-        className={cn(
-          "border-transparent! bg-transparent! shadow-none before:hidden has-focus-visible:ring-0",
-          className,
-        )}
+        className={cx(css({
+          borderColor: "transparent !important",
+          backgroundColor: "transparent !important",
+          boxShadow: "none",
+          "&::before": { display: "none" },
+          "&:focus-visible": { "--ring-width": "0" },
+        }), className)}
         placeholder={placeholder}
         size="lg"
         startAddon={<Icon icon={Search01Icon} />}
@@ -142,7 +234,7 @@ export function CommandList({
 }: React.ComponentProps<typeof AutocompleteList>): React.ReactElement {
   return (
     <AutocompleteList
-      className={cn("not-empty:scroll-py-2 not-empty:p-2", className)}
+      className={cx(css({ "&:not(:empty)": { scrollPaddingBlock: "0.5rem", padding: "0.5rem" } }), className)}
       data-slot="command-list"
       {...props}
     />
@@ -155,7 +247,7 @@ export function CommandEmpty({
 }: React.ComponentProps<typeof AutocompleteEmpty>): React.ReactElement {
   return (
     <AutocompleteEmpty
-      className={cn("not-empty:py-6", className)}
+      className={cx(css({ "&:not(:empty)": { paddingBlock: "1.5rem" } }), className)}
       data-slot="command-empty"
       {...props}
     />
@@ -166,15 +258,7 @@ export function CommandPanel({
   className,
   ...props
 }: React.ComponentProps<"div">): React.ReactElement {
-  return (
-    <div
-      className={cn(
-        "relative -mx-px not-has-[+[data-slot=command-footer]]:-mb-px min-h-0 rounded-t-xl not-has-[+[data-slot=command-footer]]:rounded-b-2xl border border-b-0 bg-popover bg-clip-padding shadow-xs/5 [clip-path:inset(0_1px)] not-has-[+[data-slot=command-footer]]:[clip-path:inset(0_1px_1px_1px_round_0_0_calc(var(--radius-2xl)-1px)_calc(var(--radius-2xl)-1px))] before:pointer-events-none before:absolute before:inset-0 before:rounded-t-[calc(var(--radius-xl)-1px)] **:data-[slot=scroll-area-scrollbar]:mt-2",
-        className,
-      )}
-      {...props}
-    />
-  );
+  return <div className={cx(panelStyle, className)} {...props} />;
 }
 
 export function CommandGroup({
@@ -211,7 +295,7 @@ export function CommandItem({
 }: React.ComponentProps<typeof AutocompleteItem>): React.ReactElement {
   return (
     <AutocompleteItem
-      className={cn("py-1.5", className)}
+      className={cx(css({ paddingBlock: "0.375rem" }), className)}
       data-slot="command-item"
       {...props}
     />
@@ -224,7 +308,7 @@ export function CommandSeparator({
 }: React.ComponentProps<typeof AutocompleteSeparator>): React.ReactElement {
   return (
     <AutocompleteSeparator
-      className={cn("my-2", className)}
+      className={cx(css({ marginBlock: "0.5rem" }), className)}
       data-slot="command-separator"
       {...props}
     />
@@ -237,10 +321,14 @@ export function CommandShortcut({
 }: React.ComponentProps<"kbd">): React.ReactElement {
   return (
     <kbd
-      className={cn(
-        "ms-auto font-medium font-sans text-muted-foreground/72 text-xs tracking-widest",
-        className,
-      )}
+      className={cx(css({
+        marginInlineStart: "auto",
+        fontWeight: "medium",
+        fontFamily: "var(--font-sans)",
+        color: "color-mix(in srgb, var(--muted-foreground) 72%, transparent)",
+        fontSize: "xs",
+        letterSpacing: "0.1em",
+      }), className)}
       data-slot="command-shortcut"
       {...props}
     />
@@ -253,10 +341,18 @@ export function CommandFooter({
 }: React.ComponentProps<"div">): React.ReactElement {
   return (
     <div
-      className={cn(
-        "flex items-center justify-between gap-2 rounded-b-[calc(var(--radius-2xl)-1px)] border-t px-5 py-3 text-muted-foreground text-xs",
-        className,
-      )}
+      className={cx(css({
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: "0.5rem",
+        borderTopWidth: "1px",
+        borderBottomRadius: "calc(var(--radius-2xl) - 1px)",
+        paddingInline: "1.25rem",
+        paddingBlock: "0.75rem",
+        color: "var(--muted-foreground)",
+        fontSize: "xs",
+      }), className)}
       data-slot="command-footer"
       {...props}
     />
