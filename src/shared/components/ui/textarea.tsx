@@ -56,7 +56,7 @@ export function Textarea({ className, size = "default", unstyled = false, ref, .
         name={props.name}
         render={(defaultProps: React.ComponentProps<"textarea">) => (
           <textarea
-            className={cx(css({
+            className={css({
               fieldSizing: "content", minH: "17.5", w: "full", rounded: "inherit",
               px: "calc(0.75rem - 1px)", py: "calc(0.375rem - 1px)",
               color: "foreground", outline: "none",
@@ -64,7 +64,7 @@ export function Textarea({ className, size = "default", unstyled = false, ref, .
               "@media (max-width: 639px)": { minH: "20.5" },
               ...(size === "sm" ? { minH: "16.5", px: "calc(0.625rem - 1px)", py: "calc(0.25rem - 1px)" } : {}),
               ...(size === "lg" ? { minH: "18.5", py: "calc(0.5rem - 1px)" } : {}),
-            }), className)}
+            })}
             data-slot="textarea"
             {...mergeProps(defaultProps, props)}
           />
