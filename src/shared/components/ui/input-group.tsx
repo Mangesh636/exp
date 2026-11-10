@@ -15,9 +15,9 @@ const inputGroupAddonVariants = cva({
     "& > kbd": { borderRadius: "calc(var(--radius) - 5px)" },
     "& svg": { marginInline: "-0.125rem" },
     "&:not(:has(button))": { "& svg:not([class*='opacity-'])": { opacity: 0.8 } },
-    "[data-slot='input-group']:has([data-slot='input-control'],[data-slot='textarea-control']) & svg:not([class*='size-'])": { width: "1.125rem", height: "1.125rem" },
+    _inputGroupControl: { "& svg:not([class*='size-'])": { width: "1.125rem", height: "1.125rem" } },
     "@media (min-width: 40rem)": {
-      "[data-slot='input-group']:has([data-slot='input-control'],[data-slot='textarea-control']) & svg:not([class*='size-'])": { width: "1rem", height: "1rem" },
+      _inputGroupControl: { "& svg:not([class*='size-'])": { width: "1rem", height: "1rem" } },
     },
   },
   variants: {
@@ -70,14 +70,13 @@ const inputGroupStyle = css({
   "&:not(:has(input:disabled,textarea:disabled,input:focus-visible,textarea:focus-visible,input[aria-invalid],textarea[aria-invalid]))::before": {
     boxShadow: "0 1px 0 color-mix(in srgb, black 4%, transparent)",
   },
-  "&:has(input:focus-visible,textarea:focus-visible)": { borderColor: "var(--ring)", boxShadow: "0 0 0 3px color-mix(in srgb, var(--ring) 24%, transparent)" },
   "&:has(input:focus-visible,textarea:focus-visible):has(input[aria-invalid],textarea[aria-invalid])": { borderColor: "color-mix(in srgb, var(--destructive) 64%, transparent)", boxShadow: "0 0 0 3px color-mix(in srgb, var(--destructive) 16%, transparent)" },
   "&:has(input[aria-invalid],textarea[aria-invalid])": { borderColor: "color-mix(in srgb, var(--destructive) 36%, transparent)" },
   "&:has(textarea),&:has([data-align='block-end']),&:has([data-align='block-start'])": { height: "auto" },
   "&:has([data-align='block-end']),&:has([data-align='block-start'])": { flexDirection: "column" },
   "&:has(input:disabled,textarea:disabled)": { opacity: 0.64 },
   "&:has(input:disabled,textarea:disabled,input:focus-visible,textarea:focus-visible,input[aria-invalid],textarea[aria-invalid])": { boxShadow: "none" },
-  "&:has(input:focus-visible,textarea:focus-visible)": { boxShadow: "0 0 0 3px var(--ring)" },
+  "&:has(input:focus-visible,textarea:focus-visible)": { borderColor: "var(--ring)", boxShadow: "0 0 0 3px var(--ring)" },
   "&:has(input:autofill,textarea:autofill)": { backgroundColor: "color-mix(in srgb, var(--foreground) 4%, transparent)" },
   "& [data-slot='input-control'],& [data-slot='textarea-control']": { display: "contents" },
   "& [data-slot='input-control']::before,& [data-slot='textarea-control']::before": { display: "none" },
