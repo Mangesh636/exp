@@ -9,6 +9,7 @@ Working branch: `codex/panda-css-migration`
 - [x] Global tokens, light/dark themes, and base styles are owned by Panda global styles; custom keyframes remain as standard CSS in `globals.css`.
 - [x] App-level Tailwind utilities migrated from the root layout and starter page; no other app-level Tailwind styling was found in the source tree.
 - [x] Tailwind directives and Turbopack integration removed; Tailwind packages removed from `package.json`. Regenerate `pnpm-lock.yaml` locally and confirm no third-party dependency expects Tailwind.
+- [x] Panda's required cascade-layer order is declared in `src/app/globals.css`; `styled-system` is explicitly included by TypeScript.
 - [x] `apps/design-system` provides a shadcn-style component gallery with live previews for all 56 shared UI components, representative variants and states, and copyable implementation examples.
 - [ ] Re-run Panda codegen, Biome, TypeScript, and production build locally after adding the design-system gallery; resolve any errors.
 - [ ] Review visual parity in light and dark themes at responsive breakpoints.
@@ -86,7 +87,7 @@ Working branch: `codex/panda-css-migration`
 
 ## Current implementation notes
 
-- Panda CSS config and PostCSS integration were already present on `main`; this migration extends the extraction include paths to cover `apps/**`.
+- Panda CSS config and PostCSS integration were already present on `main`; this migration extends the extraction include paths to cover `apps/**`. The Next.js App Router setup uses `@pandacss/dev/postcss`, the `prepare: panda codegen` script, the documented CSS layer order, and a `styled-system` TypeScript include.
 - Tailwind dependencies and the Tailwind Turbopack loader have been removed from `package.json` and `next.config.ts`. The lockfile still needs regeneration with pnpm.
 - TypeScript check: user reports `pnpm exec tsc --noEmit` completes with no errors before the latest global-style and app-page changes. Re-run after Panda codegen and lockfile regeneration; lint, production build, and light/dark visual checks are also pending.
 - The design-system showcase is intentionally deferred until the component migration and token layer are stable, so it documents the real shared components rather than parallel or placeholder implementations.
