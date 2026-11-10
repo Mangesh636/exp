@@ -23,6 +23,8 @@ Working branch: `codex/panda-css-migration`
 - [x] `button.tsx`
 - [x] `checkbox.tsx`
 - [x] `checkbox-group.tsx`
+- [x] `card.tsx`
+- [x] `alert-dialog.tsx`
 - [x] `collapsible.tsx`
 - [x] `empty.tsx`
 - [x] `field.tsx`
