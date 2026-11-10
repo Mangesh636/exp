@@ -1,7 +1,7 @@
 "use client";
 
 import { Toolbar as ToolbarPrimitive } from "@base-ui/react/toolbar";
-import { css, cx } from "styled-system/css";
+import { css, cx } from "../../../../styled-system/css";
 
 import type React from "react";
 
