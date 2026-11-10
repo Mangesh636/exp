@@ -80,7 +80,7 @@ const popupStyle = css({
     scale: "0.98",
     opacity: 0,
   },
-  "& .\[\*\*\:data-\[slot\=scroll-area-viewport\]\:data-has-overflow-y\:pe-1\]": {
+  "& [data-slot='scroll-area-viewport'][data-has-overflow-y]": {
     paddingInlineEnd: "0.25rem",
   },
   _dark: {
