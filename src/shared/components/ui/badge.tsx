@@ -2,7 +2,7 @@
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { cva, cx } from "styled-system/css";
+import { cva, cx, type RecipeVariantProps } from "styled-system/css";
 
 import type React from "react";
 
@@ -164,13 +164,9 @@ const badgeVariants = cva({
   },
 });
 
-type BadgeVariant = "default" | "destructive" | "error" | "info" | "outline" | "secondary" | "success" | "warning";
-type BadgeSize = "default" | "lg" | "sm";
-
-export interface BadgeProps extends useRender.ComponentProps<"span"> {
-  variant?: BadgeVariant;
-  size?: BadgeSize;
-}
+export interface BadgeProps
+  extends useRender.ComponentProps<"span">,
+    RecipeVariantProps<typeof badgeVariants> {}
 
 export function Badge({
   className,
