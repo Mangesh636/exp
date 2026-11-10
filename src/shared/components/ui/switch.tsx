@@ -1,7 +1,7 @@
 "use client";
 
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch";
-import { css } from "styled-system/css";
+import { css } from "../../../../styled-system/css";
 
 import type React from "react";
 
