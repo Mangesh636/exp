@@ -1,7 +1,8 @@
 "use client";
 
 import { Slider as SliderPrimitive } from "@base-ui/react/slider";
-import { cx, css } from "../../../../styled-system/css";
+import { css } from "../../../../styled-system/css";
+import { cx } from "@/shared/lib/cx";
 import * as React from "react";
 
 export function Slider({ className, getAriaLabel, children, defaultValue, value, min = 0, max = 100, ...props }: SliderPrimitive.Root.Props & Pick<SliderPrimitive.Thumb.Props, "getAriaLabel">): React.ReactElement {
