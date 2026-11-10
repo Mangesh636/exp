@@ -17,13 +17,18 @@ Working branch: `codex/panda-css-migration`
 
 ### Migrated to Panda CSS (implementation; parity still needs local visual validation)
 
-- [x] `checkbox-group.tsx`
+- [x] `alert.tsx`
 - [x] `badge.tsx`
+- [x] `breadcrumb.tsx`
+- [x] `button.tsx`
+- [x] `checkbox.tsx`
+- [x] `checkbox-group.tsx`
 - [x] `collapsible.tsx`
-- [x] `field.tsx`
 - [x] `empty.tsx`
+- [x] `field.tsx`
 - [x] `fieldset.tsx`
 - [x] `frame.tsx`
+- [x] `input.tsx`
 - [x] `kbd.tsx`
 - [x] `label.tsx`
 - [x] `meter.tsx`
@@ -38,14 +43,14 @@ Working branch: `codex/panda-css-migration`
 
 - [ ] `accordion.tsx`
 - [ ] `alert-dialog.tsx`
-- [x] `alert.tsx`
+
 - [ ] `autocomplete.tsx`
 - [ ] `avatar.tsx`
-- [x] `breadcrumb.tsx`
-- [x] `button.tsx`
+
+
 - [ ] `calendar.tsx`
 - [ ] `card.tsx`
-- [x] `checkbox.tsx`
+
 - [ ] `combobox.tsx`
 - [ ] `command.tsx`
 - [ ] `composer.tsx`
@@ -56,7 +61,7 @@ Working branch: `codex/panda-css-migration`
 - [ ] `group.tsx`
 - [ ] `icon.tsx`
 - [ ] `input-group.tsx`
-- [x] `input.tsx`
+
 - [ ] `menu.tsx`
 - [ ] `number-field.tsx`
 - [ ] `otp-field.tsx`
