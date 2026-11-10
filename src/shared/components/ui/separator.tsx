@@ -20,9 +20,8 @@ export function Separator({
           },
           "&[data-orientation=vertical]": {
             width: "1px",
-            alignSelf: "stretch",
           },
-          "&[data-orientation=vertical]:not([class^='h-']):not([class*=' h-'])": {
+          "&[data-orientation=vertical]:not([class^='h-']):not([class*='_h-'])": {
             alignSelf: "stretch",
           },
         }),
