@@ -60,6 +60,9 @@ Working branch: `codex/panda-css-migration`
 - [x] `preview-card.tsx`
 - [x] `scroll-area.tsx`
 - [x] `segmented-control.tsx`
+- [x] `select.tsx`
+- [x] `sheet.tsx`
+- [x] `slider.tsx`
 
 ### Audited; no Tailwind styling to migrate (2)
 
