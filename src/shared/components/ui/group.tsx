@@ -2,7 +2,7 @@
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { cva, cx, type RecipeVariantProps } from "styled-system/css";
+import { css, cva, cx, type RecipeVariantProps } from "styled-system/css";
 
 import type * as React from "react";
 
@@ -135,6 +135,7 @@ const groupTextStyle = css({
     boxShadow: "0 1px 0 color-mix(in srgb, black 6%, transparent)",
   },
   _dark: {
+    backgroundClip: "border-box",
     backgroundColor: "color-mix(in srgb, var(--input) 64%, transparent)",
     "&::before": {
       boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
