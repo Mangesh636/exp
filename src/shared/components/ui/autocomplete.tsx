@@ -45,24 +45,24 @@ const startAddonStyle = css({
 });
 
 const inputStartAddonStyle = css({
-  "& [data-slot='autocomplete-input']": {
+  "& [data-slot='input']": {
     paddingInlineStart: "calc(var(--spacing) * 8.5 - 1px)",
   },
-  "&[data-size='sm'] [data-slot='autocomplete-input']": {
+  "&[data-size='sm'] [data-slot='input']": {
     paddingInlineStart: "calc(var(--spacing) * 7.5 - 1px)",
   },
   "@media (min-width: 40rem)": {
-    "& [data-slot='autocomplete-input']": {
+    "& [data-slot='input']": {
       paddingInlineStart: "calc(var(--spacing) * 8 - 1px)",
     },
-    "&[data-size='sm'] [data-slot='autocomplete-input']": {
+    "&[data-size='sm'] [data-slot='input']": {
       paddingInlineStart: "calc(var(--spacing) * 7 - 1px)",
     },
   },
 });
 
 const inputEndAddonStyle = css({
-  "&:has(+ [data-slot='autocomplete-trigger'], + [data-slot='autocomplete-clear']) [data-slot='autocomplete-input']": {
+  "&:has(+ [data-slot='autocomplete-trigger'], + [data-slot='autocomplete-clear']) [data-slot='input']": {
     paddingInlineEnd: "1.75rem",
   },
   "&[data-size='sm']:has(+ [data-slot='autocomplete-trigger'], + [data-slot='autocomplete-clear']) [data-slot='autocomplete-input']": {
@@ -385,7 +385,7 @@ export function AutocompleteList({
       <AutocompletePrimitive.List
         className={cx(css({
           "&:not(:empty)": { scrollPaddingY: "0.25rem", padding: "0.25rem" },
-          "&[data-has-overflow-y]": { paddingInlineEnd: "0.75rem" },
+          ":where([data-has-overflow-y]) &": { paddingInlineEnd: "0.75rem" },
         }), className)}
         data-slot="autocomplete-list"
         {...props}
