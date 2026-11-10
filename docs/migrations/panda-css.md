@@ -44,15 +44,9 @@ Working branch: `codex/panda-css-migration`
 ### Remaining
 
 - [ ] `accordion.tsx`
-- [ ] `alert-dialog.tsx`
-
 - [ ] `autocomplete.tsx`
 - [ ] `avatar.tsx`
-
-
 - [ ] `calendar.tsx`
-- [ ] `card.tsx`
-
 - [ ] `combobox.tsx`
 - [ ] `command.tsx`
 - [ ] `composer.tsx`
@@ -63,7 +57,6 @@ Working branch: `codex/panda-css-migration`
 - [ ] `group.tsx`
 - [ ] `icon.tsx`
 - [ ] `input-group.tsx`
-
 - [ ] `menu.tsx`
 - [ ] `number-field.tsx`
 - [ ] `otp-field.tsx`
