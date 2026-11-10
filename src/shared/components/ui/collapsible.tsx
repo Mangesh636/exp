@@ -1,7 +1,7 @@
 "use client";
 
 import { Collapsible as CollapsiblePrimitive } from "@base-ui/react/collapsible";
-import { css } from "styled-system/css";
+import { css } from "../../../../styled-system/css";
 
 import type React from "react";
 
