@@ -25,6 +25,8 @@ Working branch: `codex/panda-css-migration`
 - [x] `checkbox-group.tsx`
 - [x] `card.tsx`
 - [x] `alert-dialog.tsx`
+- [x] `accordion.tsx`
+- [x] `avatar.tsx`
 - [x] `collapsible.tsx`
 - [x] `empty.tsx`
 - [x] `field.tsx`
@@ -43,9 +45,7 @@ Working branch: `codex/panda-css-migration`
 
 ### Remaining
 
-- [ ] `accordion.tsx`
 - [ ] `autocomplete.tsx`
-- [ ] `avatar.tsx`
 - [ ] `calendar.tsx`
 - [ ] `combobox.tsx`
 - [ ] `command.tsx`
