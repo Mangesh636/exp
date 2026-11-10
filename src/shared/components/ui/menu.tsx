@@ -1,355 +1,126 @@
 "use client";
 
 import { Menu as MenuPrimitive } from "@base-ui/react/menu";
-import { cn } from "cn";
+import { css, cx } from "styled-system/css";
 
 import type * as React from "react";
 
 import { ChevronRightIcon } from "@/shared/components/icons/interface-icon";
 import { Icon } from "@/shared/components/ui/icon";
 
-export const MenuCreateHandle: typeof MenuPrimitive.createHandle =
-  MenuPrimitive.createHandle;
-
+export const MenuCreateHandle: typeof MenuPrimitive.createHandle = MenuPrimitive.createHandle;
 export const Menu: typeof MenuPrimitive.Root = MenuPrimitive.Root;
-
 export const MenuPortal: typeof MenuPrimitive.Portal = MenuPrimitive.Portal;
 
-export function MenuTrigger({
-  className,
-  children,
-  ...props
-}: MenuPrimitive.Trigger.Props): React.ReactElement {
-  return (
-    <MenuPrimitive.Trigger
-      className={className}
-      data-slot="menu-trigger"
-      {...props}
-    >
-      {children}
-    </MenuPrimitive.Trigger>
-  );
+const positionerStyle = css({ zIndex: 50 });
+const popupStyle = css({
+  position: "relative", display: "flex", minWidth: "8rem",
+  transformOrigin: "var(--transform-origin)", borderWidth: "1px",
+  borderColor: "var(--border)", borderRadius: "lg",
+  backgroundColor: "var(--popover)", outline: "none",
+  boxShadow: "0 10px 15px -3px color-mix(in srgb, black 5%, transparent)",
+  "&:not([class*='w-'])": { minWidth: "8rem" },
+  "&::before": { content: '""', position: "absolute", pointerEvents: "none", inset: 0, borderRadius: "calc(var(--radius-lg) - 1px)", boxShadow: "0 1px 0 color-mix(in srgb, black 4%, transparent)" },
+  "&:focus": { outline: "none" },
+  _dark: { backgroundClip: "border-box", "&::before": { boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)" } },
+});
+const scrollStyle = css({ width: "100%", maxHeight: "var(--available-height)", overflowY: "auto", padding: "1" });
+const itemStyle = css({
+  display: "flex", minHeight: "2rem", cursor: "default", userSelect: "none",
+  alignItems: "center", gap: "2", borderRadius: "sm", paddingInline: "2", paddingBlock: "1",
+  fontSize: { base: "base", sm: "sm" }, color: "var(--foreground)", outline: "none",
+  "&[data-disabled]": { pointerEvents: "none", opacity: 0.64 },
+  "&[data-highlighted]": { backgroundColor: "var(--accent)", color: "var(--accent-foreground)" },
+  "&[data-inset]": { paddingInlineStart: "2rem" },
+  "&[data-variant='destructive']": { color: "var(--destructive-foreground)" },
+  "& > svg:not([class*='opacity-'])": { opacity: 0.8 },
+  "& > svg:not([class*='size-'])": { width: "1.125rem", height: "1.125rem" },
+  "& > svg": { pointerEvents: "none", marginInline: "-0.125rem", flexShrink: 0 },
+  "@media (min-width: 40rem)": { minHeight: "1.75rem", "& > svg:not([class*='size-'])": { width: "1rem", height: "1rem" } },
+});
+const checkItemStyle = css({
+  display: "grid", minHeight: "2rem", cursor: "default", alignItems: "center",
+  gap: "2", borderRadius: "sm", paddingBlock: "1", paddingInlineStart: "2",
+  fontSize: { base: "base", sm: "sm" }, color: "var(--foreground)", outline: "none",
+  "&[data-disabled]": { pointerEvents: "none", opacity: 0.64 },
+  "&[data-highlighted]": { backgroundColor: "var(--accent)", color: "var(--accent-foreground)" },
+  "&[data-side='none']": { minWidth: "calc(var(--anchor-width) + 1.25rem)" },
+  "& svg:not([class*='size-'])": { width: "1.125rem", height: "1.125rem" },
+  "& svg": { pointerEvents: "none", flexShrink: 0 },
+  "@media (min-width: 40rem)": { minHeight: "1.75rem", "& svg:not([class*='size-'])": { width: "1rem", height: "1rem" } },
+});
+const switchIndicatorStyle = css({
+  display: "inline-flex", height: "calc(var(--thumb-size) + 2px)", width: "calc(var(--thumb-size) * 2 - 2px)",
+  flexShrink: 0, alignItems: "center", borderRadius: "full", padding: "1px", outline: "none",
+  transitionProperty: "background-color, box-shadow", transitionDuration: "200ms",
+  backgroundColor: "var(--input)", "&[data-checked]": { backgroundColor: "var(--primary)" },
+  "&[data-disabled]": { opacity: 0.64 },
+  "&:focus-visible": { boxShadow: "0 0 0 2px var(--ring), 0 0 0 3px var(--background)" },
+  "--thumb-size": "1rem", "@media (min-width: 40rem)": { "--thumb-size": "0.75rem" },
+});
+const switchThumbStyle = css({
+  pointerEvents: "none", display: "block", aspectRatio: "1", height: "100%",
+  borderRadius: "full", backgroundColor: "var(--background)",
+  boxShadow: "0 1px 2px color-mix(in srgb, black 5%, transparent)",
+  transformOrigin: "left center", transition: "translate .15s, border-radius .15s, scale .1s .1s, transform-origin .15s",
+  "[data-checked] &": { transformOrigin: "var(--thumb-size) 50%", translate: "calc(var(--thumb-size) - 4px) 0" },
+  "[data-slot='menu-checkbox-item']:active:not([data-disabled]) &": { scale: "1.1 1", borderRadius: "calc(var(--thumb-size) / 1.1)" },
+  "[dir='rtl'] &": { transformOrigin: "right center" },
+  "[dir='rtl'] [data-checked] &": { transformOrigin: "left center", translate: "calc((var(--thumb-size) - 4px) * -1) 0" },
+});
+const labelStyle = css({ paddingInline: "2", paddingBlock: "1.5", fontWeight: "medium", color: "var(--muted-foreground)", fontSize: "xs", "&[data-inset]": { paddingInlineStart: "2.25rem" }, "@media (min-width: 40rem)": { "&[data-inset]": { paddingInlineStart: "2rem" } } });
+const separatorStyle = css({ height: "1px", marginInline: "2", marginBlock: "1", backgroundColor: "var(--border)" });
+const shortcutStyle = css({ marginInlineStart: "auto", fontFamily: "sans-serif", fontWeight: "medium", color: "color-mix(in srgb, var(--muted-foreground) 72%, transparent)", fontSize: "xs", letterSpacing: "0.1em" });
+const subTriggerStyle = css({
+  display: "flex", minHeight: "2rem", alignItems: "center", gap: "2",
+  borderRadius: "sm", paddingInline: "2", paddingBlock: "1", fontSize: { base: "base", sm: "sm" },
+  color: "var(--foreground)", outline: "none",
+  "&[data-disabled]": { pointerEvents: "none", opacity: 0.64 },
+  "&[data-highlighted],&[data-popup-open]": { backgroundColor: "var(--accent)", color: "var(--accent-foreground)" },
+  "&[data-inset]": { paddingInlineStart: "2rem" },
+  "& > svg:not(:last-child)": { marginInline: "-0.125rem" },
+  "& svg:not([class*='size-'])": { width: "1.125rem", height: "1.125rem" },
+  "& svg": { pointerEvents: "none" },
+  "@media (min-width: 40rem)": { minHeight: "1.75rem", "& svg:not([class*='size-'])": { width: "1rem", height: "1rem" } },
+});
+
+export function MenuTrigger({ className, children, ...props }: MenuPrimitive.Trigger.Props): React.ReactElement {
+  return <MenuPrimitive.Trigger className={className} data-slot="menu-trigger" {...props}>{children}</MenuPrimitive.Trigger>;
 }
-
-export function MenuPopup({
-  children,
-  className,
-  sideOffset = 4,
-  align = "center",
-  alignOffset,
-  side = "bottom",
-  anchor,
-  portalProps,
-  ...props
-}: MenuPrimitive.Popup.Props & {
-  align?: MenuPrimitive.Positioner.Props["align"];
-  sideOffset?: MenuPrimitive.Positioner.Props["sideOffset"];
-  alignOffset?: MenuPrimitive.Positioner.Props["alignOffset"];
-  side?: MenuPrimitive.Positioner.Props["side"];
-  anchor?: MenuPrimitive.Positioner.Props["anchor"];
-  portalProps?: MenuPrimitive.Portal.Props;
-}): React.ReactElement {
-  return (
-    <MenuPortal {...portalProps}>
-      <MenuPrimitive.Positioner
-        align={align}
-        alignOffset={alignOffset}
-        anchor={anchor}
-        className="z-50"
-        data-slot="menu-positioner"
-        side={side}
-        sideOffset={sideOffset}
-      >
-        <MenuPrimitive.Popup
-          className={cn(
-            "relative flex not-[class*='w-']:min-w-32 origin-(--transform-origin) rounded-lg border bg-popover not-dark:bg-clip-padding shadow-lg/5 outline-none before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] focus:outline-none dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
-            className,
-          )}
-          data-slot="menu-popup"
-          {...props}
-        >
-          <div className="max-h-(--available-height) w-full overflow-y-auto p-1">
-            {children}
-          </div>
-        </MenuPrimitive.Popup>
-      </MenuPrimitive.Positioner>
-    </MenuPortal>
-  );
+export function MenuPopup({ children, className, sideOffset = 4, align = "center", alignOffset, side = "bottom", anchor, portalProps, ...props }: MenuPrimitive.Popup.Props & { align?: MenuPrimitive.Positioner.Props["align"]; sideOffset?: MenuPrimitive.Positioner.Props["sideOffset"]; alignOffset?: MenuPrimitive.Positioner.Props["alignOffset"]; side?: MenuPrimitive.Positioner.Props["side"]; anchor?: MenuPrimitive.Positioner.Props["anchor"]; portalProps?: MenuPrimitive.Portal.Props }): React.ReactElement {
+  return <MenuPortal {...portalProps}><MenuPrimitive.Positioner align={align} alignOffset={alignOffset} anchor={anchor} className={positionerStyle} data-slot="menu-positioner" side={side} sideOffset={sideOffset}><MenuPrimitive.Popup className={cx(popupStyle,className)} data-slot="menu-popup" {...props}><div className={scrollStyle}>{children}</div></MenuPrimitive.Popup></MenuPrimitive.Positioner></MenuPortal>;
 }
-
-export function MenuGroup(
-  props: MenuPrimitive.Group.Props,
-): React.ReactElement {
-  return <MenuPrimitive.Group data-slot="menu-group" {...props} />;
+export function MenuGroup(props: MenuPrimitive.Group.Props): React.ReactElement { return <MenuPrimitive.Group data-slot="menu-group" {...props} />; }
+export function MenuItem({ className, inset, variant="default", ...props }: MenuPrimitive.Item.Props & { inset?: boolean; variant?: "default"|"destructive" }): React.ReactElement {
+ return <MenuPrimitive.Item className={cx(itemStyle,className)} data-inset={inset} data-slot="menu-item" data-variant={variant} {...props} />;
 }
-
-export function MenuItem({
-  className,
-  inset,
-  variant = "default",
-  ...props
-}: MenuPrimitive.Item.Props & {
-  inset?: boolean;
-  variant?: "default" | "destructive";
-}): React.ReactElement {
-  return (
-    <MenuPrimitive.Item
-      className={cn(
-        "flex min-h-8 cursor-default select-none items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none data-disabled:pointer-events-none data-highlighted:bg-accent data-inset:ps-8 data-[variant=destructive]:text-destructive-foreground data-highlighted:text-accent-foreground data-disabled:opacity-64 sm:min-h-7 sm:text-sm [&>svg:not([class*='opacity-'])]:opacity-80 [&>svg:not([class*='size-'])]:size-4.5 sm:[&>svg:not([class*='size-'])]:size-4 [&>svg]:pointer-events-none [&>svg]:-mx-0.5 [&>svg]:shrink-0",
-        className,
-      )}
-      data-inset={inset}
-      data-slot="menu-item"
-      data-variant={variant}
-      {...props}
-    />
-  );
+export function MenuLinkItem({ className, inset, variant="default", closeOnClick=true, ...props }: MenuPrimitive.LinkItem.Props & { inset?: boolean; variant?: "default"|"destructive" }): React.ReactElement {
+ return <MenuPrimitive.LinkItem className={cx(itemStyle,className)} closeOnClick={closeOnClick} data-inset={inset} data-slot="menu-link-item" data-variant={variant} {...props} />;
 }
-
-export function MenuLinkItem({
-  className,
-  inset,
-  variant = "default",
-  closeOnClick = true,
-  ...props
-}: MenuPrimitive.LinkItem.Props & {
-  inset?: boolean;
-  variant?: "default" | "destructive";
-}): React.ReactElement {
-  return (
-    <MenuPrimitive.LinkItem
-      className={cn(
-        "flex min-h-8 cursor-default select-none items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none data-disabled:pointer-events-none data-highlighted:bg-accent data-inset:ps-8 data-[variant=destructive]:text-destructive-foreground data-highlighted:text-accent-foreground data-disabled:opacity-64 sm:min-h-7 sm:text-sm [&>svg:not([class*='opacity-'])]:opacity-80 [&>svg:not([class*='size-'])]:size-4.5 sm:[&>svg:not([class*='size-'])]:size-4 [&>svg]:pointer-events-none [&>svg]:-mx-0.5 [&>svg]:shrink-0",
-        className,
-      )}
-      closeOnClick={closeOnClick}
-      data-inset={inset}
-      data-slot="menu-link-item"
-      data-variant={variant}
-      {...props}
-    />
-  );
+export function MenuCheckboxItem({ className, children, checked, variant="default", ...props }: MenuPrimitive.CheckboxItem.Props & { variant?: "default"|"switch" }): React.ReactElement {
+ return <MenuPrimitive.CheckboxItem checked={checked} className={cx(checkItemStyle,variant==="switch"?css({gridTemplateColumns:"1fr auto",gap:"4",paddingInlineEnd:"1.5"}):css({gridTemplateColumns:"0.75rem 1fr",paddingInlineEnd:"4"}),className)} data-slot="menu-checkbox-item" {...props}>
+ {variant==="switch"?<><span style={{gridColumnStart:1}}>{children}</span><MenuPrimitive.CheckboxItemIndicator className={switchIndicatorStyle} keepMounted><span className={switchThumbStyle}/></MenuPrimitive.CheckboxItemIndicator></>:<><MenuPrimitive.CheckboxItemIndicator className={css({gridColumnStart:1,marginInlineStart:"-0.125rem"})}><svg aria-hidden="true" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5.252 12.7 10.2 18.63 18.748 5.37"/></svg></MenuPrimitive.CheckboxItemIndicator><span style={{gridColumnStart:2}}>{children}</span></>}
+ </MenuPrimitive.CheckboxItem>;
 }
-
-export function MenuCheckboxItem({
-  className,
-  children,
-  checked,
-  variant = "default",
-  ...props
-}: MenuPrimitive.CheckboxItem.Props & {
-  variant?: "default" | "switch";
-}): React.ReactElement {
-  return (
-    <MenuPrimitive.CheckboxItem
-      checked={checked}
-      className={cn(
-        "grid min-h-8 in-data-[side=none]:min-w-[calc(var(--anchor-width)+1.25rem)] cursor-default items-center gap-2 rounded-sm py-1 ps-2 text-base text-foreground outline-none data-disabled:pointer-events-none data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:opacity-64 sm:min-h-7 sm:text-sm [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
-        variant === "switch"
-          ? "grid-cols-[1fr_auto] gap-4 pe-1.5"
-          : "grid-cols-[.75rem_1fr] pe-4",
-        className,
-      )}
-      data-slot="menu-checkbox-item"
-      {...props}
-    >
-      {variant === "switch" ? (
-        <>
-          <span className="col-start-1">{children}</span>
-          <MenuPrimitive.CheckboxItemIndicator
-            className="inset-shadow-[0_1px_--theme(--color-black/4%)] inline-flex h-[calc(var(--thumb-size)+2px)] w-[calc(var(--thumb-size)*2-2px)] shrink-0 items-center rounded-full p-px outline-none transition-[background-color,box-shadow] duration-200 [--thumb-size:--spacing(4)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background data-checked:bg-primary data-unchecked:bg-input data-disabled:opacity-64 sm:[--thumb-size:--spacing(3)]"
-            keepMounted
-          >
-            <span className="pointer-events-none block aspect-square h-full in-[[data-slot=menu-checkbox-item][data-checked]]:origin-[var(--thumb-size)_50%] origin-left in-[[data-slot=menu-checkbox-item][data-checked]]:translate-x-[calc(var(--thumb-size)-4px)] in-[[data-slot=menu-checkbox-item]:active]:not-data-disabled:scale-x-110 in-[[data-slot=menu-checkbox-item]:active]:rounded-[var(--thumb-size)/calc(var(--thumb-size)*1.10)] rounded-(--thumb-size) bg-background shadow-sm/5 will-change-transform [transition:translate_.15s,border-radius_.15s,scale_.1s_.1s,transform-origin_.15s] rtl:in-[[data-slot=menu-checkbox-item][data-checked]]:origin-left rtl:origin-right rtl:in-[[data-slot=menu-checkbox-item][data-checked]]:-translate-x-[calc(var(--thumb-size)-4px)]" />
-          </MenuPrimitive.CheckboxItemIndicator>
-        </>
-      ) : (
-        <>
-          <MenuPrimitive.CheckboxItemIndicator className="col-start-1 -ms-0.5">
-            <svg
-              aria-hidden="true"
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
-            </svg>
-          </MenuPrimitive.CheckboxItemIndicator>
-          <span className="col-start-2">{children}</span>
-        </>
-      )}
-    </MenuPrimitive.CheckboxItem>
-  );
+export function MenuRadioGroup(props: MenuPrimitive.RadioGroup.Props): React.ReactElement { return <MenuPrimitive.RadioGroup data-slot="menu-radio-group" {...props}/>; }
+export function MenuRadioItem({className,children,...props}:MenuPrimitive.RadioItem.Props):React.ReactElement {
+ return <MenuPrimitive.RadioItem className={cx(checkItemStyle,css({gridTemplateColumns:"0.75rem 1fr",paddingInlineEnd:"4"}),className)} data-slot="menu-radio-item" {...props}><MenuPrimitive.RadioItemIndicator className={css({gridColumnStart:1,marginInlineStart:"-0.125rem"})}><svg aria-hidden="true" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5.252 12.7 10.2 18.63 18.748 5.37"/></svg></MenuPrimitive.RadioItemIndicator><span style={{gridColumnStart:2}}>{children}</span></MenuPrimitive.RadioItem>;
 }
-
-export function MenuRadioGroup(
-  props: MenuPrimitive.RadioGroup.Props,
-): React.ReactElement {
-  return <MenuPrimitive.RadioGroup data-slot="menu-radio-group" {...props} />;
+export function MenuGroupLabel({className,inset,...props}:MenuPrimitive.GroupLabel.Props & {inset?:boolean}):React.ReactElement {
+ return <MenuPrimitive.GroupLabel className={cx(labelStyle,className)} data-inset={inset} data-slot="menu-label" {...props}/>;
 }
-
-export function MenuRadioItem({
-  className,
-  children,
-  ...props
-}: MenuPrimitive.RadioItem.Props): React.ReactElement {
-  return (
-    <MenuPrimitive.RadioItem
-      className={cn(
-        "grid min-h-8 in-data-[side=none]:min-w-[calc(var(--anchor-width)+1.25rem)] cursor-default grid-cols-[.75rem_1fr] items-center gap-2 rounded-sm py-1 ps-2 pe-4 text-base text-foreground outline-none data-disabled:pointer-events-none data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:opacity-64 sm:min-h-7 sm:text-sm [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
-        className,
-      )}
-      data-slot="menu-radio-item"
-      {...props}
-    >
-      <MenuPrimitive.RadioItemIndicator className="col-start-1 -ms-0.5">
-        <svg
-          aria-hidden="true"
-          fill="none"
-          height="24"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-          width="24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
-        </svg>
-      </MenuPrimitive.RadioItemIndicator>
-      <span className="col-start-2">{children}</span>
-    </MenuPrimitive.RadioItem>
-  );
+export function MenuSeparator({className,...props}:MenuPrimitive.Separator.Props):React.ReactElement {
+ return <MenuPrimitive.Separator className={cx(separatorStyle,className)} data-slot="menu-separator" {...props}/>;
 }
-
-export function MenuGroupLabel({
-  className,
-  inset,
-  ...props
-}: MenuPrimitive.GroupLabel.Props & {
-  inset?: boolean;
-}): React.ReactElement {
-  return (
-    <MenuPrimitive.GroupLabel
-      className={cn(
-        "px-2 py-1.5 font-medium text-muted-foreground text-xs data-inset:ps-9 sm:data-inset:ps-8",
-        className,
-      )}
-      data-inset={inset}
-      data-slot="menu-label"
-      {...props}
-    />
-  );
+export function MenuShortcut({className,...props}:React.ComponentProps<"kbd">):React.ReactElement {
+ return <kbd className={cx(shortcutStyle,className)} data-slot="menu-shortcut" {...props}/>;
 }
-
-export function MenuSeparator({
-  className,
-  ...props
-}: MenuPrimitive.Separator.Props): React.ReactElement {
-  return (
-    <MenuPrimitive.Separator
-      className={cn("mx-2 my-1 h-px bg-border", className)}
-      data-slot="menu-separator"
-      {...props}
-    />
-  );
+export function MenuSub(props:MenuPrimitive.SubmenuRoot.Props):React.ReactElement { return <MenuPrimitive.SubmenuRoot data-slot="menu-sub" {...props}/>; }
+export function MenuSubTrigger({className,inset,children,...props}:MenuPrimitive.SubmenuTrigger.Props & {inset?:boolean}):React.ReactElement {
+ return <MenuPrimitive.SubmenuTrigger className={cx(subTriggerStyle,className)} data-inset={inset} data-slot="menu-sub-trigger" {...props}>{children}<Icon icon={ChevronRightIcon} className={css({marginInlineStart:"auto",marginInlineEnd:"-0.125rem",opacity:0.8})}/></MenuPrimitive.SubmenuTrigger>;
 }
-
-export function MenuShortcut({
-  className,
-  ...props
-}: React.ComponentProps<"kbd">): React.ReactElement {
-  return (
-    <kbd
-      className={cn(
-        "ms-auto font-medium font-sans text-muted-foreground/72 text-xs tracking-widest",
-        className,
-      )}
-      data-slot="menu-shortcut"
-      {...props}
-    />
-  );
+export function MenuSubPopup({className,sideOffset=0,alignOffset,align="start",...props}:MenuPrimitive.Popup.Props & {align?:MenuPrimitive.Positioner.Props["align"];sideOffset?:MenuPrimitive.Positioner.Props["sideOffset"];alignOffset?:MenuPrimitive.Positioner.Props["alignOffset"]}):React.ReactElement {
+ const defaultAlignOffset=align!=="center"?-5:undefined;
+ return <MenuPopup align={align} alignOffset={alignOffset??defaultAlignOffset} className={className} data-slot="menu-sub-content" side="inline-end" sideOffset={sideOffset} {...props}/>;
 }
-
-export function MenuSub(
-  props: MenuPrimitive.SubmenuRoot.Props,
-): React.ReactElement {
-  return <MenuPrimitive.SubmenuRoot data-slot="menu-sub" {...props} />;
-}
-
-export function MenuSubTrigger({
-  className,
-  inset,
-  children,
-  ...props
-}: MenuPrimitive.SubmenuTrigger.Props & {
-  inset?: boolean;
-}): React.ReactElement {
-  return (
-    <MenuPrimitive.SubmenuTrigger
-      className={cn(
-        "flex min-h-8 items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none data-disabled:pointer-events-none data-highlighted:bg-accent data-popup-open:bg-accent data-inset:ps-8 data-highlighted:text-accent-foreground data-popup-open:text-accent-foreground data-disabled:opacity-64 sm:min-h-7 sm:text-sm [&>svg:not(:last-child)]:-mx-0.5 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none",
-        className,
-      )}
-      data-inset={inset}
-      data-slot="menu-sub-trigger"
-      {...props}
-    >
-      {children}
-      <Icon icon={ChevronRightIcon} className="ms-auto -me-0.5 opacity-80" />
-    </MenuPrimitive.SubmenuTrigger>
-  );
-}
-
-export function MenuSubPopup({
-  className,
-  sideOffset = 0,
-  alignOffset,
-  align = "start",
-  ...props
-}: MenuPrimitive.Popup.Props & {
-  align?: MenuPrimitive.Positioner.Props["align"];
-  sideOffset?: MenuPrimitive.Positioner.Props["sideOffset"];
-  alignOffset?: MenuPrimitive.Positioner.Props["alignOffset"];
-}): React.ReactElement {
-  const defaultAlignOffset = align !== "center" ? -5 : undefined;
-
-  return (
-    <MenuPopup
-      align={align}
-      alignOffset={alignOffset ?? defaultAlignOffset}
-      className={className}
-      data-slot="menu-sub-content"
-      side="inline-end"
-      sideOffset={sideOffset}
-      {...props}
-    />
-  );
-}
-
-export {
-  MenuPrimitive,
-  MenuCreateHandle as DropdownMenuCreateHandle,
-  Menu as DropdownMenu,
-  MenuPortal as DropdownMenuPortal,
-  MenuTrigger as DropdownMenuTrigger,
-  MenuPopup as DropdownMenuContent,
-  MenuGroup as DropdownMenuGroup,
-  MenuItem as DropdownMenuItem,
-  MenuCheckboxItem as DropdownMenuCheckboxItem,
-  MenuRadioGroup as DropdownMenuRadioGroup,
-  MenuRadioItem as DropdownMenuRadioItem,
-  MenuGroupLabel as DropdownMenuLabel,
-  MenuSeparator as DropdownMenuSeparator,
-  MenuShortcut as DropdownMenuShortcut,
-  MenuSub as DropdownMenuSub,
-  MenuSubTrigger as DropdownMenuSubTrigger,
-  MenuSubPopup as DropdownMenuSubContent,
-};
+export { MenuPrimitive, MenuCreateHandle as DropdownMenuCreateHandle, Menu as DropdownMenu, MenuPortal as DropdownMenuPortal, MenuTrigger as DropdownMenuTrigger, MenuPopup as DropdownMenuContent, MenuGroup as DropdownMenuGroup, MenuItem as DropdownMenuItem, MenuCheckboxItem as DropdownMenuCheckboxItem, MenuRadioGroup as DropdownMenuRadioGroup, MenuRadioItem as DropdownMenuRadioItem, MenuGroupLabel as DropdownMenuLabel, MenuSeparator as DropdownMenuSeparator, MenuShortcut as DropdownMenuShortcut, MenuSub as DropdownMenuSub, MenuSubTrigger as DropdownMenuSubTrigger, MenuSubPopup as DropdownMenuSubContent };
