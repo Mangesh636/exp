@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from "react";
 
 import { css } from "../../styled-system/css";
+import { AdvancedExamples } from "./advanced-examples";
 import {
   Alert,
   AlertDescription,
@@ -396,6 +397,8 @@ export default function DesignSystemPage() {
               </Tabs>
             </Example>
           </Section>
+
+          <AdvancedExamples />
 
           <footer className={css({ marginTop: "14", paddingTop: "5", borderTopWidth: "1px", borderColor: "var(--border)", color: "var(--muted-foreground)", fontSize: "xs" })}>
             Shared UI components · Panda CSS migration · Preview examples are interactive where appropriate.
