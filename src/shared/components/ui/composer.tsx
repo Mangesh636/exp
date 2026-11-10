@@ -329,7 +329,7 @@ const composerPositionerStyle = css({
   width: "var(--anchor-width)",
 });
 
-export function ComposerFrame({
+function ComposerFrame({
   className,
   layout = "stacked",
   render,
