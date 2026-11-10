@@ -1,25 +1,17 @@
 "use client";
 
 import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog";
-import { cn } from "cn";
+import { css, cx } from "styled-system/css";
 
 import type React from "react";
 
 export const AlertDialogCreateHandle: typeof AlertDialogPrimitive.createHandle =
   AlertDialogPrimitive.createHandle;
+export const AlertDialog: typeof AlertDialogPrimitive.Root = AlertDialogPrimitive.Root;
+export const AlertDialogPortal: typeof AlertDialogPrimitive.Portal = AlertDialogPrimitive.Portal;
 
-export const AlertDialog: typeof AlertDialogPrimitive.Root =
-  AlertDialogPrimitive.Root;
-
-export const AlertDialogPortal: typeof AlertDialogPrimitive.Portal =
-  AlertDialogPrimitive.Portal;
-
-export function AlertDialogTrigger(
-  props: AlertDialogPrimitive.Trigger.Props,
-): React.ReactElement {
-  return (
-    <AlertDialogPrimitive.Trigger data-slot="alert-dialog-trigger" {...props} />
-  );
+export function AlertDialogTrigger(props: AlertDialogPrimitive.Trigger.Props): React.ReactElement {
+  return <AlertDialogPrimitive.Trigger data-slot="alert-dialog-trigger" {...props} />;
 }
 
 export function AlertDialogBackdrop({
@@ -28,10 +20,16 @@ export function AlertDialogBackdrop({
 }: AlertDialogPrimitive.Backdrop.Props): React.ReactElement {
   return (
     <AlertDialogPrimitive.Backdrop
-      className={cn(
-        "fixed inset-0 z-50 bg-black/32 backdrop-blur-sm transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-[-webkit-touch-callout:none]:absolute",
-        className,
-      )}
+      className={cx(css({
+        position: "fixed",
+        inset: 0,
+        zIndex: 50,
+        backgroundColor: "rgb(0 0 0 / 0.32)",
+        backdropFilter: "blur(4px)",
+        transition: "all 200ms",
+        "&[data-ending-style], &[data-starting-style]": { opacity: 0 },
+        "@supports (-webkit-touch-callout: none)": { position: "absolute" },
+      }), className)}
       data-slot="alert-dialog-backdrop"
       {...props}
     />
@@ -44,10 +42,15 @@ export function AlertDialogViewport({
 }: AlertDialogPrimitive.Viewport.Props): React.ReactElement {
   return (
     <AlertDialogPrimitive.Viewport
-      className={cn(
-        "fixed inset-0 z-50 grid grid-rows-[1fr_auto_3fr] justify-items-center p-4",
-        className,
-      )}
+      className={cx(css({
+        position: "fixed",
+        inset: 0,
+        zIndex: 50,
+        display: "grid",
+        gridTemplateRows: "1fr auto 3fr",
+        justifyItems: "center",
+        padding: "4",
+      }), className)}
       data-slot="alert-dialog-viewport"
       {...props}
     />
@@ -67,18 +70,66 @@ export function AlertDialogPopup({
     <AlertDialogPortal {...portalProps}>
       <AlertDialogBackdrop />
       <AlertDialogViewport
-        className={cn(
-          bottomStickOnMobile &&
-            "max-sm:grid-rows-[1fr_auto] max-sm:p-0 max-sm:pt-12",
-        )}
+        className={cx(bottomStickOnMobile && css({
+          "@media (max-width: 39.999rem)": {
+            gridTemplateRows: "1fr auto",
+            padding: 0,
+            paddingTop: "3rem",
+          },
+        }))}
       >
         <AlertDialogPrimitive.Popup
-          className={cn(
-            "relative row-start-2 flex max-h-full min-h-0 w-full min-w-0 max-w-lg origin-center flex-col rounded-2xl border bg-popover not-dark:bg-clip-padding text-popover-foreground opacity-[calc(1-var(--nested-dialogs))] shadow-lg/5 transition-[scale,opacity,translate] duration-200 ease-in-out will-change-transform before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-2xl)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] data-ending-style:opacity-0 data-starting-style:opacity-0 sm:scale-[calc(1-0.1*var(--nested-dialogs))] sm:data-ending-style:scale-98 sm:data-starting-style:scale-98 dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
-            bottomStickOnMobile &&
-              "max-sm:max-w-none max-sm:origin-bottom max-sm:rounded-none max-sm:border-x-0 max-sm:border-t max-sm:border-b-0 max-sm:data-ending-style:translate-y-4 max-sm:data-starting-style:translate-y-4 max-sm:before:hidden max-sm:before:rounded-none",
-            className,
-          )}
+          className={cx(css({
+            position: "relative",
+            gridRowStart: 2,
+            display: "flex",
+            maxHeight: "100%",
+            minHeight: 0,
+            width: "100%",
+            minWidth: 0,
+            maxWidth: "32rem",
+            transformOrigin: "center",
+            flexDirection: "column",
+            borderRadius: "2xl",
+            borderWidth: "1px",
+            backgroundColor: "var(--popover)",
+            backgroundClip: "padding-box",
+            color: "var(--popover-foreground)",
+            opacity: "calc(1 - var(--nested-dialogs))",
+            boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05)",
+            transition: "scale 200ms ease-in-out, opacity 200ms ease-in-out, translate 200ms ease-in-out",
+            willChange: "transform",
+            "&:before": {
+              content: '""',
+              position: "absolute",
+              inset: 0,
+              pointerEvents: "none",
+              borderRadius: "calc(var(--radius-2xl) - 1px)",
+              boxShadow: "0 1px 0 color-mix(in srgb, black 4%, transparent)",
+            },
+            "&[data-ending-style], &[data-starting-style]": { opacity: 0 },
+            "@media (min-width: 40rem)": {
+              transform: "scale(calc(1 - 0.1 * var(--nested-dialogs)))",
+              "&[data-ending-style], &[data-starting-style]": { transform: "scale(0.98)" },
+            },
+            _dark: {
+              backgroundClip: "border-box",
+              "&:before": { boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)" },
+            },
+            ...(bottomStickOnMobile ? {
+              "@media (max-width: 39.999rem)": {
+                maxWidth: "none",
+                transformOrigin: "bottom",
+                borderRadius: 0,
+                borderLeftWidth: 0,
+                borderRightWidth: 0,
+                borderTopWidth: "1px",
+                borderBottomWidth: 0,
+                "&[data-ending-style], &[data-starting-style]": { translate: "0 1rem" },
+                "&:before": { display: "none", borderRadius: 0 },
+              },
+            } : {}),
+          }), className)}
           data-slot="alert-dialog-popup"
           {...props}
         />
@@ -93,10 +144,15 @@ export function AlertDialogHeader({
 }: React.ComponentProps<"div">): React.ReactElement {
   return (
     <div
-      className={cn(
-        "flex flex-col gap-2 p-6 text-center max-sm:pb-4 sm:text-left",
-        className,
-      )}
+      className={cx(css({
+        display: "flex",
+        flexDirection: "column",
+        gap: "2",
+        padding: "6",
+        textAlign: "center",
+        "@media (min-width: 40rem)": { textAlign: "left" },
+        "@media (max-width: 39.999rem)": { paddingBottom: "4" },
+      }), className)}
       data-slot="alert-dialog-header"
       {...props}
     />
@@ -107,17 +163,25 @@ export function AlertDialogFooter({
   className,
   variant = "default",
   ...props
-}: React.ComponentProps<"div"> & {
-  variant?: "default" | "bare";
-}): React.ReactElement {
+}: React.ComponentProps<"div"> & { variant?: "default" | "bare" }): React.ReactElement {
   return (
     <div
-      className={cn(
-        "flex flex-col-reverse gap-2 px-6 sm:flex-row sm:justify-end sm:rounded-b-[calc(var(--radius-2xl)-1px)]",
-        variant === "default" && "border-t bg-muted/72 py-4",
-        variant === "bare" && "pb-6",
-        className,
-      )}
+      className={cx(css({
+        display: "flex",
+        flexDirection: "column-reverse",
+        gap: "2",
+        paddingX: "6",
+        "@media (min-width: 40rem)": {
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          borderBottomRadius: "calc(var(--radius-2xl) - 1px)",
+        },
+        ...(variant === "default" ? {
+          borderTopWidth: "1px",
+          backgroundColor: "color-mix(in srgb, var(--muted) 72%, transparent)",
+          paddingY: "4",
+        } : { paddingBottom: "6" }),
+      }), className)}
       data-slot="alert-dialog-footer"
       {...props}
     />
@@ -130,7 +194,7 @@ export function AlertDialogTitle({
 }: AlertDialogPrimitive.Title.Props): React.ReactElement {
   return (
     <AlertDialogPrimitive.Title
-      className={cn("font-bold font-sans text-xl leading-none", className)}
+      className={cx(css({ fontWeight: "bold", fontFamily: "sans", fontSize: "xl", lineHeight: 1 }), className)}
       data-slot="alert-dialog-title"
       {...props}
     />
@@ -143,19 +207,15 @@ export function AlertDialogDescription({
 }: AlertDialogPrimitive.Description.Props): React.ReactElement {
   return (
     <AlertDialogPrimitive.Description
-      className={cn("text-muted-foreground text-sm", className)}
+      className={cx(css({ color: "var(--muted-foreground)", fontSize: "sm" }), className)}
       data-slot="alert-dialog-description"
       {...props}
     />
   );
 }
 
-export function AlertDialogClose(
-  props: AlertDialogPrimitive.Close.Props,
-): React.ReactElement {
-  return (
-    <AlertDialogPrimitive.Close data-slot="alert-dialog-close" {...props} />
-  );
+export function AlertDialogClose(props: AlertDialogPrimitive.Close.Props): React.ReactElement {
+  return <AlertDialogPrimitive.Close data-slot="alert-dialog-close" {...props} />;
 }
 
 export {
