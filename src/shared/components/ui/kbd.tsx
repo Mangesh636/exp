@@ -1,4 +1,4 @@
-import { cn } from "cn";
+import { css } from "styled-system/css";
 
 import type * as React from "react";
 
@@ -8,10 +8,32 @@ export function Kbd({
 }: React.ComponentProps<"kbd">): React.ReactElement {
   return (
     <kbd
-      className={cn(
-        "pointer-events-none inline-flex h-5 min-w-5 select-none items-center justify-center gap-1 rounded-lg bg-muted px-1 font-medium font-sans text-muted-foreground text-xs [&_svg:not([class*='size-'])]:size-3",
+      className={[
+        css({
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "1",
+          minWidth: "5",
+          height: "5",
+          paddingX: "1",
+          borderRadius: "lg",
+          backgroundColor: "var(--muted)",
+          color: "var(--muted-foreground)",
+          fontFamily: "sans",
+          fontSize: "xs",
+          fontWeight: "medium",
+          pointerEvents: "none",
+          userSelect: "none",
+          "& svg:not([class*='size-'])": {
+            width: "3",
+            height: "3",
+          },
+        }),
         className,
-      )}
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="kbd"
       {...props}
     />
@@ -24,7 +46,16 @@ export function KbdGroup({
 }: React.ComponentProps<"kbd">): React.ReactElement {
   return (
     <kbd
-      className={cn("inline-flex items-center gap-1", className)}
+      className={[
+        css({
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "1",
+        }),
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="kbd-group"
       {...props}
     />
