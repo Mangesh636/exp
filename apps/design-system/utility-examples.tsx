@@ -22,14 +22,30 @@ import { Button } from "@/shared/components/ui/button";
 const cardStyle = css({ overflow: "hidden", minWidth: "0", borderWidth: "1px", borderColor: "var(--border)", borderRadius: "xl", background: "var(--card)" });
 const previewStyle = css({ display: "flex", minHeight: "9rem", alignItems: "center", justifyContent: "center", padding: "5", borderBottomWidth: "1px", borderColor: "var(--border)" });
 
-function Example({ name, description, children }: { name: string; description: string; children: ReactNode }) {
+function Example({ name, description, code, children }: { name: string; description: string; code: string; children: ReactNode }) {
+  const [copied, setCopied] = useState(false);
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+    } catch {
+      setCopied(false);
+    }
+  }
   return (
     <article className={cardStyle}>
       <div className={previewStyle}>{children}</div>
-      <div className={css({ padding: "4" })}>
-        <h3 className={css({ fontSize: "sm", fontWeight: "semibold" })}>{name}</h3>
-        <p className={css({ marginTop: "1", color: "var(--muted-foreground)", fontSize: "xs", lineHeight: "1.6" })}>{description}</p>
+      <div className={css({ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "3", padding: "4" })}>
+        <div>
+          <h3 className={css({ fontSize: "sm", fontWeight: "semibold" })}>{name}</h3>
+          <p className={css({ marginTop: "1", color: "var(--muted-foreground)", fontSize: "xs", lineHeight: "1.6" })}>{description}</p>
+        </div>
+        <button type="button" onClick={copy} className={css({ flexShrink: "0", borderWidth: "1px", borderColor: "var(--border)", borderRadius: "md", paddingX: "2.5", paddingY: "1", fontSize: "xs", _hover: { background: "var(--muted)" } })}>
+          {copied ? "Copied" : "Copy"}
+        </button>
       </div>
+      <pre className={css({ overflowX: "auto", padding: "3", background: "var(--muted)", color: "var(--muted-foreground)", fontFamily: "mono", fontSize: "xs", whiteSpace: "pre" })}><code>{code}</code></pre>
     </article>
   );
 }
@@ -56,11 +72,11 @@ export function UtilityExamples() {
         <p className={css({ marginTop: "1", color: "var(--muted-foreground)", fontSize: "sm" })}>Date selection, search, structured inputs, and keyboard-oriented controls.</p>
       </div>
       <div className={css({ display: "grid", gridTemplateColumns: { base: "1fr", xl: "repeat(2, minmax(0, 1fr))" }, gap: "4" })}>
-        <Example name="Calendar" description="Month navigation and single-date selection." >
+        <Example name="Calendar" description="Month navigation and single-date selection." code={'<Calendar mode="single" />'}>
           <Calendar mode="single" className={css({ "--cell-size": "2rem" })} />
         </Example>
 
-        <Example name="Checkbox group" description="Select multiple values from a related set." >
+        <Example name="Checkbox group" description="Select multiple values from a related set." code={'<CheckboxGroup defaultValue={["docs"]}>\\n  <Checkbox value="docs">Documentation</Checkbox>\\n  <Checkbox value="videos">Videos</Checkbox>\\n</CheckboxGroup>'}>
           <CheckboxGroup defaultValue={["docs"]} className={css({ gap: "3" })}>
             <label className={css({ display: "flex", alignItems: "center", gap: "2", fontSize: "sm" })}><Checkbox value="docs" /> Documentation</label>
             <label className={css({ display: "flex", alignItems: "center", gap: "2", fontSize: "sm" })}><Checkbox value="videos" /> Videos</label>
@@ -68,20 +84,20 @@ export function UtilityExamples() {
           </CheckboxGroup>
         </Example>
 
-        <Example name="OTP field" description="One-time passcode input with segmented entry slots." >
+        <Example name="OTP field" description="One-time passcode input with segmented entry slots." code={'<OTPField length={6} aria-label="Verification code">\\n  <OTPFieldInput />\\n</OTPField>'}>
           <OTPField length={6} aria-label="Verification code">
             <OTPFieldInput />
           </OTPField>
         </Example>
 
-        <Example name="Segmented control" description="A compact set of peer actions presented as one control." >
+        <Example name="Segmented control" description="A compact set of peer actions presented as one control." code={'<SegmentedControl aria-label="View density">\\n  <SegmentedControlItem aria-pressed="true">Comfortable</SegmentedControlItem>\\n  <SegmentedControlItem aria-pressed="false">Compact</SegmentedControlItem>\\n</SegmentedControl>'}>
           <SegmentedControl aria-label="View density">
             <SegmentedControlItem aria-pressed="true">Comfortable</SegmentedControlItem>
             <SegmentedControlItem aria-pressed="false">Compact</SegmentedControlItem>
           </SegmentedControl>
         </Example>
 
-        <Example name="Toolbar" description="Keyboard-navigable group of related editing actions." >
+        <Example name="Toolbar" description="Keyboard-navigable group of related editing actions." code={'<Toolbar aria-label="Text formatting">\\n  <ToolbarGroup>\\n    <ToolbarButton aria-label="Bold">B</ToolbarButton>\\n    <ToolbarButton aria-label="Italic">I</ToolbarButton>\\n  </ToolbarGroup>\\n  <ToolbarSeparator orientation="vertical" />\\n</Toolbar>'}>
           <Toolbar aria-label="Text formatting">
             <ToolbarGroup>
               <ToolbarButton aria-label="Bold">B</ToolbarButton>
@@ -95,14 +111,14 @@ export function UtilityExamples() {
           </Toolbar>
         </Example>
 
-        <Example name="Form" description="Form root for validation-aware, accessible submission flows." >
+        <Example name="Form" description="Form root for validation-aware, accessible submission flows." code={'<Form onSubmit={(event) => event.preventDefault()}>\\n  <input name="resource" required />\\n  <Button type="submit">Submit</Button>\\n</Form>'}>
           <Form className={css({ display: "flex", width: "100%", maxWidth: "20rem", flexDirection: "column", gap: "3" })} onSubmit={(event) => event.preventDefault()}>
             <input name="resource" placeholder="Resource title" required className={css({ height: "2.25rem", width: "100%", borderWidth: "1px", borderColor: "var(--input)", borderRadius: "lg", paddingX: "3", background: "var(--background)", fontSize: "sm" })} />
             <Button type="submit" size="sm">Submit example</Button>
           </Form>
         </Example>
 
-        <Example name="Icon" description="Consistent icon sizing and stroke defaults for Hugeicons." >
+        <Example name="Icon" description="Consistent icon sizing and stroke defaults for Hugeicons." code={'<Icon icon={Search01Icon} size={20} />'}>
           <div className={css({ display: "flex", alignItems: "center", gap: "4", color: "var(--muted-foreground)" })}>
             <Icon icon={Search01Icon} size={16} />
             <Icon icon={Search01Icon} size={20} />
@@ -110,7 +126,7 @@ export function UtilityExamples() {
           </div>
         </Example>
 
-        <Example name="Autocomplete" description="Filterable suggestions with text input and popup results." >
+        <Example name="Autocomplete" description="Filterable suggestions with text input and popup results." code={'<Autocomplete items={["React", "Next.js"]}>\\n  <AutocompleteInput placeholder="Search technologies" />\\n  <AutocompletePopup>\\n    <AutocompleteList>\\n      <AutocompleteItem value="React">React</AutocompleteItem>\\n      <AutocompleteItem value="Next.js">Next.js</AutocompleteItem>\\n    </AutocompleteList>\\n  </AutocompletePopup>\\n</Autocomplete>'}>
           <Autocomplete items={["React", "Next.js", "TypeScript"]}>
             <AutocompleteInput placeholder="Search technologies" />
             <AutocompletePopup>
@@ -123,7 +139,7 @@ export function UtilityExamples() {
           </Autocomplete>
         </Example>
 
-        <Example name="Combobox" description="Select one or more values from a searchable collection." >
+        <Example name="Combobox" description="Select one or more values from a searchable collection." code={'<Combobox items={["Design", "Development"]}>\\n  <ComboboxInput placeholder="Choose a tag" />\\n  <ComboboxPopup>\\n    <ComboboxList>\\n      <ComboboxItem value="Design">Design</ComboboxItem>\\n      <ComboboxItem value="Development">Development</ComboboxItem>\\n    </ComboboxList>\\n  </ComboboxPopup>\\n</Combobox>'}>
           <Combobox items={["Design", "Development", "Research"]}>
             <ComboboxInput placeholder="Choose a tag" />
             <ComboboxPopup>
@@ -136,7 +152,7 @@ export function UtilityExamples() {
           </Combobox>
         </Example>
 
-        <Example name="Command" description="Searchable command list for keyboard-first workflows." >
+        <Example name="Command" description="Searchable command list for keyboard-first workflows." code={'<Command>\\n  <CommandInput placeholder="Search commands..." />\\n  <CommandList>\\n    <CommandItem value="add-bookmark">Add bookmark</CommandItem>\\n  </CommandList>\\n</Command>'}>
           <div className={css({ width: "100%", maxWidth: "22rem", overflow: "hidden", borderWidth: "1px", borderColor: "var(--border)", borderRadius: "lg" })}>
             <Command>
               <CommandInput placeholder="Search commands..." />
@@ -149,7 +165,7 @@ export function UtilityExamples() {
           </div>
         </Example>
 
-        <Example name="Composer" description="Rich-text composer with token-aware input and submit action." >
+        <Example name="Composer" description="Rich-text composer with token-aware input and submit action." code={'<Composer onSubmit={() => undefined}>\\n  <ComposerInput placeholder="Write a note..." />\\n  <ComposerActions><ComposerSubmit /></ComposerActions>\\n</Composer>'}>
           <Composer className={css({ width: "100%", maxWidth: "22rem", borderWidth: "1px", borderColor: "var(--border)", borderRadius: "lg", padding: "3" })} onSubmit={() => undefined}>
             <ComposerInput placeholder="Write a note or mention a resource..." className={css({ minHeight: "3rem", fontSize: "sm" })} />
             <ComposerActions className={css({ justifyContent: "flex-end", marginTop: "3" })}>
@@ -158,7 +174,7 @@ export function UtilityExamples() {
           </Composer>
         </Example>
 
-        <Example name="Toast" description="Transient success feedback rendered in a shared viewport." >
+        <Example name="Toast" description="Transient success feedback rendered in a shared viewport." code={'<ToastProvider>\\n  <Button onClick={() => toastManager.add({ title: "Bookmark saved" })}>\\n    Show toast\\n  </Button>\\n</ToastProvider>'}>
           <ToastDemo />
         </Example>
       </div>
