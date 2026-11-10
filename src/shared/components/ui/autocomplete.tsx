@@ -259,9 +259,9 @@ export function AutocompletePopup({
         side={side}
         sideOffset={sideOffset}
       >
-        <span className={cx(popupSurfaceStyle, className)}>
+        <span className={popupSurfaceStyle}>
           <AutocompletePrimitive.Popup
-            className={popupContentStyle}
+            className={cx(popupContentStyle, className)}
             data-slot="autocomplete-popup"
             {...props}
           >
