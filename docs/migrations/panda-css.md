@@ -49,10 +49,10 @@ Working branch: `codex/panda-css-migration`
 
 - [x] `combobox.tsx`
 - [x] `command.tsx`
-- [ ] `composer.tsx`
+- [x] `composer.tsx`
 - [x] `context-menu.tsx`
-- [ ] `dialog.tsx`
-- [ ] `drawer.tsx`
+- [x] `dialog.tsx`
+- [x] `drawer.tsx`
 - [ ] `form.tsx`
 - [ ] `group.tsx`
 - [ ] `icon.tsx`
@@ -84,3 +84,5 @@ Working branch: `codex/panda-css-migration`
 - The current branch cannot be considered complete until local code generation, type checking, linting, build, and light/dark visual checks pass.
 - The design-system showcase is intentionally deferred until the component migration and token layer are stable, so it documents the real shared components rather than parallel or placeholder implementations.
 - Batch completed: `combobox.tsx`, `command.tsx`, and `context-menu.tsx` now use Panda `css`/`cx`; public exports and Base UI primitive composition were retained. These are implementation-complete only and still require generated-CSS, type, and visual parity checks.
+
+- Batch completed: `composer.tsx`, `dialog.tsx`, and `drawer.tsx` now use Panda `css`/`cx`. Composer editor hooks, content-editable/token portal behavior, Base UI dialog/drawer primitives, virtual-keyboard provider, swipe directions, nested drawer transforms, safe-area handling, and menu item APIs were retained in the conversion. These are implementation-complete only; generated CSS, type, runtime interaction, and visual parity checks remain pending.
