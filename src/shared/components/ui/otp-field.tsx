@@ -1,7 +1,7 @@
 "use client";
 
 import { OTPField as OTPFieldPrimitive } from "@base-ui/react/otp-field";
-import { css, cx } from "styled-system/css";
+import { css, cx } from "../../../../styled-system/css";
 
 import type * as React from "react";
 
