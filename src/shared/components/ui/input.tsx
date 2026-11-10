@@ -1,7 +1,7 @@
 "use client";
 
 import { Input as InputPrimitive } from "@base-ui/react/input";
-import { cn } from "cn";
+import { css, cx } from "styled-system/css";
 
 import type * as React from "react";
 
@@ -22,26 +22,99 @@ export function Input({
   style,
   ...props
 }: InputProps): React.ReactElement {
-  const inputClassName = cn(
-    "h-8.5 w-full min-w-0 rounded-[inherit] px-[calc(--spacing(3)-1px)] text-foreground leading-8.5 outline-none [transition:background-color_5000000s_ease-in-out_0s] placeholder:text-muted-foreground/72 sm:h-7.5 sm:leading-7.5 autofill:[-webkit-text-fill-color:var(--foreground)]",
-    size === "sm" &&
-      "h-7.5 px-[calc(--spacing(2.5)-1px)] leading-7.5 sm:h-6.5 sm:leading-6.5",
-    size === "lg" && "h-9.5 leading-9.5 sm:h-8.5 sm:leading-8.5",
-    props.type === "search" &&
-      "[&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none",
-    props.type === "file" &&
-      "text-muted-foreground file:me-3 file:bg-transparent file:font-medium file:text-foreground file:text-sm",
-  );
+  const inputClassName = css({
+    width: "100%",
+    minWidth: 0,
+    height: size === "sm" ? "1.875rem" : size === "lg" ? "2.375rem" : "2.125rem",
+    borderRadius: "inherit",
+    paddingX: size === "sm" ? "calc(var(--spacing) * 2.5 - 1px)" : "calc(var(--spacing) * 3 - 1px)",
+    color: "var(--foreground)",
+    lineHeight: size === "sm" ? "1.875rem" : size === "lg" ? "2.375rem" : "2.125rem",
+    outline: "none",
+    transition: "background-color 5000000s ease-in-out 0s",
+    "&::placeholder": { color: "color-mix(in srgb, var(--muted-foreground) 72%, transparent)" },
+    "@media (min-width: 40rem)": {
+      height: size === "sm" ? "1.625rem" : size === "lg" ? "2.125rem" : "1.875rem",
+      lineHeight: size === "sm" ? "1.625rem" : size === "lg" ? "2.125rem" : "1.875rem",
+    },
+    "&:-webkit-autofill": {
+      WebkitTextFillColor: "var(--foreground)",
+    },
+    ...(props.type === "search" ? {
+      "&::-webkit-search-cancel-button, &::-webkit-search-decoration, &::-webkit-search-results-button, &::-webkit-search-results-decoration": {
+        appearance: "none",
+      },
+    } : {}),
+    ...(props.type === "file" ? {
+      color: "var(--muted-foreground)",
+      "&::file-selector-button": {
+        marginInlineEnd: "0.75rem",
+        backgroundColor: "transparent",
+        fontWeight: "500",
+        color: "var(--foreground)",
+        fontSize: "sm",
+      },
+    } : {}),
+  });
 
   return (
     <span
-      className={
-        cn(
-          !unstyled &&
-            "relative inline-flex w-full rounded-lg border border-input bg-background not-dark:bg-clip-padding text-base shadow-xs/5 ring-ring/24 transition-shadow before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] not-has-disabled:not-has-focus-visible:not-has-aria-invalid:before:shadow-[0_1px_--theme(--color-black/4%)] has-focus-visible:has-aria-invalid:border-destructive/64 has-focus-visible:has-aria-invalid:ring-destructive/16 has-aria-invalid:border-destructive/36 has-focus-visible:border-ring has-autofill:bg-foreground/4 has-disabled:opacity-64 has-[:disabled,:focus-visible,[aria-invalid]]:shadow-none has-focus-visible:ring-[3px] sm:text-sm dark:bg-input/32 dark:has-autofill:bg-foreground/8 dark:has-aria-invalid:ring-destructive/24 dark:not-has-disabled:not-has-focus-visible:not-has-aria-invalid:before:shadow-[0_-1px_--theme(--color-white/6%)]",
-          className,
-        ) || undefined
-      }
+      className={cx(
+        !unstyled && css({
+          position: "relative",
+          display: "inline-flex",
+          width: "100%",
+          borderRadius: "lg",
+          borderWidth: "1px",
+          borderColor: "var(--input)",
+          backgroundColor: "var(--background)",
+          backgroundClip: "padding-box",
+          fontSize: "base",
+          boxShadow: "0 1px 2px rgb(0 0 0 / 0.05)",
+          transitionProperty: "box-shadow",
+          "&:before": {
+            content: '""',
+            position: "absolute",
+            inset: 0,
+            pointerEvents: "none",
+            borderRadius: "calc(var(--radius-lg) - 1px)",
+          },
+          "&:not(:has(:disabled)):not(:has(:focus-visible)):not(:has([aria-invalid='true'])):before": {
+            boxShadow: "0 1px 0 color-mix(in srgb, black 4%, transparent)",
+          },
+          "&:has(:focus-visible[aria-invalid='true'])": {
+            borderColor: "color-mix(in srgb, var(--destructive) 64%, transparent)",
+            boxShadow: "0 0 0 3px color-mix(in srgb, var(--destructive) 16%, transparent)",
+          },
+          "&:has([aria-invalid='true'])": {
+            borderColor: "color-mix(in srgb, var(--destructive) 36%, transparent)",
+          },
+          "&:has(:focus-visible)": {
+            borderColor: "var(--ring)",
+            boxShadow: "0 0 0 3px color-mix(in srgb, var(--ring) 24%, transparent)",
+          },
+          "&:has(:autofill)": {
+            backgroundColor: "color-mix(in srgb, var(--foreground) 4%, transparent)",
+          },
+          "&:has(:disabled)": { opacity: 0.64 },
+          "&:has(:disabled, :focus-visible, [aria-invalid='true'])": { boxShadow: "none" },
+          "@media (min-width: 40rem)": { fontSize: "sm" },
+          _dark: {
+            backgroundClip: "border-box",
+            backgroundColor: "color-mix(in srgb, var(--input) 32%, transparent)",
+            "&:has(:autofill)": {
+              backgroundColor: "color-mix(in srgb, var(--foreground) 8%, transparent)",
+            },
+            "&:has([aria-invalid='true'])": {
+              boxShadow: "0 0 0 3px color-mix(in srgb, var(--destructive) 24%, transparent)",
+            },
+            "&:not(:has(:disabled)):not(:has(:focus-visible)):not(:has([aria-invalid='true'])):before": {
+              boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
+            },
+          },
+        }),
+        className,
+      ) || undefined}
       data-size={size}
       data-slot="input-control"
     >
