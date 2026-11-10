@@ -74,14 +74,12 @@ export function Radio({
             "&:focus-visible[aria-invalid='true']": {
               boxShadow: "0 0 0 1px var(--background), 0 0 0 3px color-mix(in srgb, var(--destructive) 24%, transparent)",
             },
-          },
-          "&:not([data-checked])[aria-invalid='true']": {
-            borderColor: "color-mix(in srgb, var(--destructive) 36%, transparent)",
-          },
-          _dark: {
             "&:not([data-disabled]):not([data-checked]):not([aria-invalid='true']):before": {
               boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
             },
+          },
+          "&:not([data-checked])[aria-invalid='true']": {
+            borderColor: "color-mix(in srgb, var(--destructive) 36%, transparent)",
           },
           "@media (min-width: 40rem)": {
             width: "1rem",
