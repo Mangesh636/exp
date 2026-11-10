@@ -78,8 +78,10 @@ export function Radio({
           "&:not([data-checked])[aria-invalid='true']": {
             borderColor: "color-mix(in srgb, var(--destructive) 36%, transparent)",
           },
-          ":is(.dark) &:not([data-disabled]):not([data-checked]):not([aria-invalid='true']):before": {
-            boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
+          _dark: {
+            "&:not([data-disabled]):not([data-checked]):not([aria-invalid='true']):before": {
+              boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
+            },
           },
           "@media (min-width: 40rem)": {
             width: "1rem",
