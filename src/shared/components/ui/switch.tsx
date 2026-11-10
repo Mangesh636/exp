@@ -58,16 +58,17 @@ export function Switch({
             transformOrigin: "var(--thumb-size) 50%",
             translate: "calc(var(--thumb-size) - 4px) 0",
           },
-          ":is([role='switch']:active, [data-slot='label']:active, [data-slot='field-label']:active):not([data-disabled]) &":
-            {
+          _activeLabel: {
               scale: "1.1 1",
               borderRadius:
                 "var(--thumb-size) / calc(var(--thumb-size) * 1.1)",
             },
-          ":dir(rtl) &": { transformOrigin: "right center" },
-          ":dir(rtl) &[data-checked]": {
-            transformOrigin: "left center",
-            translate: "calc((var(--thumb-size) - 4px) * -1) 0",
+          _directionRtl: {
+            transformOrigin: "right center",
+            "&[data-checked]": {
+              transformOrigin: "left center",
+              translate: "calc((var(--thumb-size) - 4px) * -1) 0",
+            },
           },
         })}
         data-slot="switch-thumb"
