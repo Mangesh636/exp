@@ -80,7 +80,7 @@ export function CardFrame({ className, render, ...props }: useRender.ComponentPr
 export function CardFrameHeader({ className, render, ...props }: useRender.ComponentProps<"div">): React.ReactElement {
   return renderSlot(className, "card-frame-header", { ...props, render }, {
     position: "relative",
-    display: "flex",
+    display: "grid",
     gridTemplateRows: "auto auto",
     gridAutoRows: "min-content",
     flexDirection: "column",
@@ -124,7 +124,7 @@ export function CardHeader({ className, render, ...props }: useRender.ComponentP
     gap: "1.5",
     padding: "6",
     "&:has([data-slot='card-action'])": { gridTemplateColumns: "1fr auto" },
-    "&:where([data-slot='card']:has(> [data-slot='card-panel']))": { paddingBottom: "4" },
+    ":where([data-slot='card']:has(> [data-slot='card-panel'])) &": { paddingBottom: "4" },
   });
 }
 
@@ -151,8 +151,8 @@ export function CardPanel({ className, render, ...props }: useRender.ComponentPr
   return renderSlot(className, "card-panel", { ...props, render }, {
     flex: "1",
     padding: "6",
-    "&:where([data-slot='card']:has(> [data-slot='card-header']:not(.border-b)))": { paddingTop: 0 },
-    "&:where([data-slot='card']:has(> [data-slot='card-footer']:not(.border-t)))": { paddingBottom: 0 },
+    ":where([data-slot='card']:has(> [data-slot='card-header']:not(.border-b))) &": { paddingTop: 0 },
+    ":where([data-slot='card']:has(> [data-slot='card-footer']:not(.border-t))) &": { paddingBottom: 0 },
   });
 }
 
@@ -161,7 +161,7 @@ export function CardFooter({ className, render, ...props }: useRender.ComponentP
     display: "flex",
     alignItems: "center",
     padding: "6",
-    "&:where([data-slot='card']:has(> [data-slot='card-panel']))": { paddingTop: "4" },
+    ":where([data-slot='card']:has(> [data-slot='card-panel'])) &": { paddingTop: "4" },
   });
 }
 
