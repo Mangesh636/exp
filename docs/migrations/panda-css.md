@@ -18,6 +18,9 @@ Working branch: `codex/panda-css-migration`
 
 - Design-system gallery added under `apps/design-system` and exposed at `/design-system`. It renders live shared components rather than placeholder replicas, covers all 56 inventory entries across foundations, forms, feedback, layout, navigation, composite controls, overlays, and utilities, and provides copyable example snippets. The route and gallery files are in place; codegen, lint, TypeScript, production build, and visual checks must be rerun after these additions.
 
+
+- Runtime CSS parser follow-up: replaced a Tailwind arbitrary-descendant utility that had been incorrectly escaped as a literal Panda class selector in `command.tsx` with the equivalent native descendant attribute selector. This prevents Panda from emitting the malformed `.\[\*\*...` selector that Turbopack rejected. Recheck the route locally after regenerating Panda output.
+
 ## Component inventory
 
 ### Migrated to Panda CSS (54 implementations; parity still needs local validation)
