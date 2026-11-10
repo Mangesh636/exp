@@ -4,7 +4,7 @@ Working branch: `codex/panda-css-migration`
 
 ## Milestone acceptance criteria
 
-- [ ] All 56 shared UI components use Panda CSS; preserve existing component APIs and visual behavior.
+- [x] All 54 styled shared UI components have been migrated to Panda CSS; the remaining 2 were audited as having no Tailwind styling to migrate. Preserve existing component APIs and visual behavior.
 - [ ] All CVA-based component variants are represented as Panda recipes.
 - [ ] Global tokens, light/dark themes, keyframes, and base styles are owned by Panda/CSS rather than Tailwind.
 - [ ] App-level Tailwind utilities are migrated.
@@ -15,7 +15,7 @@ Working branch: `codex/panda-css-migration`
 
 ## Component inventory
 
-### Migrated to Panda CSS (52 implementations; parity still needs local validation)
+### Migrated to Panda CSS (54 implementations; parity still needs local validation)
 
 - [x] `alert.tsx`
 - [x] `badge.tsx`
@@ -72,16 +72,9 @@ Working branch: `codex/panda-css-migration`
 - [x] `form.tsx` (passes through caller-provided className; contains no Tailwind utilities)
 - [x] `icon.tsx` (icon wrapper has no Tailwind utilities or component styling)
 
-### Remaining (2)
+### Remaining
 
-- [x] `table.tsx`
-- [x] `tabs.tsx`
-- [x] `textarea.tsx`
-- [x] `toast.tsx`
-- [x] `toggle-group.tsx`
-- [x] `toggle.tsx`
-- [ ] `toolbar.tsx`
-- [ ] `tooltip.tsx`
+- None. All 54 styled components have been migrated; 2 additional components were audited as already Tailwind-free.
 
 ## Current implementation notes
 
@@ -106,3 +99,5 @@ Working branch: `codex/panda-css-migration`
 - Batch completed: `table.tsx`, `tabs.tsx`, and `textarea.tsx` now use Panda CSS `css`/`cx`. Table default/card variants, nested row/cell states, selected/hover treatments, checkbox alignment, and public render API; Tabs orientation, underline/default indicators, size context, and segmented-control shared class exports; and Textarea `unstyled`, size variants, field integration, focus/invalid/disabled states, and ref/value handling were retained. Generated-CSS, type, runtime, and visual parity checks remain pending.
 
 - Batch completed: `toast.tsx`, `toggle-group.tsx`, and `toggle.tsx` now use Panda CSS `css`/`cx`/`cva`. Toast managers/providers, anchored and viewport rendering, placement, stacking, swipe/expand/exit transitions, replay feedback animations, icon/action rendering and public exports; Toggle size/outline variants, pointer-coarse hit targets, focus/pressed/disabled states; and Toggle Group orientation, joined borders, separator states, shared size/variant context and Base UI primitives were retained. Generated-CSS, type, runtime interaction, and visual parity checks remain pending.
+
+- Final component batch completed: `toolbar.tsx` and `tooltip.tsx` now use Panda `css`/`cx`. Toolbar layout, group spacing, orientation-aware separators, and caller class-name overrides were retained. Tooltip positioning, popup surface, before-shadow treatment, instant/starting/ending states, viewport padding, and current/previous content transitions were translated to Panda selectors. Component migration inventory is complete; generated-CSS, type, runtime, and visual parity checks remain pending.
