@@ -1,11 +1,99 @@
 "use client";
 
 import { OTPField as OTPFieldPrimitive } from "@base-ui/react/otp-field";
-import { cn } from "cn";
+import { css, cx } from "styled-system/css";
 
 import type * as React from "react";
 
 import { Separator } from "@/shared/components/ui/separator";
+
+const rootStyle = css({
+  display: "flex",
+  alignItems: "center",
+  gap: "2",
+  "&[data-disabled]": {
+    opacity: 0.64,
+    "& [data-slot='otp-field-input']": {
+      boxShadow: "none",
+      "&::before": { boxShadow: "none !important" },
+    },
+  },
+});
+
+const inputStyle = css({
+  position: "relative",
+  width: "2.25rem",
+  height: "2.25rem",
+  minWidth: 0,
+  borderWidth: "1px",
+  borderColor: "var(--input)",
+  borderRadius: "lg",
+  backgroundColor: "var(--background)",
+  backgroundClip: "padding-box",
+  textAlign: "center",
+  fontSize: "base",
+  lineHeight: "2.25rem",
+  color: "var(--foreground)",
+  boxShadow: "0 1px 2px color-mix(in srgb, black 5%, transparent)",
+  outline: "none",
+  transitionProperty: "box-shadow",
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    inset: 0,
+    pointerEvents: "none",
+    borderRadius: "calc(var(--radius-lg) - 1px)",
+  },
+  "&:not(:focus-visible):not([aria-invalid])::before": {
+    boxShadow: "0 1px 0 color-mix(in srgb, black 4%, transparent)",
+  },
+  "&:focus-visible": {
+    zIndex: 10,
+    borderColor: "var(--ring)",
+    boxShadow: "0 0 0 3px color-mix(in srgb, var(--ring) 24%, transparent)",
+  },
+  "&[aria-invalid]": {
+    borderColor: "color-mix(in srgb, var(--destructive) 36%, transparent)",
+    boxShadow: "none",
+    "&:focus-visible": {
+      borderColor: "color-mix(in srgb, var(--destructive) 64%, transparent)",
+      boxShadow: "0 0 0 3px color-mix(in srgb, var(--destructive) 16%, transparent)",
+    },
+  },
+  "[data-slot='otp-field'][data-size='lg'] &": {
+    width: "2.5rem",
+    height: "2.5rem",
+    fontSize: "lg",
+    lineHeight: "2.5rem",
+  },
+  "@media (min-width: 40rem)": {
+    width: "2rem",
+    height: "2rem",
+    fontSize: "sm",
+    lineHeight: "2rem",
+    "[data-slot='otp-field'][data-size='lg'] &": {
+      width: "2.25rem",
+      height: "2.25rem",
+      fontSize: "base",
+      lineHeight: "2.25rem",
+    },
+  },
+  _dark: {
+    backgroundColor: "color-mix(in srgb, var(--input) 32%, transparent)",
+    "&:not(:focus-visible):not([aria-invalid])::before": {
+      boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
+    },
+    "&[aria-invalid]:focus-visible": {
+      boxShadow: "0 0 0 3px color-mix(in srgb, var(--destructive) 24%, transparent)",
+    },
+  },
+});
+
+const separatorStyle = css({
+  borderRadius: "full",
+  backgroundColor: "var(--input)",
+  "&[data-orientation='horizontal']": { height: "0.125rem", width: "0.75rem" },
+});
 
 export function OTPField({
   className,
@@ -16,10 +104,7 @@ export function OTPField({
 }): React.ReactElement {
   return (
     <OTPFieldPrimitive.Root
-      className={cn(
-        "flex items-center gap-2 has-disabled:opacity-64 has-disabled:**:data-[slot=otp-field-input]:shadow-none has-disabled:**:data-[slot=otp-field-input]:before:shadow-none!",
-        className,
-      )}
+      className={cx(rootStyle, className)}
       data-size={size}
       data-slot="otp-field"
       {...props}
@@ -33,10 +118,7 @@ export function OTPFieldInput({
 }: React.ComponentProps<typeof OTPFieldPrimitive.Input>): React.ReactElement {
   return (
     <OTPFieldPrimitive.Input
-      className={cn(
-        "relative in-[[data-slot=otp-field][data-size=lg]]:size-10 size-9 min-w-0 rounded-lg border border-input bg-background not-dark:bg-clip-padding text-center in-[[data-slot=otp-field][data-size=lg]]:text-lg text-base text-foreground in-[[data-slot=otp-field][data-size=lg]]:leading-10 leading-9 shadow-xs/5 outline-none ring-ring/24 transition-shadow before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] not-focus-visible:not-aria-invalid:before:shadow-[0_1px_--theme(--color-black/4%)] focus-visible:z-10 focus-visible:border-ring focus-visible:shadow-none focus-visible:ring-[3px] focus-visible:ring-ring/24 aria-invalid:border-destructive/36 aria-invalid:shadow-none aria-invalid:focus-visible:border-destructive/64 aria-invalid:focus-visible:ring-destructive/16 sm:in-[[data-slot=otp-field][data-size=lg]]:size-9 sm:size-8 sm:in-[[data-slot=otp-field][data-size=lg]]:text-base sm:text-sm sm:in-[[data-slot=otp-field][data-size=lg]]:leading-9 sm:leading-8 dark:bg-input/32 dark:aria-invalid:focus-visible:ring-destructive/24 dark:not-focus-visible:not-aria-invalid:before:shadow-[0_-1px_--theme(--color-white/6%)]",
-        className,
-      )}
+      className={cx(inputStyle, className)}
       data-slot="otp-field-input"
       spellCheck={false}
       {...props}
@@ -52,10 +134,7 @@ export function OTPFieldSeparator({
     <OTPFieldPrimitive.Separator
       render={
         <Separator
-          className={cn(
-            "rounded-full bg-input data-[orientation=horizontal]:h-0.5 data-[orientation=horizontal]:w-3",
-            className,
-          )}
+          className={cx(separatorStyle, className)}
           orientation="horizontal"
           {...props}
         />
