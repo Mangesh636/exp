@@ -8,7 +8,7 @@ Working branch: `codex/panda-css-migration`
 - [ ] All CVA-based component variants are represented as Panda recipes.
 - [x] Global tokens, light/dark themes, and base styles are owned by Panda global styles; custom keyframes remain as standard CSS in `globals.css`.
 - [ ] Audit all app-level files for remaining Tailwind utility usage (the root layout's utilities have been replaced with Panda global styles).
-- [ ] Tailwind packages, directives, and Turbopack integration are removed only after no Tailwind usage remains.
+- [x] Tailwind directives and Turbopack integration removed; Tailwind packages removed from `package.json`. Regenerate `pnpm-lock.yaml` locally and confirm no third-party dependency expects Tailwind.
 - [ ] `apps/design-system` provides a shadcn-style component gallery with previews, variants, states, and copyable examples.
 - [ ] Run Panda codegen, Biome, TypeScript, and production build locally; resolve all errors.
 - [ ] Review visual parity in light and dark themes at responsive breakpoints.
@@ -85,8 +85,8 @@ Working branch: `codex/panda-css-migration`
 ## Current implementation notes
 
 - Panda CSS config and PostCSS integration were already present on `main`; this migration extends the extraction include paths to cover `apps/**`.
-- Tailwind dependencies remain temporarily until the repository-wide usage audit is complete and the lockfile can be regenerated.
-- TypeScript check: user reports `pnpm exec tsc --noEmit` now completes with no errors. Panda codegen, lint, production build, and light/dark visual checks are still pending.
+- Tailwind dependencies and the Tailwind Turbopack loader have been removed from `package.json` and `next.config.ts`. The lockfile still needs regeneration with pnpm.
+- TypeScript check: user reports `pnpm exec tsc --noEmit` completes with no errors before the latest global-style and app-page changes. Re-run after Panda codegen and lockfile regeneration; lint, production build, and light/dark visual checks are also pending.
 - The design-system showcase is intentionally deferred until the component migration and token layer are stable, so it documents the real shared components rather than parallel or placeholder implementations.
 - Batch completed: `combobox.tsx`, `command.tsx`, and `context-menu.tsx` now use Panda `css`/`cx`; public exports and Base UI primitive composition were retained. These are implementation-complete only and still require generated-CSS, type, and visual parity checks.
 
@@ -114,3 +114,6 @@ Working branch: `codex/panda-css-migration`
 
 
 - Global-style migration: moved the light/dark semantic color variables, font variables, spacing/radius aliases, and base element styles into Panda's `globalCss`; added the neutral palette and font tokens to the Panda theme. Removed Tailwind's `@import`, `@custom-variant`, `@theme`, and `@apply` directives from `src/app/globals.css`, retaining only the project's standard CSS keyframes. Replaced the remaining Tailwind utility classes on the root layout with global styles. This change follows Panda's documented `globalCss` and token configuration model; code generation and visual parity still require local verification.
+
+
+- App-level migration: replaced the starter home page's Tailwind utilities with Panda `css` styles, including responsive and dark-mode variants. Removed the Tailwind Turbopack CSS loader and removed `tailwindcss`, `@tailwindcss/turbopack`, and `tw-animate-css` from `package.json`. The pnpm lockfile must be regenerated locally before install/build validation.
