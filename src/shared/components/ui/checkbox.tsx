@@ -1,7 +1,7 @@
 "use client";
 
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox";
-import { css, cx } from "styled-system/css";
+import { css, cx } from "../../../../styled-system/css";
 
 import type React from "react";
 
