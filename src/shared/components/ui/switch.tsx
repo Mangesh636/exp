@@ -1,7 +1,7 @@
 "use client";
 
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch";
-import { cn } from "cn";
+import { css } from "styled-system/css";
 
 import type React from "react";
 
@@ -11,17 +11,51 @@ export function Switch({
 }: SwitchPrimitive.Root.Props): React.ReactElement {
   return (
     <SwitchPrimitive.Root
-      className={cn(
-        "inline-flex h-[calc(var(--thumb-size)+2px)] w-[calc(var(--thumb-size)*2-2px)] shrink-0 items-center rounded-full p-px outline-none transition-[background-color,box-shadow] duration-200 [--thumb-size:--spacing(5)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background data-disabled:cursor-not-allowed data-checked:bg-primary data-unchecked:bg-input data-disabled:opacity-64 sm:[--thumb-size:--spacing(4)]",
+      className={[
+        css({
+          display: "inline-flex",
+          height: "calc(var(--thumb-size) + 2px)",
+          width: "calc(var(--thumb-size) * 2 - 2px)",
+          flexShrink: 0,
+          alignItems: "center",
+          borderRadius: "full",
+          padding: "1px",
+          outline: "none",
+          transitionProperty: "background-color, box-shadow",
+          transitionDuration: "200ms",
+          "--thumb-size": "var(--spacing(5))",
+          "&:focus-visible": {
+            outline: "2px solid var(--ring)",
+            outlineOffset: "2px",
+          },
+          "&[data-disabled]": { cursor: "not-allowed", opacity: 0.64 },
+          "&[data-checked]": { backgroundColor: "var(--primary)" },
+          "&[data-unchecked]": { backgroundColor: "var(--input)" },
+          "@media (min-width: 40rem)": { "--thumb-size": "var(--spacing(4))" },
+        }),
         className,
-      )}
+      ].filter(Boolean).join(" ")}
       data-slot="switch"
       {...props}
     >
       <SwitchPrimitive.Thumb
-        className={cn(
-          "pointer-events-none block aspect-square h-full origin-left in-[[role=switch]:active,[data-slot=label]:active,[data-slot=field-label]:active]:not-data-disabled:scale-x-110 in-[[role=switch]:active,[data-slot=label]:active,[data-slot=field-label]:active]:rounded-[var(--thumb-size)/calc(var(--thumb-size)*1.1)] rounded-(--thumb-size) bg-background shadow-sm/5 will-change-transform [transition:translate_.15s,border-radius_.15s,scale_.1s_.1s,transform-origin_.15s] data-checked:origin-[var(--thumb-size)_50%] data-checked:translate-x-[calc(var(--thumb-size)-4px)] rtl:origin-right rtl:data-checked:origin-left rtl:data-checked:-translate-x-[calc(var(--thumb-size)-4px)]",
-        )}
+        className={css({
+          display: "block",
+          aspectRatio: "1",
+          height: "100%",
+          transformOrigin: "left center",
+          borderRadius: "full",
+          backgroundColor: "var(--background)",
+          boxShadow: "0 1px 2px rgb(0 0 0 / 0.05)",
+          pointerEvents: "none",
+          willChange: "transform",
+          transition: "translate 150ms, border-radius 150ms, scale 100ms 100ms, transform-origin 150ms",
+          "&[data-checked]": {
+            transformOrigin: "var(--thumb-size) 50%",
+            translate: "calc(var(--thumb-size) - 4px) 0",
+          },
+          "&[data-unchecked]": { translate: "0 0" },
+        })}
         data-slot="switch-thumb"
       />
     </SwitchPrimitive.Root>
