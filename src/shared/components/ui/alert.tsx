@@ -1,37 +1,72 @@
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "cn";
+import { cva, css, cx } from "styled-system/css";
 
-import type * as React from "react";
+import type React from "react";
 
-const alertVariants = cva(
-  "relative grid w-full items-start gap-x-2 gap-y-0.5 rounded-xl border px-3.5 py-3 text-card-foreground text-sm has-[>svg]:has-data-[slot=alert-action]:grid-cols-[calc(var(--spacing)*4)_1fr_auto] has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] has-data-[slot=alert-action]:grid-cols-[1fr_auto] has-[>svg]:gap-x-2 [&>svg]:h-lh [&>svg]:w-4",
-  {
-    defaultVariants: {
-      variant: "default",
+const alertVariants = cva({
+  base: {
+    position: "relative",
+    display: "grid",
+    width: "100%",
+    alignItems: "start",
+    columnGap: "2",
+    rowGap: "0.125rem",
+    borderRadius: "xl",
+    borderWidth: "1px",
+    paddingX: "3.5",
+    paddingY: "3",
+    color: "var(--card-foreground)",
+    fontSize: "sm",
+    "&:has(> svg)": { columnGap: "2", gridTemplateColumns: "calc(var(--spacing) * 4) 1fr" },
+    "&:has(> svg):has([data-slot='alert-action'])": {
+      gridTemplateColumns: "calc(var(--spacing) * 4) 1fr auto",
     },
-    variants: {
-      variant: {
-        default:
-          "bg-transparent dark:bg-input/32 [&>svg]:text-muted-foreground",
-        error:
-          "border-destructive/32 bg-destructive/4 [&>svg]:text-destructive",
-        info: "border-info/32 bg-info/4 [&>svg]:text-info",
-        success: "border-success/32 bg-success/4 [&>svg]:text-success",
-        warning: "border-warning/32 bg-warning/4 [&>svg]:text-warning",
+    "&:has([data-slot='alert-action']):not(:has(> svg))": {
+      gridTemplateColumns: "1fr auto",
+    },
+    "& > svg": { width: "1rem", height: "1lh" },
+  },
+  variants: {
+    variant: {
+      default: {
+        backgroundColor: "transparent",
+        "& > svg": { color: "var(--muted-foreground)" },
+        _dark: { backgroundColor: "color-mix(in srgb, var(--input) 32%, transparent)" },
+      },
+      error: {
+        borderColor: "color-mix(in srgb, var(--destructive) 32%, transparent)",
+        backgroundColor: "color-mix(in srgb, var(--destructive) 4%, transparent)",
+        "& > svg": { color: "var(--destructive)" },
+      },
+      info: {
+        borderColor: "color-mix(in srgb, var(--info) 32%, transparent)",
+        backgroundColor: "color-mix(in srgb, var(--info) 4%, transparent)",
+        "& > svg": { color: "var(--info)" },
+      },
+      success: {
+        borderColor: "color-mix(in srgb, var(--success) 32%, transparent)",
+        backgroundColor: "color-mix(in srgb, var(--success) 4%, transparent)",
+        "& > svg": { color: "var(--success)" },
+      },
+      warning: {
+        borderColor: "color-mix(in srgb, var(--warning) 32%, transparent)",
+        backgroundColor: "color-mix(in srgb, var(--warning) 4%, transparent)",
+        "& > svg": { color: "var(--warning)" },
       },
     },
   },
-);
+  defaultVariants: { variant: "default" },
+});
+
+type AlertVariant = "default" | "error" | "info" | "success" | "warning";
 
 export function Alert({
   className,
   variant,
   ...props
-}: React.ComponentProps<"div"> &
-  VariantProps<typeof alertVariants>): React.ReactElement {
+}: React.ComponentProps<"div"> & { variant?: AlertVariant }): React.ReactElement {
   return (
     <div
-      className={cn(alertVariants({ variant }), className)}
+      className={cx(alertVariants({ variant }), className)}
       data-slot="alert"
       role="alert"
       {...props}
@@ -45,7 +80,7 @@ export function AlertTitle({
 }: React.ComponentProps<"div">): React.ReactElement {
   return (
     <div
-      className={cn("font-medium [svg~&]:col-start-2", className)}
+      className={cx(css({ fontWeight: "medium", "&:is(svg ~ *)": { gridColumnStart: 2 } }), className)}
       data-slot="alert-title"
       {...props}
     />
@@ -58,8 +93,14 @@ export function AlertDescription({
 }: React.ComponentProps<"div">): React.ReactElement {
   return (
     <div
-      className={cn(
-        "flex flex-col gap-2.5 text-muted-foreground [svg~&]:col-start-2",
+      className={cx(
+        css({
+          display: "flex",
+          flexDirection: "column",
+          gap: "2.5",
+          color: "var(--muted-foreground)",
+          "&:is(svg ~ *)": { gridColumnStart: 2 },
+        }),
         className,
       )}
       data-slot="alert-description"
@@ -74,8 +115,25 @@ export function AlertAction({
 }: React.ComponentProps<"div">): React.ReactElement {
   return (
     <div
-      className={cn(
-        "flex gap-1 max-sm:col-start-2 max-sm:mt-2 sm:row-start-1 sm:row-end-3 sm:self-center sm:[[data-slot=alert-description]~&]:col-start-2 sm:[[data-slot=alert-title]~&]:col-start-2 sm:[svg~&]:col-start-2 sm:[svg~[data-slot=alert-description]~&]:col-start-3 sm:[svg~[data-slot=alert-title]~&]:col-start-3",
+      className={cx(
+        css({
+          display: "flex",
+          gap: "1",
+          "@media (max-width: 39.999rem)": {
+            gridColumnStart: 2,
+            marginTop: "2",
+          },
+          "@media (min-width: 40rem)": {
+            gridRowStart: 1,
+            gridRowEnd: 3,
+            alignSelf: "center",
+            "&:is([data-slot='alert-description'] ~ *)": { gridColumnStart: 2 },
+            "&:is([data-slot='alert-title'] ~ *)": { gridColumnStart: 2 },
+            "&:is(svg ~ *)": { gridColumnStart: 2 },
+            "&:is(svg ~ [data-slot='alert-description'] ~ *)": { gridColumnStart: 3 },
+            "&:is(svg ~ [data-slot='alert-title'] ~ *)": { gridColumnStart: 3 },
+          },
+        }),
         className,
       )}
       data-slot="alert-action"
