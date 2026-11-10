@@ -70,7 +70,7 @@ const composerFrameStyle = css({
   },
   "&:has([data-slot='composer-input']:focus-visible):has([aria-invalid])": {
     borderColor: "color-mix(in srgb, var(--destructive) 64%, transparent)",
-    boxShadow: "none",
+    boxShadow: "0 0 0 3px color-mix(in srgb, var(--destructive) 16%, transparent)",
   },
   "&:has([data-slot='composer-input']:focus-visible):not(:has([aria-invalid]))": {
     borderColor: "var(--ring)",
@@ -163,7 +163,7 @@ const composerScrollStyle = css({
   "--composer-scroll-padding": "var(--composer-padding)",
   ":where([data-layout='adaptive'][data-multiline]) &": {
     gridColumn: "1 / -1",
-    gridRow: "auto",
+    gridRowStart: 1,
     alignSelf: "stretch",
   },
   ":where([data-layout='adaptive']) &": {
@@ -175,10 +175,10 @@ const composerScrollStyle = css({
     "--composer-scroll-padding": "0px",
   },
   "& [data-slot='scroll-area-viewport']": {
-    height: "auto",
+    height: "auto !important",
     maxHeight: "min(var(--composer-max-height, calc(var(--composer-max-rows, 8) * var(--composer-line-height, 1lh) + var(--composer-input-padding, var(--spacing) * 2) + var(--composer-scroll-padding))), 50dvh)",
-    minHeight: 0,
-    paddingBottom: 0,
+    minHeight: "0 !important",
+    paddingBottom: "0 !important",
   },
   "& [data-slot='scroll-area-content']": {
     paddingTop: "max(0px, calc(var(--composer-scroll-padding) - 1px))",
@@ -224,7 +224,7 @@ const composerPopupStyle = css({
   color: "var(--popover-foreground)",
   boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.05)",
   outline: "none",
-  transitionProperty: "opacity",
+  transition: "opacity 150ms",
   "&::before": {
     content: '""',
     pointerEvents: "none",
@@ -247,7 +247,7 @@ const composerListStyle = css({
 const composerListScrollStyle = css({
   height: "auto",
   "& [data-slot='scroll-area-viewport']": {
-    height: "auto",
+    height: "auto !important",
     maxHeight: "min(var(--available-height), 16rem)",
   },
 });
