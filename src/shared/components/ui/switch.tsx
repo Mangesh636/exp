@@ -2,6 +2,7 @@
 
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch";
 import { css } from "../../../../styled-system/css";
+import { cx } from "@/shared/lib/cx";
 
 import type React from "react";
 
