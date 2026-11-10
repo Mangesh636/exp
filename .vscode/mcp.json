@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "panda": {
+      "command": "pnpm dlx",
+      "args": ["-y", "@pandacss/mcp"]
+    }
+  }
+}
