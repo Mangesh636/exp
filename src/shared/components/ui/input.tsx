@@ -114,14 +114,14 @@ export function Input({
             },
           },
         }),
-        className,
+        typeof className === "string" ? className : undefined,
       ) || undefined}
       data-size={size}
       data-slot="input-control"
     >
       {nativeInput ? (
         <input
-          className={inputClassName}
+          className={cx(inputClassName, typeof className === "function" ? className : undefined)}
           data-slot="input"
           size={typeof size === "number" ? size : undefined}
           style={typeof style === "function" ? undefined : style}
@@ -129,7 +129,7 @@ export function Input({
         />
       ) : (
         <InputPrimitive
-          className={inputClassName}
+          className={cx(inputClassName, typeof className === "function" ? className : undefined)}
           data-slot="input"
           size={typeof size === "number" ? size : undefined}
           style={style}
