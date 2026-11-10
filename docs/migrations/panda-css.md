@@ -15,7 +15,7 @@ Working branch: `codex/panda-css-migration`
 
 ## Component inventory
 
-### Migrated to Panda CSS (43 implementations; parity still needs local validation)
+### Migrated to Panda CSS (46 implementations; parity still needs local validation)
 
 - [x] `alert.tsx`
 - [x] `badge.tsx`
@@ -66,11 +66,8 @@ Working branch: `codex/panda-css-migration`
 - [x] `form.tsx` (passes through caller-provided className; contains no Tailwind utilities)
 - [x] `icon.tsx` (icon wrapper has no Tailwind utilities or component styling)
 
-### Remaining (11)
+### Remaining (8)
 
-- [ ] `select.tsx`
-- [ ] `sheet.tsx`
-- [ ] `slider.tsx`
 - [ ] `table.tsx`
 - [ ] `tabs.tsx`
 - [ ] `textarea.tsx`
@@ -97,3 +94,5 @@ Working branch: `codex/panda-css-migration`
 - Batch completed: `otp-field.tsx`, `pagination.tsx`, and `popover.tsx` now use Panda CSS `css`/`cx`. OTP sizing, disabled/focus/invalid states, pagination's button recipe variants and responsive previous/next controls, and Popover positioning, animation states, tooltip styling, calendar viewport behavior, and public Base UI APIs were retained. Generated-CSS, type, runtime, and visual parity checks remain pending.
 
 - Batch completed: `preview-card.tsx`, `scroll-area.tsx`, and `segmented-control.tsx` now use Panda CSS `css`/`cx`. Preview-card positioning, popup animation and light/dark surface; Scroll Area overflow, conditional overscroll/gutter, fade masks and scrollbar interactions; and Segmented Control sizing, active states, animated indicator measurement/observers and public class-name exports were retained in the conversion. Generated-CSS, type, runtime, and visual parity checks remain pending.
+
+- Batch completed: `select.tsx`, `sheet.tsx`, and `slider.tsx` now use Panda CSS `css`/`cx`/`cva`. Select trigger sizing, popup positioning, scrolling arrows, item states and public exports; Sheet side/inset variants, backdrop and panel composition; and Slider orientation, multi-thumb rendering, focus and dragging states were retained. Generated-CSS, type, runtime interaction, and visual parity checks remain pending.
