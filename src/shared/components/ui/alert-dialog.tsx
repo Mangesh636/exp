@@ -174,7 +174,8 @@ export function AlertDialogFooter({
         "@media (min-width: 40rem)": {
           flexDirection: "row",
           justifyContent: "flex-end",
-          borderBottomRadius: "calc(var(--radius-2xl) - 1px)",
+          borderBottomLeftRadius: "calc(var(--radius-2xl) - 1px)",
+          borderBottomRightRadius: "calc(var(--radius-2xl) - 1px)",
         },
         ...(variant === "default" ? {
           borderTopWidth: "1px",
