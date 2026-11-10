@@ -1,5 +1,5 @@
 import { Separator as SeparatorPrimitive } from "@base-ui/react/separator";
-import { css } from "styled-system/css";
+import { css } from "../../../../styled-system/css";
 
 import type React from "react";
 
