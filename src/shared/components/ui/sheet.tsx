@@ -33,13 +33,78 @@ export function SheetViewport({ className, side, variant = "default", ...props }
 }
 
 export function SheetPopup({ className, children, showCloseButton = true, side = "right", variant = "default", closeProps, portalProps, ...props }: SheetPrimitive.Popup.Props & { showCloseButton?: boolean; side?: "right" | "left" | "top" | "bottom"; variant?: "default" | "inset"; closeProps?: SheetPrimitive.Close.Props; portalProps?: SheetPrimitive.Portal.Props }): React.ReactElement {
-  const sideStyles = side === "bottom" ? { gridRowStart: "2", borderTopWidth: "1px", "&[data-ending-style],&[data-starting-style]": { translate: "0 2rem" } } : side === "top" ? { borderBottomWidth: "1px", "&[data-ending-style],&[data-starting-style]": { translate: "0 -2rem" } } : side === "left" ? { w: "calc(100% - 3rem)", maxW: "md", borderInlineEndWidth: "1px", "&[data-ending-style],&[data-starting-style]": { translate: "-2rem 0" } } : { gridColumnStart: "2", w: "calc(100% - 3rem)", maxW: "md", borderInlineStartWidth: "1px", "&[data-ending-style],&[data-starting-style]": { translate: "2rem 0" } };
-  return <SheetPortal {...portalProps}><SheetBackdrop /><SheetViewport side={side} variant={variant}>
-    <SheetPrimitive.Popup className={cx(css({ position: "relative", display: "flex", maxH: "full", minH: "0", w: "full", minW: "0", flexDirection: "column", bg: "popover", color: "popover.foreground", boxShadow: "0 10px 15px -3px rgb(0 0 0 / 5%)", transition: "opacity 200ms ease-in-out, translate 200ms ease-in-out", willChange: "transform", _before: { content: '""', pointerEvents: "none", position: "absolute", inset: "0", boxShadow: "0 1px rgb(0 0 0 / 4%)" }, "&[data-ending-style],&[data-starting-style]": { opacity: "0" }, "@media (max-width: 639px)": { _before: { display: "none" } }, _dark: { _before: { boxShadow: "0 -1px rgb(255 255 255 / 6%)" } }, ...(sideStyles as object), ...(variant === "inset" ? { _before: { display: "none" }, "@media (min-width: 640px)": { rounded: "2xl", borderWidth: "1px", _before: { rounded: "calc(var(--radius-2xl) - 1px)" }, "& [data-slot=sheet-footer]": { borderBottomLeftRadius: "calc(var(--radius-2xl) - 1px)", borderBottomRightRadius: "calc(var(--radius-2xl) - 1px)" } } } : {}) }), className)} data-slot="sheet-popup" {...props}>
-      {children}
-      {showCloseButton && <SheetPrimitive.Close aria-label="Close" className={css({ position: "absolute", insetInlineEnd: "2", top: "2" })} render={<Button size="icon" variant="ghost" />} {...closeProps}><Icon icon={Cancel01Icon} /></SheetPrimitive.Close>}
-    </SheetPrimitive.Popup>
-  </SheetViewport></SheetPortal>;
+  const sideClassName = side === "bottom"
+    ? css({ gridRowStart: "2", borderTopWidth: "1px", "&[data-ending-style],&[data-starting-style]": { translate: "0 2rem" } })
+    : side === "top"
+      ? css({ borderBottomWidth: "1px", "&[data-ending-style],&[data-starting-style]": { translate: "0 -2rem" } })
+      : side === "left"
+        ? css({ w: "calc(100% - 3rem)", maxW: "md", borderInlineEndWidth: "1px", "&[data-ending-style],&[data-starting-style]": { translate: "-2rem 0" } })
+        : css({ gridColumnStart: "2", w: "calc(100% - 3rem)", maxW: "md", borderInlineStartWidth: "1px", "&[data-ending-style],&[data-starting-style]": { translate: "2rem 0" } });
+  const insetClassName = variant === "inset" ? css({
+    _before: { display: "none" },
+    "@media (min-width: 640px)": {
+      rounded: "2xl",
+      borderWidth: "1px",
+      _before: { rounded: "calc(var(--radius-2xl) - 1px)" },
+      "& [data-slot=sheet-footer]": {
+        borderBottomLeftRadius: "calc(var(--radius-2xl) - 1px)",
+        borderBottomRightRadius: "calc(var(--radius-2xl) - 1px)",
+      },
+    },
+  }) : undefined;
+
+  return (
+    <SheetPortal {...portalProps}>
+      <SheetBackdrop />
+      <SheetViewport side={side} variant={variant}>
+        <SheetPrimitive.Popup
+          className={cx(
+            css({
+              position: "relative",
+              display: "flex",
+              maxH: "full",
+              minH: "0",
+              w: "full",
+              minW: "0",
+              flexDirection: "column",
+              bg: "popover",
+              color: "popover.foreground",
+              boxShadow: "0 10px 15px -3px rgb(0 0 0 / 5%)",
+              transition: "opacity 200ms ease-in-out, translate 200ms ease-in-out",
+              willChange: "transform",
+              _before: {
+                content: '""',
+                pointerEvents: "none",
+                position: "absolute",
+                inset: "0",
+                boxShadow: "0 1px rgb(0 0 0 / 4%)",
+              },
+              "&[data-ending-style],&[data-starting-style]": { opacity: "0" },
+              "@media (max-width: 639px)": { _before: { display: "none" } },
+              _dark: { _before: { boxShadow: "0 -1px rgb(255 255 255 / 6%)" } },
+            }),
+            sideClassName,
+            insetClassName,
+            className,
+          )}
+          data-slot="sheet-popup"
+          {...props}
+        >
+          {children}
+          {showCloseButton && (
+            <SheetPrimitive.Close
+              aria-label="Close"
+              className={css({ position: "absolute", insetInlineEnd: "2", top: "2" })}
+              render={<Button size="icon" variant="ghost" />}
+              {...closeProps}
+            >
+              <Icon icon={Cancel01Icon} />
+            </SheetPrimitive.Close>
+          )}
+        </SheetPrimitive.Popup>
+      </SheetViewport>
+    </SheetPortal>
+  );
 }
 
 export function SheetHeader({ className, render, ...props }: useRender.ComponentProps<"div">): React.ReactElement {
