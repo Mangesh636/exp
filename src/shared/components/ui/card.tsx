@@ -14,6 +14,7 @@ const cardSurface = {
   borderWidth: "1px",
   backgroundColor: "var(--card)",
   color: "var(--card-foreground)",
+  ":where(html:not(.dark)) &": { backgroundClip: "padding-box" },
   boxShadow: "0 1px 2px rgb(0 0 0 / 0.05)",
   "&:before": {
     content: '""',
@@ -103,11 +104,13 @@ export function CardFrameDescription({ className, render, ...props }: useRender.
 export function CardFrameAction({ className, render, ...props }: useRender.ComponentProps<"div">): React.ReactElement {
   return renderSlot(className, "card-frame-action", { ...props, render }, {
     gridColumnStart: 2,
-    gridRow: "span 2",
-    alignSelf: "center",
-    justifySelf: "end",
     display: "inline-flex",
-    "&:nth-child(3)": { gridRowStart: 1 },
+    "&:nth-child(3)": {
+      gridRow: "span 2",
+      gridRowStart: 1,
+      alignSelf: "center",
+      justifySelf: "end",
+    },
   });
 }
 
