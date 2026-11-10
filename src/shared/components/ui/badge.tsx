@@ -2,7 +2,7 @@
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { cva, cx, type RecipeVariantProps } from "styled-system/css";
+import { cva, cx, type RecipeVariantProps } from "../../../../styled-system/css";
 
 import type React from "react";
 
