@@ -1,5 +1,5 @@
 import { Separator as SeparatorPrimitive } from "@base-ui/react/separator";
-import { cn } from "cn";
+import { css } from "styled-system/css";
 
 import type React from "react";
 
@@ -10,10 +10,23 @@ export function Separator({
 }: SeparatorPrimitive.Props): React.ReactElement {
   return (
     <SeparatorPrimitive
-      className={cn(
-        "shrink-0 bg-border data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px data-[orientation=vertical]:not-[[class^='h-']]:not-[[class*='_h-']]:self-stretch",
+      className={[
+        css({
+          flexShrink: 0,
+          backgroundColor: "var(--border)",
+          "&[data-orientation=horizontal]": {
+            height: "1px",
+            width: "100%",
+          },
+          "&[data-orientation=vertical]": {
+            width: "1px",
+            alignSelf: "stretch",
+          },
+        }),
         className,
-      )}
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="separator"
       orientation={orientation}
       {...props}
