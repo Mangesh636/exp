@@ -1,7 +1,7 @@
 "use client";
 
 import { Progress as ProgressPrimitive } from "@base-ui/react/progress";
-import { cn } from "cn";
+import { css } from "styled-system/css";
 
 import type React from "react";
 
@@ -12,7 +12,12 @@ export function Progress({
 }: ProgressPrimitive.Root.Props): React.ReactElement {
   return (
     <ProgressPrimitive.Root
-      className={cn("flex w-full flex-col gap-2", className)}
+      className={[
+        css({ display: "flex", width: "100%", flexDirection: "column", gap: "2" }),
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="progress"
       {...props}
     >
@@ -33,7 +38,12 @@ export function ProgressLabel({
 }: ProgressPrimitive.Label.Props): React.ReactElement {
   return (
     <ProgressPrimitive.Label
-      className={cn("font-medium text-sm", className)}
+      className={[
+        css({ fontWeight: "medium", fontSize: "sm" }),
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="progress-label"
       {...props}
     />
@@ -46,10 +56,19 @@ export function ProgressTrack({
 }: ProgressPrimitive.Track.Props): React.ReactElement {
   return (
     <ProgressPrimitive.Track
-      className={cn(
-        "block h-1.5 w-full overflow-hidden rounded-full bg-input",
+      className={[
+        css({
+          display: "block",
+          width: "100%",
+          height: "0.375rem",
+          overflow: "hidden",
+          borderRadius: "full",
+          backgroundColor: "var(--input)",
+        }),
         className,
-      )}
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="progress-track"
       {...props}
     />
@@ -62,7 +81,16 @@ export function ProgressIndicator({
 }: ProgressPrimitive.Indicator.Props): React.ReactElement {
   return (
     <ProgressPrimitive.Indicator
-      className={cn("bg-primary transition-all duration-500", className)}
+      className={[
+        css({
+          backgroundColor: "var(--primary)",
+          transitionProperty: "all",
+          transitionDuration: "500ms",
+        }),
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="progress-indicator"
       {...props}
     />
@@ -75,7 +103,12 @@ export function ProgressValue({
 }: ProgressPrimitive.Value.Props): React.ReactElement {
   return (
     <ProgressPrimitive.Value
-      className={cn("text-sm tabular-nums", className)}
+      className={[
+        css({ fontSize: "sm", fontVariantNumeric: "tabular-nums" }),
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="progress-value"
       {...props}
     />
