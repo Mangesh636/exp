@@ -125,9 +125,6 @@ const badgeVariants = cva({
         borderColor: "var(--input)",
         backgroundColor: "var(--background)",
         color: "var(--foreground)",
-        _dark: {
-          backgroundColor: "color-mix(in srgb, var(--input) 32%, transparent)",
-        },
         "&:is(button, a):hover": {
           backgroundColor: "color-mix(in srgb, var(--accent) 50%, transparent)",
         },
