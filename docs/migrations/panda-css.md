@@ -15,7 +15,7 @@ Working branch: `codex/panda-css-migration`
 
 ## Component inventory
 
-### Migrated to Panda CSS (37 implementations; parity still needs local validation)
+### Migrated to Panda CSS (40 implementations; parity still needs local validation)
 
 - [x] `alert.tsx`
 - [x] `badge.tsx`
@@ -54,17 +54,17 @@ Working branch: `codex/panda-css-migration`
 - [x] `input-group.tsx`
 - [x] `menu.tsx`
 - [x] `number-field.tsx`
+- [x] `otp-field.tsx`
+- [x] `pagination.tsx`
+- [x] `popover.tsx`
 
 ### Audited; no Tailwind styling to migrate (2)
 
 - [x] `form.tsx` (passes through caller-provided className; contains no Tailwind utilities)
 - [x] `icon.tsx` (icon wrapper has no Tailwind utilities or component styling)
 
-### Remaining (17)
+### Remaining (14)
 
-- [ ] `input-group.tsx`
-- [ ] `menu.tsx`
-- [ ] `number-field.tsx`
 - [ ] `otp-field.tsx`
 - [ ] `pagination.tsx`
 - [ ] `popover.tsx`
@@ -96,3 +96,5 @@ Working branch: `codex/panda-css-migration`
 - Batch audited: `form.tsx` and `icon.tsx` already contain no Tailwind utility styling, so their APIs and implementation were intentionally left unchanged. `group.tsx` was converted to Panda recipes and `css`/`cx`; orientation variants, joined-control borders, focus layering, separator focus behavior, dark-mode styling, and existing exports were retained. Generated-CSS, type, and visual parity checks remain pending.
 
 - Batch completed: `input-group.tsx`, `menu.tsx`, and `number-field.tsx` now use Panda CSS `css`/`cva`/`cx` styling. Existing component APIs, Base UI primitive composition, input focus-on-addon behavior, menu submenu/checkbox/radio/switch interactions, number-field sizing and scrub-area accessibility were retained. Generated-CSS, type, runtime interaction, and visual parity checks remain pending.
+
+- Batch completed: `otp-field.tsx`, `pagination.tsx`, and `popover.tsx` now use Panda CSS `css`/`cx`. OTP sizing, disabled/focus/invalid states, pagination's button recipe variants and responsive previous/next controls, and Popover positioning, animation states, tooltip styling, calendar viewport behavior, and public Base UI APIs were retained. Generated-CSS, type, runtime, and visual parity checks remain pending.
