@@ -17,57 +17,63 @@ Working branch: `codex/panda-css-migration`
 
 ### Migrated to Panda CSS (54 implementations; parity still needs local validation)
 
+- [x] `accordion.tsx`
+- [x] `alert-dialog.tsx`
 - [x] `alert.tsx`
+- [x] `autocomplete.tsx`
+- [x] `avatar.tsx`
 - [x] `badge.tsx`
 - [x] `breadcrumb.tsx`
 - [x] `button.tsx`
-- [x] `checkbox.tsx`
-- [x] `checkbox-group.tsx`
-- [x] `card.tsx`
-- [x] `alert-dialog.tsx`
-- [x] `accordion.tsx`
-- [x] `avatar.tsx`
-- [x] `autocomplete.tsx`
 - [x] `calendar.tsx`
+- [x] `card.tsx`
+- [x] `checkbox-group.tsx`
+- [x] `checkbox.tsx`
 - [x] `collapsible.tsx`
+- [x] `combobox.tsx`
+- [x] `command.tsx`
+- [x] `composer.tsx`
+- [x] `context-menu.tsx`
+- [x] `dialog.tsx`
+- [x] `drawer.tsx`
 - [x] `empty.tsx`
 - [x] `field.tsx`
 - [x] `fieldset.tsx`
 - [x] `frame.tsx`
+- [x] `group.tsx`
+- [x] `input-group.tsx`
 - [x] `input.tsx`
 - [x] `kbd.tsx`
 - [x] `label.tsx`
-- [x] `meter.tsx`
-- [x] `progress.tsx`
-- [x] `radio-group.tsx`
-- [x] `separator.tsx`
-- [x] `skeleton.tsx`
-- [x] `spinner.tsx`
-- [x] `switch.tsx`
-- [x] `combobox.tsx`
-- [x] `command.tsx`
-- [x] `context-menu.tsx`
-- [x] `composer.tsx`
-- [x] `dialog.tsx`
-- [x] `drawer.tsx`
-- [x] `group.tsx`
-- [x] `input-group.tsx`
 - [x] `menu.tsx`
+- [x] `meter.tsx`
 - [x] `number-field.tsx`
 - [x] `otp-field.tsx`
 - [x] `pagination.tsx`
 - [x] `popover.tsx`
 - [x] `preview-card.tsx`
+- [x] `progress.tsx`
+- [x] `radio-group.tsx`
 - [x] `scroll-area.tsx`
 - [x] `segmented-control.tsx`
 - [x] `select.tsx`
+- [x] `separator.tsx`
 - [x] `sheet.tsx`
+- [x] `skeleton.tsx`
 - [x] `slider.tsx`
+- [x] `spinner.tsx`
+- [x] `switch.tsx`
 - [x] `table.tsx`
 - [x] `tabs.tsx`
 - [x] `textarea.tsx`
+- [x] `toast.tsx`
+- [x] `toggle-group.tsx`
+- [x] `toggle.tsx`
+- [x] `toolbar.tsx`
+- [x] `tooltip.tsx`
 
 ### Audited; no Tailwind styling to migrate (2)
+ no Tailwind styling to migrate (2)
 
 - [x] `form.tsx` (passes through caller-provided className; contains no Tailwind utilities)
 - [x] `icon.tsx` (icon wrapper has no Tailwind utilities or component styling)
