@@ -1,6 +1,6 @@
 "use client";
 
-import { css, cva, cx, type RecipeVariantProps } from "styled-system/css";
+import { css, cva, cx, type RecipeVariantProps } from "../../../../styled-system/css";
 
 import type * as React from "react";
 
