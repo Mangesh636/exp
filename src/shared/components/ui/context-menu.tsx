@@ -11,7 +11,6 @@ import { Icon } from "@/shared/components/ui/icon";
 const popupStyle = css({
   position: "relative",
   display: "flex",
-  minWidth: "8rem",
   transformOrigin: "var(--transform-origin)",
   borderWidth: "1px",
   borderRadius: "lg",
