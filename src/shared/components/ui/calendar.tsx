@@ -1,7 +1,7 @@
 "use client";
 
 import { type DateLib, DayPicker } from "@daypicker/react";
-import { cn } from "cn";
+import { css, cx } from "styled-system/css";
 
 import type * as React from "react";
 
@@ -12,8 +12,186 @@ import {
 } from "@/shared/components/icons/interface-icon";
 import { Icon } from "@/shared/components/ui/icon";
 
-const buttonClassNames =
-  "relative flex size-(--cell-size) text-base sm:text-sm items-center justify-center rounded-lg text-foreground not-in-data-selected:hover:bg-accent disabled:pointer-events-none disabled:opacity-64 [&_svg:not([class*='opacity-'])]:opacity-80 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0";
+const buttonClassNames = css({
+  position: "relative",
+  display: "flex",
+  width: "var(--cell-size)",
+  height: "var(--cell-size)",
+  alignItems: "center",
+  justifyContent: "center",
+  borderRadius: "lg",
+  color: "var(--foreground)",
+  fontSize: "base",
+  "&:not([data-selected]):hover": { backgroundColor: "var(--accent)" },
+  "&:disabled": { pointerEvents: "none", opacity: 0.64 },
+  "& svg:not([class*='opacity-'])": { opacity: 0.8 },
+  "& svg:not([class*='size-'])": { width: "1.125rem", height: "1.125rem" },
+  "& svg": { pointerEvents: "none", flexShrink: 0 },
+  "@media (min-width: 40rem)": {
+    fontSize: "sm",
+    "& svg:not([class*='size-'])": { width: "1rem", height: "1rem" },
+  },
+});
+
+const dayButtonClassNames = css({
+  pointerEvents: "auto",
+  "&[data-disabled]": { pointerEvents: "none" },
+  "&.range-middle": { borderRadius: 0 },
+  "&.range-end:not(.range-start)": { borderStartEndRadius: 0, borderEndEndRadius: 0 },
+  "&.range-start:not(.range-end)": { borderStartStartRadius: 0, borderEndStartRadius: 0 },
+  "&.range-middle[data-selected]": {
+    backgroundColor: "var(--accent)",
+    color: "var(--foreground)",
+  },
+  "&[data-selected]": {
+    backgroundColor: "var(--primary)",
+    color: "var(--primary-foreground)",
+  },
+  "&[data-disabled], &[data-outside]": { color: "color-mix(in srgb, var(--muted-foreground) 72%, transparent)" },
+  "&[data-selected][data-outside]": { color: "var(--primary-foreground)" },
+  "&[data-disabled]": { textDecorationLine: "line-through" },
+  outline: "none",
+  "&[data-selected]:not(.range-middle)": {
+    transitionProperty: "border-radius, box-shadow",
+  },
+  "&:focus-visible": {
+    zIndex: 1,
+    boxShadow: "0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent)",
+  },
+});
+
+const defaultClassNames = {
+  button_next: buttonClassNames,
+  button_previous: buttonClassNames,
+  caption_label: css({
+    display: "flex",
+    height: "100%",
+    alignItems: "center",
+    gap: "0.5rem",
+    fontWeight: "medium",
+    fontSize: "base",
+    "@media (min-width: 40rem)": { fontSize: "sm" },
+  }),
+  day: css({
+    width: "var(--cell-size)",
+    height: "var(--cell-size)",
+    paddingY: "1px",
+    fontSize: "sm",
+  }),
+  day_button: cx(buttonClassNames, dayButtonClassNames),
+  dropdown: css({
+    position: "absolute",
+    inset: 0,
+    backgroundColor: "var(--popover)",
+    opacity: 0,
+  }),
+  dropdown_root: css({
+    position: "relative",
+    height: "2.25rem",
+    borderWidth: "1px",
+    borderColor: "var(--input)",
+    borderRadius: "lg",
+    paddingInline: "calc(var(--spacing) * 3 - 1px)",
+    boxShadow: "0 1px 2px rgb(0 0 0 / 0.05)",
+    "&:has(:focus)": {
+      borderColor: "var(--ring)",
+      boxShadow: "0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent)",
+    },
+    "& svg:not([class*='opacity-'])": { opacity: 0.8 },
+    "& svg:not([class*='size-'])": { width: "1.125rem", height: "1.125rem" },
+    "& svg": { pointerEvents: "none", marginInlineEnd: "-0.25rem" },
+    "@media (min-width: 40rem)": {
+      height: "2rem",
+      "& svg:not([class*='size-'])": { width: "1rem", height: "1rem" },
+    },
+  }),
+  dropdowns: css({
+    display: "flex",
+    width: "100%",
+    height: "var(--cell-size)",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "0.375rem",
+    fontSize: "base",
+    "& > * span": { fontWeight: "medium" },
+    "@media (min-width: 40rem)": { fontSize: "sm" },
+  }),
+  hidden: css({ visibility: "hidden" }),
+  month: css({ width: "100%" }),
+  month_caption: css({
+    position: "relative",
+    zIndex: 2,
+    display: "flex",
+    height: "var(--cell-size)",
+    alignItems: "center",
+    justifyContent: "center",
+    marginInline: "var(--cell-size)",
+    marginBottom: "0.25rem",
+    paddingX: "0.25rem",
+  }),
+  months: css({
+    position: "relative",
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.5rem",
+    "@media (min-width: 40rem)": { flexDirection: "row" },
+  }),
+  nav: css({
+    position: "absolute",
+    top: 0,
+    zIndex: 1,
+    display: "flex",
+    width: "100%",
+    justifyContent: "space-between",
+  }),
+  outside: css({
+    color: "var(--muted-foreground)",
+    "&[data-selected]": {
+      backgroundColor: "color-mix(in srgb, var(--accent) 50%, transparent)",
+      color: "var(--muted-foreground)",
+    },
+  }),
+  range_end: "range-end",
+  range_middle: "range-middle",
+  range_start: "range-start",
+  today: css({
+    "& > *::after": {
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+      bottom: "0.25rem",
+      insetInlineStart: "50%",
+      zIndex: 1,
+      width: "3px",
+      height: "3px",
+      transform: "translateX(-50%)",
+      borderRadius: "full",
+      backgroundColor: "var(--primary)",
+    },
+    "&[data-selected]:not(.range-middle) > *::after": {
+      backgroundColor: "var(--background)",
+    },
+    "&[data-disabled] > *::after": {
+      backgroundColor: "color-mix(in srgb, var(--foreground) 30%, transparent)",
+    },
+  }),
+  week_number: css({
+    width: "var(--cell-size)",
+    height: "var(--cell-size)",
+    padding: 0,
+    fontWeight: "medium",
+    fontSize: "xs",
+    color: "color-mix(in srgb, var(--muted-foreground) 72%, transparent)",
+  }),
+  weekday: css({
+    width: "var(--cell-size)",
+    height: "var(--cell-size)",
+    padding: 0,
+    fontWeight: "medium",
+    fontSize: "xs",
+    color: "color-mix(in srgb, var(--muted-foreground) 72%, transparent)",
+  }),
+};
 
 export function Calendar({
   className,
@@ -23,39 +201,6 @@ export function Calendar({
   mode = "single",
   ...props
 }: React.ComponentProps<typeof DayPicker>): React.ReactElement {
-  const defaultClassNames = {
-    button_next: buttonClassNames,
-    button_previous: buttonClassNames,
-    caption_label:
-      "text-base sm:text-sm font-medium flex items-center gap-2 h-full",
-    day: "size-(--cell-size) text-sm py-px",
-    day_button: cn(
-      buttonClassNames,
-      "in-data-disabled:pointer-events-none in-[.range-middle]:rounded-none in-[.range-end:not(.range-start)]:rounded-s-none in-[.range-start:not(.range-end)]:rounded-e-none in-[.range-middle]:in-data-selected:bg-accent in-data-selected:bg-primary in-[.range-middle]:in-data-selected:text-foreground in-data-disabled:text-muted-foreground/72 in-data-outside:text-muted-foreground/72 in-data-selected:in-data-outside:text-primary-foreground in-data-selected:text-primary-foreground in-data-disabled:line-through outline-none in-[[data-selected]:not(.range-middle)]:transition-[border-radius,box-shadow] focus-visible:z-1 focus-visible:ring-[3px] focus-visible:ring-ring/50",
-    ),
-    dropdown: "absolute bg-popover inset-0 opacity-0",
-    dropdown_root:
-      "relative has-focus:border-ring has-focus:ring-ring/50 has-focus:ring-[3px] border border-input shadow-xs/5 rounded-lg px-[calc(--spacing(3)-1px)] h-9 sm:h-8 [&_svg:not([class*='opacity-'])]:opacity-80 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:-me-1",
-    dropdowns:
-      "w-full flex items-center text-base sm:text-sm justify-center h-(--cell-size) gap-1.5 *:[span]:font-medium",
-    hidden: "invisible",
-    month: "w-full",
-    month_caption:
-      "relative mx-(--cell-size) px-1 mb-1 flex h-(--cell-size) items-center justify-center z-2",
-    months: "relative flex flex-col sm:flex-row gap-2",
-    nav: "absolute top-0 flex w-full justify-between z-1",
-    outside:
-      "text-muted-foreground data-selected:bg-accent/50 data-selected:text-muted-foreground",
-    range_end: "range-end",
-    range_middle: "range-middle",
-    range_start: "range-start",
-    today:
-      "*:after:pointer-events-none *:after:absolute *:after:bottom-1 *:after:start-1/2 *:after:z-1 *:after:size-[3px] *:after:-translate-x-1/2 *:after:rounded-full *:after:bg-primary [&[data-selected]:not(.range-middle)>*]:after:bg-background [&[data-disabled]>*]:after:bg-foreground/30",
-    week_number:
-      "size-(--cell-size) p-0 text-xs font-medium text-muted-foreground/72",
-    weekday:
-      "size-(--cell-size) p-0 text-xs font-medium text-muted-foreground/72",
-  };
   const mergedClassNames: typeof defaultClassNames = Object.keys(
     defaultClassNames,
   ).reduce(
@@ -65,7 +210,7 @@ export function Calendar({
         defaultClassNames[key as keyof typeof defaultClassNames];
 
       acc[key as keyof typeof defaultClassNames] = userClass
-        ? cn(baseClass, userClass)
+        ? cx(baseClass, userClass)
         : baseClass;
 
       return acc;
@@ -86,7 +231,9 @@ export function Calendar({
         return (
           <Icon
             icon={ChevronLeftIcon}
-            className={cn(className, "rtl:rotate-180")}
+            className={cx(className, css({ transform: "rotate(180deg)" }), css({
+              "&:dir(rtl)": { transform: "rotate(0deg)" },
+            }))}
             {...props}
             aria-hidden="true"
           />
@@ -97,7 +244,10 @@ export function Calendar({
         return (
           <Icon
             icon={ChevronRightIcon}
-            className={cn(className, "rtl:rotate-180")}
+            className={cx(className, css({
+              transform: "rotate(180deg)",
+              "&:dir(rtl)": { transform: "rotate(0deg)" },
+            }))}
             {...props}
             aria-hidden="true"
           />
@@ -121,8 +271,12 @@ export function Calendar({
   };
 
   const dayPickerProps = {
-    className: cn(
-      "w-fit [--cell-size:--spacing(10)] sm:[--cell-size:--spacing(9)]",
+    className: cx(
+      css({
+        width: "fit-content",
+        "--cell-size": "2.5rem",
+        "@media (min-width: 40rem)": { "--cell-size": "2.25rem" },
+      }),
       className,
     ),
     classNames: mergedClassNames,
