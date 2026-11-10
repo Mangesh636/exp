@@ -145,8 +145,8 @@ const toastContentStyles = css({
   pointerEvents: "auto", display: "flex", alignItems: "center", justifyContent: "space-between",
   gap: "0.375rem", overflow: "hidden", px: "0.875rem", py: "0.75rem", fontSize: "sm",
   transition: "opacity 250ms",
-  "&[data-behind]:not([data-expanded])": { pointerEvents: "none", opacity: "0" },
-  "&[data-expanded]": { opacity: "1" },
+  "&:where([data-behind]:not([data-expanded]) *)": { pointerEvents: "none", opacity: "0" },
+  "&:where([data-expanded] *)": { opacity: "1" },
 });
 
 const toastIconStyles = css({
