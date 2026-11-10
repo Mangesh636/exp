@@ -103,9 +103,9 @@ const inputGroupTextStyle = css({
   display: "flex", alignItems: "center", gap: "2", overflow: "hidden",
   whiteSpace: "nowrap", color: "var(--muted-foreground)",
   "& svg": { pointerEvents: "none", marginInline: "-0.125rem" },
-  "[data-slot='input-group']:has([data-slot='input-control'],[data-slot='textarea-control']) & svg:not([class*='size-'])": { width: "1.125rem", height: "1.125rem" },
+  "& svg:not([class*='size-'])": { width: "1.125rem", height: "1.125rem" },
   "@media (min-width: 40rem)": {
-    "[data-slot='input-group']:has([data-slot='input-control'],[data-slot='textarea-control']) & svg:not([class*='size-'])": { width: "1rem", height: "1rem" },
+    "& svg:not([class*='size-'])": { width: "1rem", height: "1rem" },
   },
 });
 
