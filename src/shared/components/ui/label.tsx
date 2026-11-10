@@ -20,7 +20,7 @@ export function Label({
         fontWeight: "medium",
         color: "var(--foreground)",
         fontSize: { base: "base", sm: "sm" },
-        lineHeight: { base: "4.5", sm: "4" },
+        lineHeight: { base: "1.125rem", sm: "1rem" },
       }),
       className,
     ]
