@@ -20,6 +20,7 @@ Working branch: `codex/panda-css-migration`
 - [x] `checkbox-group.tsx`
 - [x] `collapsible.tsx`
 - [x] `field.tsx`
+- [x] `empty.tsx`
 - [x] `fieldset.tsx`
 - [x] `frame.tsx`
 - [x] `kbd.tsx`
