@@ -15,7 +15,7 @@ Working branch: `codex/panda-css-migration`
 
 ## Component inventory
 
-### Migrated to Panda CSS (40 implementations; parity still needs local validation)
+### Migrated to Panda CSS (43 implementations; parity still needs local validation)
 
 - [x] `alert.tsx`
 - [x] `badge.tsx`
@@ -57,17 +57,17 @@ Working branch: `codex/panda-css-migration`
 - [x] `otp-field.tsx`
 - [x] `pagination.tsx`
 - [x] `popover.tsx`
+- [x] `preview-card.tsx`
+- [x] `scroll-area.tsx`
+- [x] `segmented-control.tsx`
 
 ### Audited; no Tailwind styling to migrate (2)
 
 - [x] `form.tsx` (passes through caller-provided className; contains no Tailwind utilities)
 - [x] `icon.tsx` (icon wrapper has no Tailwind utilities or component styling)
 
-### Remaining (14)
+### Remaining (11)
 
-- [ ] `preview-card.tsx`
-- [ ] `scroll-area.tsx`
-- [ ] `segmented-control.tsx`
 - [ ] `select.tsx`
 - [ ] `sheet.tsx`
 - [ ] `slider.tsx`
@@ -95,3 +95,5 @@ Working branch: `codex/panda-css-migration`
 - Batch completed: `input-group.tsx`, `menu.tsx`, and `number-field.tsx` now use Panda CSS `css`/`cva`/`cx` styling. Existing component APIs, Base UI primitive composition, input focus-on-addon behavior, menu submenu/checkbox/radio/switch interactions, number-field sizing and scrub-area accessibility were retained. Generated-CSS, type, runtime interaction, and visual parity checks remain pending.
 
 - Batch completed: `otp-field.tsx`, `pagination.tsx`, and `popover.tsx` now use Panda CSS `css`/`cx`. OTP sizing, disabled/focus/invalid states, pagination's button recipe variants and responsive previous/next controls, and Popover positioning, animation states, tooltip styling, calendar viewport behavior, and public Base UI APIs were retained. Generated-CSS, type, runtime, and visual parity checks remain pending.
+
+- Batch completed: `preview-card.tsx`, `scroll-area.tsx`, and `segmented-control.tsx` now use Panda CSS `css`/`cx`. Preview-card positioning, popup animation and light/dark surface; Scroll Area overflow, conditional overscroll/gutter, fade masks and scrollbar interactions; and Segmented Control sizing, active states, animated indicator measurement/observers and public class-name exports were retained in the conversion. Generated-CSS, type, runtime, and visual parity checks remain pending.
