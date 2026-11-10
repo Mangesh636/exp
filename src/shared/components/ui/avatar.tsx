@@ -1,7 +1,8 @@
 "use client";
 
 import { Avatar as AvatarPrimitive } from "@base-ui/react/avatar";
-import { css, cx } from "../../../../styled-system/css";
+import { css } from "../../../../styled-system/css";
+import { cx } from "@/shared/lib/cx";
 
 import type React from "react";
 
