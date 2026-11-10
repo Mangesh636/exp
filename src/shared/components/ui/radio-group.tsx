@@ -67,7 +67,13 @@ export function Radio({
             boxShadow: "none",
           },
           _dark: {
-            backgroundColor: "color-mix(in srgb, var(--input) 32%, transparent)",
+            backgroundClip: "border-box",
+            "&:not([data-checked])": {
+              backgroundColor: "color-mix(in srgb, var(--input) 32%, transparent)",
+            },
+            "&:focus-visible[aria-invalid='true']": {
+              boxShadow: "0 0 0 1px var(--background), 0 0 0 3px color-mix(in srgb, var(--destructive) 24%, transparent)",
+            },
           },
           "&:not([data-checked])[aria-invalid='true']": {
             borderColor: "color-mix(in srgb, var(--destructive) 36%, transparent)",
