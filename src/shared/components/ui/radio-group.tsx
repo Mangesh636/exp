@@ -12,7 +12,9 @@ export function RadioGroup({
 }: RadioGroupPrimitive.Props): React.ReactElement {
   return (
     <RadioGroupPrimitive
-      className={[css({ display: "flex", flexDirection: "column", gap: "3" }), className].filter(Boolean).join(" ")}
+      className={[css({ display: "flex", flexDirection: "column", gap: "3" }), className]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="radio-group"
       {...props}
     />
@@ -29,8 +31,8 @@ export function Radio({
         css({
           position: "relative",
           display: "inline-flex",
-          width: "4",
-          height: "4",
+          width: "4.5",
+          height: "4.5",
           flexShrink: 0,
           alignItems: "center",
           justifyContent: "center",
@@ -38,6 +40,7 @@ export function Radio({
           borderWidth: "1px",
           borderColor: "var(--input)",
           backgroundColor: "var(--background)",
+          backgroundClip: "padding-box",
           boxShadow: "0 1px 2px rgb(0 0 0 / 0.05)",
           outline: "none",
           transitionProperty: "box-shadow",
@@ -48,16 +51,39 @@ export function Radio({
             borderRadius: "full",
             pointerEvents: "none",
           },
+          "&:not([data-disabled]):not([data-checked]):not([aria-invalid='true']):before": {
+            boxShadow: "0 1px 0 color-mix(in srgb, black 4%, transparent)",
+          },
           "&:focus-visible": {
-            outline: "2px solid var(--ring)",
-            outlineOffset: "2px",
+            boxShadow: "0 0 0 1px var(--background), 0 0 0 3px var(--ring)",
+          },
+          "&[aria-invalid='true']": { borderColor: "color-mix(in srgb, var(--destructive) 36%, transparent)" },
+          "&:focus-visible[aria-invalid='true']": {
+            borderColor: "color-mix(in srgb, var(--destructive) 64%, transparent)",
+            boxShadow: "0 0 0 1px var(--background), 0 0 0 3px color-mix(in srgb, var(--destructive) 48%, transparent)",
           },
           "&[data-disabled]": { cursor: "not-allowed", opacity: 0.64 },
-          "&[data-checked]": { boxShadow: "none" },
-          _dark: { backgroundColor: "var(--input)" },
+          "&[data-disabled], &[data-checked], &[aria-invalid='true']": {
+            boxShadow: "none",
+          },
+          _dark: {
+            backgroundColor: "color-mix(in srgb, var(--input) 32%, transparent)",
+          },
+          "&:not([data-checked])[aria-invalid='true']": {
+            borderColor: "color-mix(in srgb, var(--destructive) 36%, transparent)",
+          },
+          "&:not([data-disabled]):not([data-checked]):not([aria-invalid='true']):before": {
+            boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
+          },
+          "@media (min-width: 40rem)": {
+            width: "1rem",
+            height: "1rem",
+          },
         }),
         className,
-      ].filter(Boolean).join(" ")}
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="radio"
       {...props}
     >
@@ -66,20 +92,25 @@ export function Radio({
           position: "absolute",
           inset: "-1px",
           display: "flex",
-          width: "4",
-          height: "4",
+          width: "1.125rem",
+          height: "1.125rem",
           alignItems: "center",
           justifyContent: "center",
           borderRadius: "full",
-          backgroundColor: "var(--primary)",
           "&:before": {
             content: '""',
-            width: "1.5",
-            height: "1.5",
+            width: "0.5rem",
+            height: "0.5rem",
             borderRadius: "full",
             backgroundColor: "var(--primary-foreground)",
           },
           "&[data-unchecked]": { display: "none" },
+          "&[data-checked]": { backgroundColor: "var(--primary)" },
+          "@media (min-width: 40rem)": {
+            width: "1rem",
+            height: "1rem",
+            "&:before": { width: "0.375rem", height: "0.375rem" },
+          },
         })}
         data-slot="radio-indicator"
       />
