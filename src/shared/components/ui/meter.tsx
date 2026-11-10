@@ -1,7 +1,7 @@
 "use client";
 
 import { Meter as MeterPrimitive } from "@base-ui/react/meter";
-import { css } from "styled-system/css";
+import { css } from "../../../../styled-system/css";
 
 import type React from "react";
 
