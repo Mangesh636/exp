@@ -15,7 +15,7 @@ Working branch: `codex/panda-css-migration`
 
 ## Component inventory
 
-### Migrated to Panda CSS (implementation; parity still needs local visual validation)
+### Migrated to Panda CSS (34 implementations; parity still needs local validation)
 
 - [x] `alert.tsx`
 - [x] `badge.tsx`
@@ -44,18 +44,21 @@ Working branch: `codex/panda-css-migration`
 - [x] `skeleton.tsx`
 - [x] `spinner.tsx`
 - [x] `switch.tsx`
-
-### Remaining
-
 - [x] `combobox.tsx`
 - [x] `command.tsx`
-- [x] `composer.tsx`
 - [x] `context-menu.tsx`
+- [x] `composer.tsx`
 - [x] `dialog.tsx`
 - [x] `drawer.tsx`
-- [x] `form.tsx` (audited: no Tailwind utilities; preserves caller-provided className)
 - [x] `group.tsx`
-- [x] `icon.tsx` (audited: no Tailwind utilities or component styling to migrate)
+
+### Audited; no Tailwind styling to migrate (2)
+
+- [x] `form.tsx` (passes through caller-provided className; contains no Tailwind utilities)
+- [x] `icon.tsx` (icon wrapper has no Tailwind utilities or component styling)
+
+### Remaining (20)
+
 - [ ] `input-group.tsx`
 - [ ] `menu.tsx`
 - [ ] `number-field.tsx`
