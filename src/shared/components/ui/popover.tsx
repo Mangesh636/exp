@@ -1,7 +1,7 @@
 "use client";
 
 import { Popover as PopoverPrimitive } from "@base-ui/react/popover";
-import { cn } from "cn";
+import { css, cx } from "styled-system/css";
 
 import type React from "react";
 
@@ -9,6 +9,98 @@ export const PopoverCreateHandle: typeof PopoverPrimitive.createHandle =
   PopoverPrimitive.createHandle;
 
 export const Popover: typeof PopoverPrimitive.Root = PopoverPrimitive.Root;
+
+const positionerStyle = css({
+  zIndex: 50,
+  height: "var(--positioner-height)",
+  width: "var(--positioner-width)",
+  maxWidth: "var(--available-width)",
+  transitionProperty: "top, left, right, bottom, transform",
+  "&[data-instant]": { transition: "none" },
+});
+
+const popupStyle = css({
+  position: "relative",
+  display: "flex",
+  height: "var(--popup-height, auto)",
+  width: "var(--popup-width, auto)",
+  transformOrigin: "var(--transform-origin)",
+  borderWidth: "1px",
+  borderColor: "var(--border)",
+  borderRadius: "lg",
+  backgroundColor: "var(--popover)",
+  backgroundClip: "padding-box",
+  color: "var(--popover-foreground)",
+  boxShadow: "0 10px 15px -3px color-mix(in srgb, black 5%, transparent)",
+  outline: "none",
+  transitionProperty: "width, height, scale, opacity",
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    inset: 0,
+    pointerEvents: "none",
+    borderRadius: "calc(var(--radius-lg) - 1px)",
+    boxShadow: "0 1px 0 color-mix(in srgb, black 4%, transparent)",
+  },
+  "&:has([data-slot='calendar'])": {
+    borderRadius: "xl",
+    "&::before": { borderRadius: "calc(var(--radius-xl) - 1px)" },
+  },
+  "&[data-starting-style]": { scale: "0.98", opacity: 0 },
+  "&:focus": { outline: "none" },
+  _dark: {
+    backgroundClip: "border-box",
+    "&::before": {
+      boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
+    },
+  },
+});
+
+const tooltipPopupStyle = css({
+  width: "fit-content",
+  borderRadius: "md",
+  fontSize: "xs",
+  boxShadow: "0 4px 6px -1px color-mix(in srgb, black 5%, transparent)",
+  "&::before": { borderRadius: "calc(var(--radius-md) - 1px)" },
+});
+
+const viewportStyle = css({
+  position: "relative",
+  width: "100%",
+  height: "100%",
+  maxHeight: "var(--available-height)",
+  overflow: "clip",
+  paddingInline: "var(--viewport-inline-padding)",
+  paddingBlock: "1rem",
+  "--viewport-inline-padding": "1rem",
+  "&:has([data-slot='calendar'])": { padding: "0.5rem" },
+  "&[data-instant]": { transition: "none" },
+  "& [data-current][data-ending-style],& [data-current][data-starting-style],& [data-previous][data-ending-style],& [data-previous][data-starting-style]": {
+    opacity: 0,
+  },
+  "& [data-current],& [data-previous]": {
+    width: "calc(var(--popup-width) - 2 * var(--viewport-inline-padding) - 2px)",
+    opacity: 1,
+    transitionProperty: "opacity",
+  },
+  "&:not([data-transitioning])": { overflowY: "auto" },
+});
+
+const tooltipViewportStyle = css({
+  paddingBlock: "0.25rem",
+  "--viewport-inline-padding": "0.5rem",
+});
+
+const titleStyle = css({
+  fontSize: "lg",
+  fontWeight: "semibold",
+  lineHeight: 1,
+});
+
+const descriptionStyle = css({
+  fontSize: "sm",
+  color: "var(--muted-foreground)",
+});
 
 export function PopoverTrigger({
   className,
@@ -52,27 +144,20 @@ export function PopoverPopup({
         align={align}
         alignOffset={alignOffset}
         anchor={anchor}
-        className="z-50 h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) transition-[top,left,right,bottom,transform] data-instant:transition-none"
+        className={positionerStyle}
         data-slot="popover-positioner"
         side={side}
         sideOffset={sideOffset}
       >
         <PopoverPrimitive.Popup
-          className={cn(
-            "relative flex h-(--popup-height,auto) w-(--popup-width,auto) origin-(--transform-origin) rounded-lg border bg-popover not-dark:bg-clip-padding text-popover-foreground shadow-lg/5 outline-none transition-[width,height,scale,opacity] before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] has-data-[slot=calendar]:rounded-xl has-data-[slot=calendar]:before:rounded-[calc(var(--radius-xl)-1px)] data-starting-style:scale-98 data-starting-style:opacity-0 dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
-            tooltipStyle &&
-              "w-fit text-balance rounded-md text-xs shadow-md/5 before:rounded-[calc(var(--radius-md)-1px)]",
-            className,
-          )}
+          className={cx(popupStyle, tooltipStyle && tooltipPopupStyle, className)}
           data-slot="popover-popup"
           {...props}
         >
           <PopoverPrimitive.Viewport
-            className={cn(
-              "relative size-full max-h-(--available-height) overflow-clip px-(--viewport-inline-padding) py-4 [--viewport-inline-padding:--spacing(4)] has-data-[slot=calendar]:p-2 data-instant:transition-none **:data-current:data-ending-style:opacity-0 **:data-current:data-starting-style:opacity-0 **:data-previous:data-ending-style:opacity-0 **:data-previous:data-starting-style:opacity-0 **:data-current:w-[calc(var(--popup-width)-2*var(--viewport-inline-padding)-2px)] **:data-previous:w-[calc(var(--popup-width)-2*var(--viewport-inline-padding)-2px)] **:data-current:opacity-100 **:data-previous:opacity-100 **:data-current:transition-opacity **:data-previous:transition-opacity",
-              tooltipStyle
-                ? "py-1 [--viewport-inline-padding:--spacing(2)]"
-                : "not-data-transitioning:overflow-y-auto",
+            className={cx(
+              viewportStyle,
+              tooltipStyle && tooltipViewportStyle,
             )}
             data-slot="popover-viewport"
           >
@@ -96,7 +181,7 @@ export function PopoverTitle({
 }: PopoverPrimitive.Title.Props): React.ReactElement {
   return (
     <PopoverPrimitive.Title
-      className={cn("font-semibold text-lg leading-none", className)}
+      className={cx(titleStyle, className)}
       data-slot="popover-title"
       {...props}
     />
@@ -109,7 +194,7 @@ export function PopoverDescription({
 }: PopoverPrimitive.Description.Props): React.ReactElement {
   return (
     <PopoverPrimitive.Description
-      className={cn("text-muted-foreground text-sm", className)}
+      className={cx(descriptionStyle, className)}
       data-slot="popover-description"
       {...props}
     />
