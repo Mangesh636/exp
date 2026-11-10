@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prepare": "panda codegen",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -31,6 +32,9 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.2",
+    "@pandacss/dev": "^2.5.0",
+    "@pandacss/preset-base": "2.5.0",
+    "@pandacss/preset-panda": "2.5.0",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
