@@ -111,11 +111,11 @@ export function AccordionPanel({
 }: AccordionPrimitive.Panel.Props): React.ReactElement {
   return (
     <AccordionPrimitive.Panel
-      className={panelStyle}
+      className={cx(panelStyle, className)}
       data-slot="accordion-panel"
       {...props}
     >
-      <div className={cx(css({ paddingTop: 0, paddingBottom: "1rem" }), className)}>
+      <div className={css({ paddingTop: 0, paddingBottom: "1rem" })}>
         {children}
       </div>
     </AccordionPrimitive.Panel>
