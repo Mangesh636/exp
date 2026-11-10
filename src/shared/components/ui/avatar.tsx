@@ -54,9 +54,7 @@ export function AvatarImage({
           height: "100%",
           borderRadius: "inherit",
           objectFit: "cover",
-          "&[data-status='error'], &[data-status='loading']": {
-            visibility: "hidden",
-          },
+          "&[data-error], &[data-loading]": { visibility: "hidden" },
         }),
         className,
       )}
@@ -129,12 +127,7 @@ const avatarGroupFirst = css({
     "& [data-slot='avatar-fallback']": {
       paddingInlineStart: "calc(var(--avatar-group-nudge) * 2)",
     },
-    "@supports (mask-composite: subtract)": {
-      borderRadius: 0,
-    },
-  },
-  "& > *:not(:first-child)": {
-    "--avatar-group-cut-x": "var(--avatar-group-cut-start)",
+    "@supports (mask-composite: subtract)": { borderRadius: 0 },
   },
   "&:dir(rtl) > *:not(:first-child)": {
     "--avatar-group-cut-x": "var(--avatar-group-cut-end)",
@@ -152,9 +145,7 @@ const avatarGroupLast = css({
     "& [data-slot='avatar-fallback']": {
       paddingInlineEnd: "calc(var(--avatar-group-nudge) * 2)",
     },
-    "@supports (mask-composite: subtract)": {
-      borderRadius: 0,
-    },
+    "@supports (mask-composite: subtract)": { borderRadius: 0 },
   },
   "&:dir(rtl) > *:not(:last-child)": {
     "--avatar-group-cut-x": "var(--avatar-group-cut-start)",
