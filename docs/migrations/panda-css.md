@@ -47,10 +47,10 @@ Working branch: `codex/panda-css-migration`
 
 ### Remaining
 
-- [ ] `combobox.tsx`
-- [ ] `command.tsx`
+- [x] `combobox.tsx`
+- [x] `command.tsx`
 - [ ] `composer.tsx`
-- [ ] `context-menu.tsx`
+- [x] `context-menu.tsx`
 - [ ] `dialog.tsx`
 - [ ] `drawer.tsx`
 - [ ] `form.tsx`
@@ -83,3 +83,4 @@ Working branch: `codex/panda-css-migration`
 - Tailwind remains installed and active because components and global styles are still being migrated.
 - The current branch cannot be considered complete until local code generation, type checking, linting, build, and light/dark visual checks pass.
 - The design-system showcase is intentionally deferred until the component migration and token layer are stable, so it documents the real shared components rather than parallel or placeholder implementations.
+- Batch completed: `combobox.tsx`, `command.tsx`, and `context-menu.tsx` now use Panda `css`/`cx`; public exports and Base UI primitive composition were retained. These are implementation-complete only and still require generated-CSS, type, and visual parity checks.
