@@ -75,10 +75,10 @@ const viewportStyle = css({
   "--viewport-inline-padding": "1rem",
   "&:has([data-slot='calendar'])": { padding: "0.5rem" },
   "&[data-instant]": { transition: "none" },
-  "& [data-current][data-ending-style],& [data-current][data-starting-style],& [data-previous][data-ending-style],& [data-previous][data-starting-style]": {
+  "& :is([data-current][data-ending-style],[data-current][data-starting-style],[data-previous][data-ending-style],[data-previous][data-starting-style])": {
     opacity: 0,
   },
-  "& [data-current],& [data-previous]": {
+  "& :is([data-current],[data-previous])": {
     width: "calc(var(--popup-width) - 2 * var(--viewport-inline-padding) - 2px)",
     opacity: 1,
     transitionProperty: "opacity",
