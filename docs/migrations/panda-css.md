@@ -18,6 +18,7 @@ Working branch: `codex/panda-css-migration`
 ### Migrated to Panda CSS (implementation; parity still needs local visual validation)
 
 - [x] `checkbox-group.tsx`
+- [x] `badge.tsx`
 - [x] `collapsible.tsx`
 - [x] `field.tsx`
 - [x] `empty.tsx`
