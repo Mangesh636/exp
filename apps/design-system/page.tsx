@@ -5,6 +5,7 @@ import { useState, type ReactNode } from "react";
 import { css } from "../../styled-system/css";
 import { AdvancedExamples } from "./advanced-examples";
 import { OverlayExamples } from "./overlay-examples";
+import { UtilityExamples } from "./utility-examples";
 import {
   Alert,
   AlertDescription,
@@ -215,6 +216,7 @@ export default function DesignSystemPage() {
             <a className={navLinkStyle} href="#navigation">Navigation</a>
             <a className={navLinkStyle} href="#composites">Composite controls</a>
             <a className={navLinkStyle} href="#overlays">Overlays & menus</a>
+            <a className={navLinkStyle} href="#utilities">Utilities & inputs</a>
           </div>
           <div className={css({ marginTop: "auto", display: "flex", flexDirection: "column", gap: "2" })}>
             <Button variant="outline" size="sm" onClick={toggleTheme}>
@@ -403,6 +405,7 @@ export default function DesignSystemPage() {
 
           <AdvancedExamples />
           <OverlayExamples />
+          <UtilityExamples />
 
           <footer className={css({ marginTop: "14", paddingTop: "5", borderTopWidth: "1px", borderColor: "var(--border)", color: "var(--muted-foreground)", fontSize: "xs" })}>
             Shared UI components · Panda CSS migration · Preview examples are interactive where appropriate.
