@@ -15,7 +15,7 @@ Working branch: `codex/panda-css-migration`
 
 ## Component inventory
 
-### Migrated to Panda CSS (49 implementations; parity still needs local validation)
+### Migrated to Panda CSS (52 implementations; parity still needs local validation)
 
 - [x] `alert.tsx`
 - [x] `badge.tsx`
@@ -72,14 +72,14 @@ Working branch: `codex/panda-css-migration`
 - [x] `form.tsx` (passes through caller-provided className; contains no Tailwind utilities)
 - [x] `icon.tsx` (icon wrapper has no Tailwind utilities or component styling)
 
-### Remaining (5)
+### Remaining (2)
 
 - [x] `table.tsx`
 - [x] `tabs.tsx`
 - [x] `textarea.tsx`
-- [ ] `toast.tsx`
-- [ ] `toggle-group.tsx`
-- [ ] `toggle.tsx`
+- [x] `toast.tsx`
+- [x] `toggle-group.tsx`
+- [x] `toggle.tsx`
 - [ ] `toolbar.tsx`
 - [ ] `tooltip.tsx`
 
@@ -104,3 +104,5 @@ Working branch: `codex/panda-css-migration`
 - Batch completed: `select.tsx`, `sheet.tsx`, and `slider.tsx` now use Panda CSS `css`/`cx`/`cva`. Select trigger sizing, popup positioning, scrolling arrows, item states and public exports; Sheet side/inset variants, backdrop and panel composition; and Slider orientation, multi-thumb rendering, focus and dragging states were retained. Generated-CSS, type, runtime interaction, and visual parity checks remain pending.
 
 - Batch completed: `table.tsx`, `tabs.tsx`, and `textarea.tsx` now use Panda CSS `css`/`cx`. Table default/card variants, nested row/cell states, selected/hover treatments, checkbox alignment, and public render API; Tabs orientation, underline/default indicators, size context, and segmented-control shared class exports; and Textarea `unstyled`, size variants, field integration, focus/invalid/disabled states, and ref/value handling were retained. Generated-CSS, type, runtime, and visual parity checks remain pending.
+
+- Batch completed: `toast.tsx`, `toggle-group.tsx`, and `toggle.tsx` now use Panda CSS `css`/`cx`/`cva`. Toast managers/providers, anchored and viewport rendering, placement, stacking, swipe/expand/exit transitions, replay feedback animations, icon/action rendering and public exports; Toggle size/outline variants, pointer-coarse hit targets, focus/pressed/disabled states; and Toggle Group orientation, joined borders, separator states, shared size/variant context and Base UI primitives were retained. Generated-CSS, type, runtime interaction, and visual parity checks remain pending.
