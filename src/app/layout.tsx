@@ -1,4 +1,3 @@
-import { cn } from "cn";
 import { GeistMono } from "geist/font/mono";
 import { GeistPixelCircle } from "geist/font/pixel";
 import { GeistSans } from "geist/font/sans";
@@ -17,17 +16,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={cn(
-        "h-full",
-        "font-sans",
-        "antialiased",
+      className={[
         GeistSans.variable,
         GeistMono.variable,
         GeistSerif.variable,
         GeistPixelCircle.variable,
-      )}
+      ].join(" ")}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body>{children}</body>
     </html>
   );
 }
