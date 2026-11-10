@@ -35,23 +35,33 @@ const buttonClassNames = css({
 
 const dayButtonClassNames = css({
   pointerEvents: "auto",
-  "&[data-disabled]": { pointerEvents: "none" },
-  "&.range-middle": { borderRadius: 0 },
-  "&.range-end:not(.range-start)": { borderStartEndRadius: 0, borderEndEndRadius: 0 },
-  "&.range-start:not(.range-end)": { borderStartStartRadius: 0, borderEndStartRadius: 0 },
-  "&.range-middle[data-selected]": {
+  ":where([data-disabled]) &": { pointerEvents: "none" },
+  ":where(.range-middle) &": { borderRadius: 0 },
+  ":where(.range-end:not(.range-start)) &": {
+    borderStartEndRadius: 0,
+    borderEndEndRadius: 0,
+  },
+  ":where(.range-start:not(.range-end)) &": {
+    borderStartStartRadius: 0,
+    borderEndStartRadius: 0,
+  },
+  ":where(.range-middle[data-selected]) &": {
     backgroundColor: "var(--accent)",
     color: "var(--foreground)",
   },
-  "&[data-selected]": {
+  ":where([data-selected]) &": {
     backgroundColor: "var(--primary)",
     color: "var(--primary-foreground)",
   },
-  "&[data-disabled], &[data-outside]": { color: "color-mix(in srgb, var(--muted-foreground) 72%, transparent)" },
-  "&[data-selected][data-outside]": { color: "var(--primary-foreground)" },
-  "&[data-disabled]": { textDecorationLine: "line-through" },
+  ":where([data-disabled], [data-outside]) &": {
+    color: "color-mix(in srgb, var(--muted-foreground) 72%, transparent)",
+  },
+  ":where([data-selected][data-outside]) &": {
+    color: "var(--primary-foreground)",
+  },
+  ":where([data-disabled]) &": { textDecorationLine: "line-through" },
   outline: "none",
-  "&[data-selected]:not(.range-middle)": {
+  ":where([data-selected]:not(.range-middle)) &": {
     transitionProperty: "border-radius, box-shadow",
   },
   "&:focus-visible": {
@@ -231,8 +241,8 @@ export function Calendar({
         return (
           <Icon
             icon={ChevronLeftIcon}
-            className={cx(className, css({ transform: "rotate(180deg)" }), css({
-              "&:dir(rtl)": { transform: "rotate(0deg)" },
+            className={cx(className, css({
+              ":where([dir='rtl']) &": { transform: "rotate(180deg)" },
             }))}
             {...props}
             aria-hidden="true"
@@ -245,8 +255,7 @@ export function Calendar({
           <Icon
             icon={ChevronRightIcon}
             className={cx(className, css({
-              transform: "rotate(180deg)",
-              "&:dir(rtl)": { transform: "rotate(0deg)" },
+              ":where([dir='rtl']) &": { transform: "rotate(180deg)" },
             }))}
             {...props}
             aria-hidden="true"
