@@ -1,7 +1,8 @@
 "use client";
 
 import { NumberField as NumberFieldPrimitive } from "@base-ui/react/number-field";
-import { css, cx } from "../../../../styled-system/css";
+import { css } from "../../../../styled-system/css";
+import { cx } from "@/shared/lib/cx";
 import * as React from "react";
 
 import { MinusSignIcon, PlusSignIcon } from "@/shared/components/icons/interface-icon";
