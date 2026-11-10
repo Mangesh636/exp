@@ -11,6 +11,13 @@ export default defineConfig({
     "./apps/**/*.{js,jsx,ts,tsx}",
   ],
   exclude: [],
+  conditions: {
+    groupSibling: "[role='group'] + &",
+    chipSibling: "[data-slot='combobox-chip'] + &",
+    inputGroupControl: "[data-slot='input-group']:has([data-slot='input-control'],[data-slot='textarea-control']) &",
+    directionRtl: ":dir(rtl) &",
+    activeLabel: ":is([role='switch']:active, [data-slot='label']:active, [data-slot='field-label']:active):not([data-disabled]) &",
+  },
   theme: {
     extend: {},
   },
