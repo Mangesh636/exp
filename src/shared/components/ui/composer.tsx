@@ -90,16 +90,14 @@ const composerFrameStyle = css({
     inset: 0,
     borderRadius: "calc(var(--composer-radius) - 1px)",
   },
-  ".dark &": {
+  _dark: {
     backgroundColor: "color-mix(in srgb, var(--input) 32%, transparent)",
     "&:has([aria-invalid])": {
       "--ring-color": "color-mix(in srgb, var(--destructive) 24%, transparent)",
+      boxShadow: "none",
     },
     "&:not([data-disabled]):not(:has([data-slot='composer-input']:focus-visible)):not(:has([aria-invalid]))::before": {
       boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
-    },
-    "&:has([aria-invalid])": {
-      boxShadow: "none",
     },
   },
   ":where(html:not(.dark)) &": { backgroundClip: "padding-box" },
