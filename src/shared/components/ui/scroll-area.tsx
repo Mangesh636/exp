@@ -20,24 +20,14 @@ const viewportStyle = css({
     boxShadow:
       "0 0 0 2px var(--ring), 0 0 0 3px var(--background)",
   },
-  "&[data-has-overflow-y][data-overscroll-contain]": {
-    overscrollBehaviorY: "contain",
-  },
-  "&[data-has-overflow-x][data-overscroll-contain]": {
-    overscrollBehaviorX: "contain",
-  },
-  "&[data-has-overflow-y][data-scrollbar-gutter]": {
-    paddingInlineEnd: "0.625rem",
-  },
-  "&[data-has-overflow-x][data-scrollbar-gutter]": {
-    paddingBottom: "0.625rem",
-  },
 });
 
 const fadeStyle = css({
   maskImage: [
-    "linear-gradient(to bottom, transparent, black min(1.5rem, var(--scroll-area-overflow-y-start)), black calc(100% - min(1.5rem, var(--scroll-area-overflow-y-end))), transparent)",
-    "linear-gradient(to right, transparent, black min(1.5rem, var(--scroll-area-overflow-x-start)), black calc(100% - min(1.5rem, var(--scroll-area-overflow-x-end))), transparent)",
+    "linear-gradient(to bottom, transparent, black min(1.5rem, var(--scroll-area-overflow-y-start)))",
+    "linear-gradient(to top, transparent, black min(1.5rem, var(--scroll-area-overflow-y-end)))",
+    "linear-gradient(to right, transparent, black min(1.5rem, var(--scroll-area-overflow-x-start)))",
+    "linear-gradient(to left, transparent, black min(1.5rem, var(--scroll-area-overflow-x-end)))",
   ].join(", "),
   maskComposite: "intersect",
 });
