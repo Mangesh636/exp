@@ -5,13 +5,15 @@ Working branch: `codex/panda-css-migration`
 ## Milestone acceptance criteria
 
 - [x] All 54 styled shared UI components have been migrated to Panda CSS; the remaining 2 were audited as having no Tailwind styling to migrate. Preserve existing component APIs and visual behavior.
-- [ ] All CVA-based component variants are represented as Panda recipes.
+- [x] All CVA-based component variants are represented as Panda recipes.
 - [x] Global tokens, light/dark themes, and base styles are owned by Panda global styles; custom keyframes remain as standard CSS in `globals.css`.
 - [x] App-level Tailwind utilities migrated from the root layout and starter page; no other app-level Tailwind styling was found in the source tree.
 - [x] Tailwind directives and Turbopack integration removed; Tailwind packages removed from `package.json`. Regenerate `pnpm-lock.yaml` locally and confirm no third-party dependency expects Tailwind.
 - [ ] `apps/design-system` provides a shadcn-style component gallery with previews, variants, states, and copyable examples.
-- [ ] Run Panda codegen, Biome, TypeScript, and production build locally; resolve all errors.
+- [x] Run Panda codegen, Biome, TypeScript, and production build locally; user reports all checks are clean.
 - [ ] Review visual parity in light and dark themes at responsive breakpoints.
+
+- CVA audit completed against the original `main` branch: all eight original CVA implementations (`alert`, `badge`, `button`, `empty`, `group`, `input-group`, `select`, and `toggle`) are represented with Panda `cva` recipes on this branch. `toggle-group`, pagination, and toast reuse the Toggle/Button recipe APIs rather than defining duplicate recipes. User reports local Panda codegen, Biome, TypeScript, and production build checks are clean; responsive light/dark visual parity remains pending.
 
 ## Component inventory
 
@@ -73,8 +75,6 @@ Working branch: `codex/panda-css-migration`
 - [x] `tooltip.tsx`
 
 ### Audited; no Tailwind styling to migrate (2)
- no Tailwind styling to migrate (2)
-
 - [x] `form.tsx` (passes through caller-provided className; contains no Tailwind utilities)
 - [x] `icon.tsx` (icon wrapper has no Tailwind utilities or component styling)
 
