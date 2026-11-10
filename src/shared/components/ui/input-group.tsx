@@ -1,111 +1,148 @@
 "use client";
 
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "cn";
+import { css, cva, cx, type RecipeVariantProps } from "styled-system/css";
 
 import type * as React from "react";
 
 import { Input, type InputProps } from "@/shared/components/ui/input";
 import { Textarea, type TextareaProps } from "@/shared/components/ui/textarea";
 
-const inputGroupAddonVariants = cva(
-  "flex h-auto cursor-text select-none items-center justify-center gap-2 [&>kbd]:rounded-[calc(var(--radius)-5px)] in-[[data-slot=input-group]:has([data-slot=input-control],[data-slot=textarea-control])]:[&_svg:not([class*='size-'])]:size-4.5 sm:in-[[data-slot=input-group]:has([data-slot=input-control],[data-slot=textarea-control])]:[&_svg:not([class*='size-'])]:size-4 [&_svg]:-mx-0.5 not-has-[button]:**:[svg:not([class*='opacity-'])]:opacity-80",
-  {
-    defaultVariants: {
-      align: "inline-start",
+const inputGroupAddonVariants = cva({
+  base: {
+    display: "flex", height: "auto", cursor: "text", userSelect: "none",
+    alignItems: "center", justifyContent: "center", gap: "2",
+    "& > kbd": { borderRadius: "calc(var(--radius) - 5px)" },
+    "& svg": { marginInline: "-0.125rem" },
+    "&:not(:has(button))": { "& svg:not([class*='opacity-'])": { opacity: 0.8 } },
+    "[data-slot='input-group']:has([data-slot='input-control'],[data-slot='textarea-control']) & svg:not([class*='size-'])": { width: "1.125rem", height: "1.125rem" },
+    "@media (min-width: 40rem)": {
+      "[data-slot='input-group']:has([data-slot='input-control'],[data-slot='textarea-control']) & svg:not([class*='size-'])": { width: "1rem", height: "1rem" },
     },
-    variants: {
-      align: {
-        "block-end":
-          "order-last w-full justify-start px-[calc(--spacing(3)-1px)] pb-[calc(--spacing(3)-1px)] [.border-t]:pt-[calc(--spacing(3)-1px)] [[data-size=sm]+&]:px-[calc(--spacing(2.5)-1px)]",
-        "block-start":
-          "order-first w-full justify-start px-[calc(--spacing(3)-1px)] pt-[calc(--spacing(3)-1px)] [.border-b]:pb-[calc(--spacing(3)-1px)] [[data-size=sm]+&]:px-[calc(--spacing(2.5)-1px)]",
-        "inline-end":
-          "order-last pe-[calc(--spacing(3)-1px)] has-[>:last-child[data-slot=badge]]:-me-1.5 has-[>button]:-me-2 has-[>kbd:last-child]:me-[-0.35rem] [[data-size=sm]+&]:pe-[calc(--spacing(2.5)-1px)]",
-        "inline-start":
-          "order-first ps-[calc(--spacing(3)-1px)] has-[>:last-child[data-slot=badge]]:-ms-1.5 has-[>button]:-ms-2 has-[>kbd:last-child]:ms-[-0.35rem] [[data-size=sm]+&]:ps-[calc(--spacing(2.5)-1px)]",
+  },
+  variants: {
+    align: {
+      "block-end": {
+        order: 1, width: "100%", justifyContent: "flex-start",
+        paddingInline: "calc(var(--spacing) * 3 - 1px)",
+        paddingBottom: "calc(var(--spacing) * 3 - 1px)",
+        "&:is(.border-t)": { paddingTop: "calc(var(--spacing) * 3 - 1px)" },
+        "[data-size='sm'] + &": { paddingInline: "calc(var(--spacing) * 2.5 - 1px)" },
+      },
+      "block-start": {
+        order: -1, width: "100%", justifyContent: "flex-start",
+        paddingInline: "calc(var(--spacing) * 3 - 1px)",
+        paddingTop: "calc(var(--spacing) * 3 - 1px)",
+        "&:is(.border-b)": { paddingBottom: "calc(var(--spacing) * 3 - 1px)" },
+        "[data-size='sm'] + &": { paddingInline: "calc(var(--spacing) * 2.5 - 1px)" },
+      },
+      "inline-end": {
+        order: 1, paddingInlineEnd: "calc(var(--spacing) * 3 - 1px)",
+        "&:has(> :last-child[data-slot='badge'])": { marginInlineEnd: "-0.375rem" },
+        "&:has(> button)": { marginInlineEnd: "-0.5rem" },
+        "&:has(> kbd:last-child)": { marginInlineEnd: "-0.35rem" },
+        "[data-size='sm'] + &": { paddingInlineEnd: "calc(var(--spacing) * 2.5 - 1px)" },
+      },
+      "inline-start": {
+        order: -1, paddingInlineStart: "calc(var(--spacing) * 3 - 1px)",
+        "&:has(> :last-child[data-slot='badge'])": { marginInlineStart: "-0.375rem" },
+        "&:has(> button)": { marginInlineStart: "-0.5rem" },
+        "&:has(> kbd:last-child)": { marginInlineStart: "-0.35rem" },
+        "[data-size='sm'] + &": { paddingInlineStart: "calc(var(--spacing) * 2.5 - 1px)" },
       },
     },
   },
-);
+  defaultVariants: { align: "inline-start" },
+});
 
-export function InputGroup({
-  className,
-  ...props
-}: React.ComponentProps<"div">): React.ReactElement {
-  return (
-    // biome-ignore lint/a11y/useSemanticElements: A div with role="group" is intentional for this reusable component.
-    <div
-      className={cn(
-        "relative inline-flex w-full min-w-0 items-center rounded-lg border border-input bg-background not-dark:bg-clip-padding text-base text-foreground shadow-xs/5 ring-ring/24 transition-shadow before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] not-has-[input:disabled,textarea:disabled]:not-has-[input:focus-visible,textarea:focus-visible]:not-has-[input[aria-invalid],textarea[aria-invalid]]:before:shadow-[0_1px_--theme(--color-black/4%)] has-[input:focus-visible,textarea:focus-visible]:has-[input[aria-invalid],textarea[aria-invalid]]:border-destructive/64 has-[input:focus-visible,textarea:focus-visible]:has-[input[aria-invalid],textarea[aria-invalid]]:ring-destructive/16 has-[textarea]:h-auto has-data-[align=block-end]:h-auto has-data-[align=block-start]:h-auto has-data-[align=block-end]:flex-col has-data-[align=block-start]:flex-col has-[input:focus-visible,textarea:focus-visible]:border-ring has-[input[aria-invalid],textarea[aria-invalid]]:border-destructive/36 has-autofill:bg-foreground/4 has-[input:disabled,textarea:disabled]:opacity-64 has-[input:disabled,textarea:disabled,input:focus-visible,textarea:focus-visible,input[aria-invalid],textarea[aria-invalid]]:shadow-none has-[input:focus-visible,textarea:focus-visible]:ring-[3px] sm:text-sm dark:bg-input/32 dark:has-autofill:bg-foreground/8 dark:has-[input[aria-invalid],textarea[aria-invalid]]:ring-destructive/24 dark:not-has-[input:disabled,textarea:disabled]:not-has-[input:focus-visible,textarea:focus-visible]:not-has-[input[aria-invalid],textarea[aria-invalid]]:before:shadow-[0_-1px_--theme(--color-white/6%)] has-data-[align=inline-start]:**:[[data-size=sm]_input]:ps-1.5 has-data-[align=inline-end]:**:[[data-size=sm]_input]:pe-1.5 *:[[data-slot=input-control],[data-slot=textarea-control]]:contents *:[[data-slot=input-control],[data-slot=textarea-control]]:before:hidden has-[[data-align=block-start],[data-align=block-end]]:**:[input]:h-auto has-data-[align=inline-start]:**:[input]:ps-2 has-data-[align=inline-end]:**:[input]:pe-2 has-data-[align=block-end]:**:[input]:pt-1.5 has-data-[align=block-start]:**:[input]:pb-1.5 **:[textarea]:min-h-20.5 **:[textarea]:resize-none **:[textarea]:py-[calc(--spacing(3)-1px)] **:[textarea]:max-sm:min-h-23.5 **:[textarea_button]:rounded-[calc(var(--radius-md)-1px)]",
-        className,
-      )}
-      data-slot="input-group"
-      role="group"
-      {...props}
-    />
-  );
+const inputGroupStyle = css({
+  position: "relative", display: "inline-flex", width: "100%", minWidth: 0,
+  alignItems: "center", borderRadius: "lg", borderWidth: "1px",
+  borderColor: "var(--input)", backgroundColor: "var(--background)",
+  color: "var(--foreground)", fontSize: "base",
+  boxShadow: "0 1px 2px color-mix(in srgb, black 5%, transparent)",
+  outlineColor: "color-mix(in srgb, var(--ring) 24%, transparent)",
+  transitionProperty: "box-shadow",
+  "&::before": {
+    content: '""', position: "absolute", pointerEvents: "none", inset: 0,
+    borderRadius: "calc(var(--radius-lg) - 1px)",
+  },
+  "&:not(:has(input:disabled,textarea:disabled,input:focus-visible,textarea:focus-visible,input[aria-invalid],textarea[aria-invalid]))::before": {
+    boxShadow: "0 1px 0 color-mix(in srgb, black 4%, transparent)",
+  },
+  "&:has(input:focus-visible,textarea:focus-visible)": { borderColor: "var(--ring)", boxShadow: "0 0 0 3px color-mix(in srgb, var(--ring) 24%, transparent)" },
+  "&:has(input:focus-visible,textarea:focus-visible):has(input[aria-invalid],textarea[aria-invalid])": { borderColor: "color-mix(in srgb, var(--destructive) 64%, transparent)", boxShadow: "0 0 0 3px color-mix(in srgb, var(--destructive) 16%, transparent)" },
+  "&:has(input[aria-invalid],textarea[aria-invalid])": { borderColor: "color-mix(in srgb, var(--destructive) 36%, transparent)" },
+  "&:has(textarea),&:has([data-align='block-end']),&:has([data-align='block-start'])": { height: "auto" },
+  "&:has([data-align='block-end']),&:has([data-align='block-start'])": { flexDirection: "column" },
+  "&:has(input:disabled,textarea:disabled)": { opacity: 0.64 },
+  "&:has(input:disabled,textarea:disabled,input:focus-visible,textarea:focus-visible,input[aria-invalid],textarea[aria-invalid])": { boxShadow: "none" },
+  "&:has(input:focus-visible,textarea:focus-visible)": { boxShadow: "0 0 0 3px var(--ring)" },
+  "&:has(input:autofill,textarea:autofill)": { backgroundColor: "color-mix(in srgb, var(--foreground) 4%, transparent)" },
+  "& [data-slot='input-control'],& [data-slot='textarea-control']": { display: "contents" },
+  "& [data-slot='input-control']::before,& [data-slot='textarea-control']::before": { display: "none" },
+  "&:has([data-align='block-start'],[data-align='block-end']) input": { height: "auto" },
+  "&:has([data-align='inline-start']) input": { paddingInlineStart: "calc(var(--spacing) * 2)" },
+  "&:has([data-align='inline-end']) input": { paddingInlineEnd: "calc(var(--spacing) * 2)" },
+  "&:has([data-align='block-end']) input": { paddingTop: "calc(var(--spacing) * 1.5)" },
+  "&:has([data-align='block-start']) input": { paddingBottom: "calc(var(--spacing) * 1.5)" },
+  "& textarea": { minHeight: "5.125rem", resize: "none", paddingBlock: "calc(var(--spacing) * 3 - 1px)" },
+  "& textarea_button": { borderRadius: "calc(var(--radius-md) - 1px)" },
+  "&:has(textarea) textarea": { "@media (max-width: 39.99rem)": { minHeight: "5.875rem" } },
+  "&:has([data-align='inline-start']) [data-size='sm'] input": { paddingInlineStart: "0.375rem" },
+  "&:has([data-align='inline-end']) [data-size='sm'] input": { paddingInlineEnd: "0.375rem" },
+  "@media (min-width: 40rem)": { fontSize: "sm" },
+  _dark: {
+    backgroundColor: "color-mix(in srgb, var(--input) 32%, transparent)",
+    "&:has(input:autofill,textarea:autofill)": { backgroundColor: "color-mix(in srgb, var(--foreground) 8%, transparent)" },
+    "&:not(:has(input:disabled,textarea:disabled,input:focus-visible,textarea:focus-visible,input[aria-invalid],textarea[aria-invalid]))::before": { boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)" },
+    "&:has(input[aria-invalid],textarea[aria-invalid])": { boxShadow: "0 0 0 3px color-mix(in srgb, var(--destructive) 24%, transparent)" },
+  },
+});
+
+const inputGroupTextStyle = css({
+  display: "flex", alignItems: "center", gap: "2", overflow: "hidden",
+  whiteSpace: "nowrap", color: "var(--muted-foreground)",
+  "& svg": { pointerEvents: "none", marginInline: "-0.125rem" },
+  "[data-slot='input-group']:has([data-slot='input-control'],[data-slot='textarea-control']) & svg:not([class*='size-'])": { width: "1.125rem", height: "1.125rem" },
+  "@media (min-width: 40rem)": {
+    "[data-slot='input-group']:has([data-slot='input-control'],[data-slot='textarea-control']) & svg:not([class*='size-'])": { width: "1rem", height: "1rem" },
+  },
+});
+
+export function InputGroup({ className, ...props }: React.ComponentProps<"div">): React.ReactElement {
+  return <div className={cx(inputGroupStyle, className)} data-slot="input-group" role="group" {...props} />;
 }
 
-export function InputGroupAddon({
-  className,
-  align = "inline-start",
-  ...props
-}: React.ComponentProps<"div"> &
-  VariantProps<typeof inputGroupAddonVariants>): React.ReactElement {
+export function InputGroupAddon({ className, align = "inline-start", ...props }: React.ComponentProps<"div"> & RecipeVariantProps<typeof inputGroupAddonVariants>): React.ReactElement {
   return (
     // biome-ignore lint/a11y/noStaticElementInteractions: Intentional mousedown handler for input focus behavior.
     <div
-      className={cn(inputGroupAddonVariants({ align }), className)}
+      className={cx(inputGroupAddonVariants({ align }), className)}
       data-align={align}
       data-slot="input-group-addon"
       onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
         const target = e.target as Element;
         if (!e.currentTarget.contains(target)) return;
-
-        const isInteractive = target.closest(
-          "button, a, input, select, textarea, [role='button'], [role='combobox'], [role='listbox'], [data-slot='select-trigger']",
-        );
+        const isInteractive = target.closest("button, a, input, select, textarea, [role='button'], [role='combobox'], [role='listbox'], [data-slot='select-trigger']");
         if (isInteractive) return;
         e.preventDefault();
         const parent = e.currentTarget.parentElement;
-        const input = parent?.querySelector<
-          HTMLInputElement | HTMLTextAreaElement
-        >("input, textarea");
-        if (input && !parent?.querySelector("input:focus, textarea:focus")) {
-          input.focus();
-        }
+        const input = parent?.querySelector<HTMLInputElement | HTMLTextAreaElement>("input, textarea");
+        if (input && !parent?.querySelector("input:focus, textarea:focus")) input.focus();
       }}
       {...props}
     />
   );
 }
 
-export function InputGroupText({
-  className,
-  ...props
-}: React.ComponentProps<"span">): React.ReactElement {
-  return (
-    <span
-      className={cn(
-        "flex items-center gap-2 truncate text-muted-foreground in-[[data-slot=input-group]:has([data-slot=input-control],[data-slot=textarea-control])]:[&_svg:not([class*='size-'])]:size-4.5 sm:in-[[data-slot=input-group]:has([data-slot=input-control],[data-slot=textarea-control])]:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:-mx-0.5",
-        className,
-      )}
-      {...props}
-    />
-  );
+export function InputGroupText({ className, ...props }: React.ComponentProps<"span">): React.ReactElement {
+  return <span className={cx(inputGroupTextStyle, className)} {...props} />;
 }
 
-export function InputGroupInput({
-  className,
-  ...props
-}: InputProps): React.ReactElement {
+export function InputGroupInput({ className, ...props }: InputProps): React.ReactElement {
   return <Input className={className} unstyled {...props} />;
 }
 
-export function InputGroupTextarea({
-  className,
-  ...props
-}: TextareaProps): React.ReactElement {
+export function InputGroupTextarea({ className, ...props }: TextareaProps): React.ReactElement {
   return <Textarea className={className} unstyled {...props} />;
 }
