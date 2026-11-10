@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 import { css } from "../../styled-system/css";
 import {
@@ -137,7 +137,7 @@ type ExampleProps = {
   name: string;
   description: string;
   code: string;
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 function Example({ name, description, code, children }: ExampleProps) {
