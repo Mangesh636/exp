@@ -1,7 +1,8 @@
 "use client";
 
 import { type DateLib, DayPicker } from "@daypicker/react";
-import { css, cx } from "../../../../styled-system/css";
+import { css } from "../../../../styled-system/css";
+import { cx } from "@/shared/lib/cx";
 
 import type * as React from "react";
 
