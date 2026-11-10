@@ -2,7 +2,7 @@
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { cn } from "cn";
+import { css, cx } from "styled-system/css";
 
 import type * as React from "react";
 
@@ -14,6 +14,50 @@ import {
 import { type Button, buttonVariants } from "@/shared/components/ui/button";
 import { Icon } from "@/shared/components/ui/icon";
 
+const paginationStyle = css({
+  marginInline: "auto",
+  display: "flex",
+  width: "100%",
+  justifyContent: "center",
+});
+
+const contentStyle = css({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  gap: "1",
+});
+
+const previousNextStyle = css({
+  "@media (max-width: 39.99rem)": {
+    aspectRatio: "1",
+    padding: 0,
+  },
+});
+
+const previousIconStyle = css({
+  "@media (min-width: 40rem)": { marginInlineStart: "-0.25rem" },
+});
+
+const nextIconStyle = css({
+  "@media (min-width: 40rem)": { marginInlineEnd: "-0.25rem" },
+});
+
+const previousNextLabelStyle = css({
+  "@media (max-width: 39.99rem)": { display: "none" },
+});
+
+const ellipsisStyle = css({
+  display: "flex",
+  minWidth: "1.75rem",
+  justifyContent: "center",
+  "& svg": {
+    width: "1.25rem",
+    height: "1.25rem",
+    "@media (min-width: 40rem)": { width: "1rem", height: "1rem" },
+  },
+});
+
 export function Pagination({
   className,
   ...props
@@ -21,7 +65,7 @@ export function Pagination({
   return (
     <nav
       aria-label="pagination"
-      className={cn("mx-auto flex w-full justify-center", className)}
+      className={cx(paginationStyle, className)}
       data-slot="pagination"
       {...props}
     />
@@ -34,7 +78,7 @@ export function PaginationContent({
 }: React.ComponentProps<"ul">): React.ReactElement {
   return (
     <ul
-      className={cn("flex flex-row items-center gap-1", className)}
+      className={cx(contentStyle, className)}
       data-slot="pagination-content"
       {...props}
     />
@@ -63,7 +107,7 @@ export function PaginationLink({
     "aria-current": isActive ? ("page" as const) : undefined,
     className: render
       ? className
-      : cn(
+      : cx(
           buttonVariants({
             size,
             variant: isActive ? "outline" : "ghost",
@@ -88,12 +132,12 @@ export function PaginationPrevious({
   return (
     <PaginationLink
       aria-label="Go to previous page"
-      className={cn("max-sm:aspect-square max-sm:p-0", className)}
+      className={cx(previousNextStyle, className)}
       size="default"
       {...props}
     >
-      <Icon icon={ChevronLeftIcon} className="sm:-ms-1" />
-      <span className="max-sm:hidden">Previous</span>
+      <Icon icon={ChevronLeftIcon} className={previousIconStyle} />
+      <span className={previousNextLabelStyle}>Previous</span>
     </PaginationLink>
   );
 }
@@ -105,12 +149,12 @@ export function PaginationNext({
   return (
     <PaginationLink
       aria-label="Go to next page"
-      className={cn("max-sm:aspect-square max-sm:p-0", className)}
+      className={cx(previousNextStyle, className)}
       size="default"
       {...props}
     >
-      <span className="max-sm:hidden">Next</span>
-      <Icon icon={ChevronRightIcon} className="sm:-me-1" />
+      <span className={previousNextLabelStyle}>Next</span>
+      <Icon icon={ChevronRightIcon} className={nextIconStyle} />
     </PaginationLink>
   );
 }
@@ -122,11 +166,11 @@ export function PaginationEllipsis({
   return (
     <span
       aria-hidden
-      className={cn("flex min-w-7 justify-center", className)}
+      className={cx(ellipsisStyle, className)}
       data-slot="pagination-ellipsis"
       {...props}
     >
-      <Icon icon={MoreHorizontalIcon} className="size-5 sm:size-4" />
+      <Icon icon={MoreHorizontalIcon} />
       <span className="sr-only">More pages</span>
     </span>
   );
