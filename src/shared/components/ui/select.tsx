@@ -3,7 +3,8 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { Select as SelectPrimitive } from "@base-ui/react/select";
 import { useRender } from "@base-ui/react/use-render";
-import { cva, cx, css, type RecipeVariantProps } from "../../../../styled-system/css";
+import { cva, css, type RecipeVariantProps } from "../../../../styled-system/css";
+import { cx } from "@/shared/lib/cx";
 
 import type * as React from "react";
 
