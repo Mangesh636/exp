@@ -47,6 +47,18 @@ const previousNextLabelStyle = css({
   "@media (max-width: 39.99rem)": { display: "none" },
 });
 
+const screenReaderOnlyStyle = css({
+  position: "absolute",
+  width: "1px",
+  height: "1px",
+  padding: 0,
+  margin: "-1px",
+  overflow: "hidden",
+  clip: "rect(0, 0, 0, 0)",
+  whiteSpace: "nowrap",
+  borderWidth: 0,
+});
+
 const ellipsisStyle = css({
   display: "flex",
   minWidth: "1.75rem",
@@ -171,7 +183,7 @@ export function PaginationEllipsis({
       {...props}
     >
       <Icon icon={MoreHorizontalIcon} />
-      <span className="sr-only">More pages</span>
+      <span className={screenReaderOnlyStyle}>More pages</span>
     </span>
   );
 }
