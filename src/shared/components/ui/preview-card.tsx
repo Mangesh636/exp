@@ -1,7 +1,7 @@
 "use client";
 
 import { PreviewCard as PreviewCardPrimitive } from "@base-ui/react/preview-card";
-import { css, cx } from "styled-system/css";
+import { css, cx } from "../../../../styled-system/css";
 
 import type React from "react";
 
