@@ -1,7 +1,8 @@
 "use client";
 
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
-import { cva, cx } from "../../../../styled-system/css";
+import { cva } from "../../../../styled-system/css";
+import { cx } from "@/shared/lib/cx";
 
 import type React from "react";
 
