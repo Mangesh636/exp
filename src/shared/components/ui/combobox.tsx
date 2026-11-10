@@ -60,9 +60,7 @@ const startAddonStyle = css({
 });
 
 const inputStartAddonStyle = css({
-  "& [data-slot='combobox-input']": {
-    "& [data-slot='input']": { paddingInlineStart: "calc(var(--spacing) * 8.5 - 1px)" },
-  },
+  "& [data-slot='input']": { paddingInlineStart: "calc(var(--spacing) * 8.5 - 1px)" },
   "&[data-size='sm'] [data-slot='input']": { paddingInlineStart: "calc(var(--spacing) * 7.5 - 1px)" },
   "@media (min-width: 40rem)": {
     "& [data-slot='input']": { paddingInlineStart: "calc(var(--spacing) * 8 - 1px)" },
@@ -169,7 +167,7 @@ const itemStyle = css({
 
 const listStyle = css({
   "&:not(:empty)": { scrollPaddingBlock: "0.25rem", padding: "0.25rem" },
-  "&[data-has-overflow-y]": { paddingInlineEnd: "0.75rem" },
+  ":where([data-has-overflow-y]) &": { paddingInlineEnd: "0.75rem" },
 });
 
 const chipsStyle = css({
