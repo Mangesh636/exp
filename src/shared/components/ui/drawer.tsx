@@ -138,7 +138,7 @@ const popupBaseStyle = css({
     overflow: "hidden",
     backgroundColor: "color-mix(in srgb, var(--popover), black calc(2% * (var(--nested-drawers) - var(--stack-progress))))",
   },
-  "&[data-ending-style], &[data-starting-style]": { boxShadow: "transparent" },
+  "&[data-ending-style], &[data-starting-style]": { boxShadow: "0 10px 15px -3px transparent" },
   "&[data-ending-style]": {
     transitionDuration: "calc(var(--drawer-swipe-strength) * 400ms)",
   },
@@ -319,8 +319,7 @@ const footerBaseStyle = css({
   flexDirection: "column-reverse",
   gap: "0.5rem",
   paddingInline: "1.5rem",
-  paddingBottom: "var(--safe-area-inset-bottom, 0px)",
-  "@media (min-width: 40rem)": {
+    "@media (min-width: 40rem)": {
     flexDirection: "row",
     justifyContent: "flex-end",
   },
