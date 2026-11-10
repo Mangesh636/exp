@@ -128,8 +128,8 @@ const popupSurfaceStyle = css({
     boxShadow: "0 1px 0 color-mix(in srgb, black 4%, transparent)",
   },
   ":where(html:not(.dark)) &": { backgroundClip: "padding-box" },
-  ".dark &::before": {
-    boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
+  _dark: {
+    "&::before": { boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)" },
   },
 });
 
@@ -315,7 +315,7 @@ export function AutocompleteGroup({
   return (
     <AutocompletePrimitive.Group
       className={cx(css({
-        "[[role=group] + &]": { marginTop: "0.375rem" },
+        _groupSibling: { marginTop: "0.375rem" },
       }), className)}
       data-slot="autocomplete-group"
       {...props}
