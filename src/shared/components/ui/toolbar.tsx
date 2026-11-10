@@ -16,6 +16,7 @@ const toolbarStyle = css({
   backgroundClip: "padding-box",
   padding: "0.25rem",
   color: "var(--card-foreground)",
+  _dark: { backgroundClip: "border-box" },
 });
 
 const groupStyle = css({
