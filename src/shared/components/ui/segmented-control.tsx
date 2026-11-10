@@ -2,7 +2,7 @@
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { cn } from "cn";
+import { css, cx } from "styled-system/css";
 import * as React from "react";
 
 export type SegmentedControlSize = "default" | "lg" | "sm";
@@ -11,16 +11,108 @@ export const segmentedControlItemSizeClassNames: Record<
   SegmentedControlSize,
   string
 > = {
-  default: "h-8.5 px-[calc(--spacing(2.5)-1px)] sm:h-7.5",
-  lg: "h-9.5 px-[calc(--spacing(3)-1px)] sm:h-8.5",
-  sm: "h-7.5 px-[calc(--spacing(2)-1px)] sm:h-6.5",
+  default: css({
+    height: "2.125rem",
+    paddingInline: "calc(var(--spacing) * 2.5 - 1px)",
+    "@media (min-width: 40rem)": { height: "1.875rem" },
+  }),
+  lg: css({
+    height: "2.375rem",
+    paddingInline: "calc(var(--spacing) * 3 - 1px)",
+    "@media (min-width: 40rem)": { height: "2.125rem" },
+  }),
+  sm: css({
+    height: "1.875rem",
+    paddingInline: "calc(var(--spacing) * 2 - 1px)",
+    "@media (min-width: 40rem)": { height: "1.625rem" },
+  }),
 };
 
-export const segmentedControlItemLayoutClassName =
-  "gap-1.5 [&_svg:not([class*='opacity-'])]:opacity-80 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:-mx-0.5 [&_svg]:shrink-0";
+export const segmentedControlItemLayoutClassName = css({
+  gap: "1.5",
+  "& svg:not([class*='opacity-'])": { opacity: 0.8 },
+  "& svg:not([class*='size-'])": {
+    width: "1.125rem",
+    height: "1.125rem",
+    "@media (min-width: 40rem)": { width: "1rem", height: "1rem" },
+  },
+  "& svg": {
+    pointerEvents: "none",
+    marginInline: "-0.125rem",
+    flexShrink: 0,
+  },
+});
 
-export const segmentedControlIndicatorSurfaceClassName =
-  "rounded-md bg-background shadow-sm/5 dark:bg-input";
+export const segmentedControlIndicatorSurfaceClassName = css({
+  borderRadius: "md",
+  backgroundColor: "var(--background)",
+  boxShadow: "0 1px 2px color-mix(in srgb, black 5%, transparent)",
+  _dark: { backgroundColor: "var(--input)" },
+});
+
+const rootStyle = css({
+  position: "relative",
+  zIndex: 0,
+  display: "flex",
+  width: "fit-content",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "0.125rem",
+  borderRadius: "lg",
+  backgroundColor: "var(--muted)",
+  padding: "0.125rem",
+});
+
+const itemStyle = css({
+  position: "relative",
+  display: "inline-flex",
+  flexShrink: 0,
+  cursor: "pointer",
+  userSelect: "none",
+  alignItems: "center",
+  justifyContent: "center",
+  whiteSpace: "nowrap",
+  borderWidth: "1px",
+  borderColor: "transparent",
+  borderRadius: "md",
+  fontWeight: "medium",
+  fontSize: "base",
+  color: "color-mix(in srgb, var(--muted-foreground) 72%, transparent)",
+  outline: "2px solid transparent",
+  transitionProperty: "color, outline-color",
+  "&:hover": { backgroundColor: "transparent", color: "var(--muted-foreground)" },
+  "&:focus-visible": { outlineColor: "var(--ring)" },
+  "&:disabled,&[data-disabled]": { pointerEvents: "none", opacity: 0.64 },
+  "&[data-checked],&[aria-current='page'],&[data-pressed]": {
+    backgroundColor: "var(--background)",
+    color: "var(--foreground)",
+    boxShadow: "0 1px 2px color-mix(in srgb, black 5%, transparent)",
+  },
+  _dark: {
+    "&[data-checked],&[aria-current='page'],&[data-pressed]": {
+      backgroundColor: "var(--input)",
+    },
+  },
+  "&:has(>[data-slot='segmented-control-indicator']:not([hidden]))": {
+    backgroundColor: "transparent !important",
+    boxShadow: "none !important",
+  },
+  "@media (min-width: 40rem)": { fontSize: "sm" },
+});
+
+const indicatorStyle = css({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  zIndex: -1,
+  height: "var(--active-item-height)",
+  width: "var(--active-item-width)",
+  translate: "var(--active-item-left) var(--active-item-top)",
+  transitionProperty: "width, height, translate",
+  transitionDuration: "200ms",
+  transitionTimingFunction: "ease-in-out",
+  "@media (prefers-reduced-motion: reduce)": { transition: "none" },
+});
 
 const SegmentedControlContext: React.Context<SegmentedControlSize> =
   React.createContext<SegmentedControlSize>("default");
@@ -41,10 +133,7 @@ export function SegmentedControl({
         <SegmentedControlIndicator />
       </>
     ),
-    className: cn(
-      "relative z-0 flex w-fit items-center justify-center gap-0.5 rounded-lg bg-muted p-0.5",
-      className,
-    ),
+    className: cx(rootStyle, className),
     "data-size": size,
     "data-slot": "segmented-control",
   };
@@ -74,12 +163,8 @@ export function SegmentedControlItem({
   const resolvedSize = size ?? contextSize;
 
   const defaultProps = {
-    className: cn(
-      "relative inline-flex shrink-0 cursor-pointer select-none items-center justify-center whitespace-nowrap rounded-md border border-transparent font-medium text-base text-muted-foreground/72 outline-2 outline-transparent transition-[color,outline-color] hover:bg-transparent hover:text-muted-foreground focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-64 data-disabled:pointer-events-none data-disabled:opacity-64 sm:text-sm",
-      "data-checked:bg-background data-checked:text-foreground data-checked:shadow-sm/5 dark:data-checked:bg-input",
-      "aria-[current=page]:bg-background aria-[current=page]:text-foreground aria-[current=page]:shadow-sm/5 dark:aria-[current=page]:bg-input",
-      "data-pressed:bg-background data-pressed:text-foreground data-pressed:shadow-sm/5 dark:data-pressed:bg-input",
-      "[:has(>[data-slot=segmented-control-indicator]:not([hidden]))>&]:bg-transparent! [:has(>[data-slot=segmented-control-indicator]:not([hidden]))>&]:shadow-none!",
+    className: cx(
+      itemStyle,
       segmentedControlItemLayoutClassName,
       segmentedControlItemSizeClassNames[resolvedSize],
       className,
@@ -214,10 +299,7 @@ function SegmentedControlIndicator(): React.ReactElement {
   return (
     <span
       aria-hidden="true"
-      className={cn(
-        "pointer-events-none absolute top-0 left-0 -z-1 h-(--active-item-height) w-(--active-item-width) translate-x-(--active-item-left) translate-y-(--active-item-top) transition-[width,height,translate] duration-200 ease-in-out motion-reduce:transition-none",
-        segmentedControlIndicatorSurfaceClassName,
-      )}
+      className={cx(indicatorStyle, segmentedControlIndicatorSurfaceClassName)}
       data-slot="segmented-control-indicator"
       hidden={!rect}
       ref={ref}
