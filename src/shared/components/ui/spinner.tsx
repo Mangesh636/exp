@@ -1,4 +1,4 @@
-import { cn } from "cn";
+import { css } from "styled-system/css";
 
 import type React from "react";
 
@@ -12,7 +12,14 @@ export function Spinner({ className }: SpinnerProps): React.ReactElement {
     <Icon
       icon={LoaderIcon}
       aria-label="Loading"
-      className={cn("animate-spin", className)}
+      className={[
+        css({
+          animation: "spin 1s linear infinite",
+        }),
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       role="status"
     />
   );
