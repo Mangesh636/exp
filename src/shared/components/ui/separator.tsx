@@ -22,6 +22,9 @@ export function Separator({
             width: "1px",
             alignSelf: "stretch",
           },
+          "&[data-orientation=vertical]:not([class^='h-']):not([class*=' h-'])": {
+            alignSelf: "stretch",
+          },
         }),
         className,
       ]
