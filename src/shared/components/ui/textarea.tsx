@@ -62,8 +62,8 @@ export function Textarea({ className, size = "default", unstyled = false, ref, .
               color: "foreground", outline: "none",
               "&::placeholder": { color: "color-mix(in srgb, var(--muted-foreground) 72%, transparent)" },
               "@media (max-width: 639px)": { minH: "20.5" },
-              "&[data-size=sm]": { minH: "16.5", px: "calc(0.625rem - 1px)", py: "calc(0.25rem - 1px)" },
-              "&[data-size=lg]": { minH: "18.5", py: "calc(0.5rem - 1px)" },
+              ...(size === "sm" ? { minH: "16.5", px: "calc(0.625rem - 1px)", py: "calc(0.25rem - 1px)" } : {}),
+              ...(size === "lg" ? { minH: "18.5", py: "calc(0.5rem - 1px)" } : {}),
             }), className)}
             data-slot="textarea"
             {...mergeProps(defaultProps, props)}
