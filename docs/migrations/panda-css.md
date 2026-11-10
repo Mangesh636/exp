@@ -41,7 +41,6 @@ Working branch: `codex/panda-css-migration`
 - [ ] `alert.tsx`
 - [ ] `autocomplete.tsx`
 - [ ] `avatar.tsx`
-- [ ] `badge.tsx`
 - [ ] `breadcrumb.tsx`
 - [ ] `button.tsx`
 - [ ] `calendar.tsx`
@@ -53,7 +52,6 @@ Working branch: `codex/panda-css-migration`
 - [ ] `context-menu.tsx`
 - [ ] `dialog.tsx`
 - [ ] `drawer.tsx`
-- [ ] `empty.tsx`
 - [ ] `form.tsx`
 - [ ] `group.tsx`
 - [ ] `icon.tsx`
