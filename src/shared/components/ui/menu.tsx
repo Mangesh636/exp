@@ -14,7 +14,7 @@ export const MenuPortal: typeof MenuPrimitive.Portal = MenuPrimitive.Portal;
 
 const positionerStyle = css({ zIndex: 50 });
 const popupStyle = css({
-  position: "relative", display: "flex", minWidth: "8rem",
+  position: "relative", display: "flex",
   transformOrigin: "var(--transform-origin)", borderWidth: "1px",
   borderColor: "var(--border)", borderRadius: "lg",
   backgroundColor: "var(--popover)", outline: "none",
@@ -44,7 +44,7 @@ const checkItemStyle = css({
   fontSize: { base: "base", sm: "sm" }, color: "var(--foreground)", outline: "none",
   "&[data-disabled]": { pointerEvents: "none", opacity: 0.64 },
   "&[data-highlighted]": { backgroundColor: "var(--accent)", color: "var(--accent-foreground)" },
-  "&[data-side='none']": { minWidth: "calc(var(--anchor-width) + 1.25rem)" },
+  "[data-side='none'] &": { minWidth: "calc(var(--anchor-width) + 1.25rem)" },
   "& svg:not([class*='size-'])": { width: "1.125rem", height: "1.125rem" },
   "& svg": { pointerEvents: "none", flexShrink: 0 },
   "@media (min-width: 40rem)": { minHeight: "1.75rem", "& svg:not([class*='size-'])": { width: "1rem", height: "1rem" } },
