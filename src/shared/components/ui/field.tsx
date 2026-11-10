@@ -1,7 +1,7 @@
 "use client";
 
 import { Field as FieldPrimitive } from "@base-ui/react/field";
-import { cn } from "cn";
+import { css } from "styled-system/css";
 
 import type React from "react";
 
@@ -11,7 +11,12 @@ export function Field({
 }: FieldPrimitive.Root.Props): React.ReactElement {
   return (
     <FieldPrimitive.Root
-      className={cn("flex flex-col items-start gap-2", className)}
+      className={[
+        css({ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "2" }),
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="field"
       {...props}
     />
@@ -24,10 +29,21 @@ export function FieldLabel({
 }: FieldPrimitive.Label.Props): React.ReactElement {
   return (
     <FieldPrimitive.Label
-      className={cn(
-        "inline-flex items-center gap-2 font-medium text-base/4.5 text-foreground data-disabled:opacity-64 sm:text-sm/4",
+      className={[
+        css({
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "2",
+          fontWeight: "medium",
+          fontSize: { base: "base", sm: "sm" },
+          lineHeight: { base: "1.125rem", sm: "1rem" },
+          color: "var(--foreground)",
+          "&[data-disabled]": { opacity: 0.64 },
+        }),
         className,
-      )}
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="field-label"
       {...props}
     />
@@ -40,7 +56,12 @@ export function FieldItem({
 }: FieldPrimitive.Item.Props): React.ReactElement {
   return (
     <FieldPrimitive.Item
-      className={cn("flex", className)}
+      className={[
+        css({ display: "flex" }),
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="field-item"
       {...props}
     />
@@ -53,7 +74,12 @@ export function FieldDescription({
 }: FieldPrimitive.Description.Props): React.ReactElement {
   return (
     <FieldPrimitive.Description
-      className={cn("text-muted-foreground text-xs", className)}
+      className={[
+        css({ color: "var(--muted-foreground)", fontSize: "xs" }),
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="field-description"
       {...props}
     />
@@ -66,7 +92,12 @@ export function FieldError({
 }: FieldPrimitive.Error.Props): React.ReactElement {
   return (
     <FieldPrimitive.Error
-      className={cn("text-destructive-foreground text-xs", className)}
+      className={[
+        css({ color: "var(--destructive-foreground)", fontSize: "xs" }),
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="field-error"
       {...props}
     />
