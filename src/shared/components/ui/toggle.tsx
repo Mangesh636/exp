@@ -48,7 +48,7 @@ export const toggleVariants = cva({
     "& svg:not([class*=size-])": { width: "1.125rem", height: "1.125rem" },
     "& svg": { pointerEvents: "none", mx: "-0.125rem", flexShrink: "0" },
     "@media (pointer: coarse)": {
-      "&::after": { content: '""', position: "absolute", size: "full", minH: "2.75rem", minW: "2.75rem" },
+      "&::after": { content: '""', position: "absolute", width: "100%", height: "100%", minH: "2.75rem", minW: "2.75rem" },
     },
     "@media (min-width: 640px)": {
       fontSize: "sm",
