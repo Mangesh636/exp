@@ -40,17 +40,19 @@ function getSwipeDirection(position: ToastPosition): SwipeDirection[] {
   return ["right", verticalDirection];
 }
 
+const replayAnimationStyles = {
+  errorEven: css({ animation: "toast-error-even 0.28s cubic-bezier(0.5, 1, 0.89, 1)", "@media (prefers-reduced-motion: reduce)": { animation: "none" } }),
+  errorOdd: css({ animation: "toast-error-odd 0.28s cubic-bezier(0.5, 1, 0.89, 1)", "@media (prefers-reduced-motion: reduce)": { animation: "none" } }),
+  successEven: css({ animation: "toast-success-even 0.32s cubic-bezier(0.5, 1, 0.89, 1)", "@media (prefers-reduced-motion: reduce)": { animation: "none" } }),
+  successOdd: css({ animation: "toast-success-odd 0.32s cubic-bezier(0.5, 1, 0.89, 1)", "@media (prefers-reduced-motion: reduce)": { animation: "none" } }),
+};
+
 function upsertReplayClassName(toast: { type?: string; updateKey?: number }): string | undefined {
   const key = toast.updateKey ?? 0;
   if (key <= 0) return undefined;
   const even = key % 2 === 0;
-  const animation = toast.type === "error"
-    ? even ? "toast-error-even 0.28s cubic-bezier(0.5, 1, 0.89, 1)" : "toast-error-odd 0.28s cubic-bezier(0.5, 1, 0.89, 1)"
-    : even ? "toast-success-even 0.32s cubic-bezier(0.5, 1, 0.89, 1)" : "toast-success-odd 0.32s cubic-bezier(0.5, 1, 0.89, 1)";
-  return css({
-    animation,
-    "@media (prefers-reduced-motion: reduce)": { animation: "none" },
-  });
+  if (toast.type === "error") return even ? replayAnimationStyles.errorEven : replayAnimationStyles.errorOdd;
+  return even ? replayAnimationStyles.successEven : replayAnimationStyles.successOdd;
 }
 
 const toastViewportStyles = css({
@@ -153,11 +155,11 @@ const toastIconStyles = css({
 });
 
 const toastIconColorStyles = css({
-  "&[data-type=loading]": { animation: "spin 1s linear infinite", opacity: "0.8" },
-  "&[data-type=error]": { color: "destructive" },
-  "&[data-type=info]": { color: "info" },
-  "&[data-type=success]": { color: "success" },
-  "&[data-type=warning]": { color: "warning" },
+  "&:where([data-type=loading] *)": { animation: "spin 1s linear infinite", opacity: "0.8" },
+  "&:where([data-type=error] *)": { color: "destructive" },
+  "&:where([data-type=info] *)": { color: "info" },
+  "&:where([data-type=success] *)": { color: "success" },
+  "&:where([data-type=warning] *)": { color: "warning" },
 });
 
 const anchoredToastStyles = css({
@@ -165,8 +167,10 @@ const anchoredToastStyles = css({
   backgroundClip: "padding-box", color: "popover.foreground", fontSize: "xs",
   transition: "scale 150ms, opacity 150ms",
   _before: { content: '""', pointerEvents: "none", position: "absolute", inset: "0", boxShadow: "0 1px rgb(0 0 0 / 4%)" },
-  "&[data-ending-style], &[data-starting-style]": { opacity: "0" },
-  "&[data-ending-style], &[data-starting-style]": { "@media (prefers-reduced-motion: no-preference)": { scale: "0.98" } },
+  "&[data-ending-style], &[data-starting-style]": {
+    opacity: "0",
+    "@media (prefers-reduced-motion: no-preference)": { scale: "0.98" },
+  },
   _dark: { _before: { boxShadow: "0 -1px rgb(255 255 255 / 6%)" } },
 });
 
