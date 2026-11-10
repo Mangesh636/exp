@@ -1,7 +1,7 @@
 "use client";
 
 import { Collapsible as CollapsiblePrimitive } from "@base-ui/react/collapsible";
-import { cn } from "cn";
+import { css } from "styled-system/css";
 
 import type React from "react";
 
@@ -30,10 +30,16 @@ export function CollapsiblePanel({
 }: CollapsiblePrimitive.Panel.Props): React.ReactElement {
   return (
     <CollapsiblePrimitive.Panel
-      className={cn(
-        "h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 data-ending-style:h-0 data-starting-style:h-0",
+      className={[
+        css({
+          height: "var(--collapsible-panel-height)",
+          overflow: "hidden",
+          transitionProperty: "height",
+          transitionDuration: "200ms",
+          "&[data-ending-style], &[data-starting-style]": { height: "0" },
+        }),
         className,
-      )}
+      ].filter(Boolean).join(" ")}
       data-slot="collapsible-panel"
       {...props}
     />
