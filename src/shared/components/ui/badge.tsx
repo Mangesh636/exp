@@ -2,47 +2,177 @@
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "cn";
+import { cva, cx } from "styled-system/css";
 
 import type React from "react";
 
-export const badgeVariants = cva(
-  "relative inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-sm border border-transparent font-medium outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-64 [&_svg:not([class*='opacity-'])]:opacity-80 [&_svg:not([class*='size-'])]:size-3.5 sm:[&_svg:not([class*='size-'])]:size-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [button&,a&]:cursor-pointer [button&,a&]:pointer-coarse:after:absolute [button&,a&]:pointer-coarse:after:size-full [button&,a&]:pointer-coarse:after:min-h-11 [button&,a&]:pointer-coarse:after:min-w-11",
-  {
-    defaultVariants: {
-      size: "default",
-      variant: "default",
+const badgeVariants = cva({
+  base: {
+    position: "relative",
+    display: "inline-flex",
+    flexShrink: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "1",
+    whiteSpace: "nowrap",
+    borderRadius: "sm",
+    borderWidth: "1px",
+    borderColor: "transparent",
+    fontWeight: "medium",
+    outline: "none",
+    transitionProperty: "box-shadow",
+    "&:focus-visible": {
+      boxShadow: "0 0 0 1px var(--background), 0 0 0 3px var(--ring)",
     },
-    variants: {
-      size: {
-        default:
-          "h-5.5 min-w-5.5 px-[calc(--spacing(1)-1px)] text-sm sm:h-4.5 sm:min-w-4.5 sm:text-xs",
-        lg: "h-6.5 min-w-6.5 px-[calc(--spacing(1.5)-1px)] text-base sm:h-5.5 sm:min-w-5.5 sm:text-sm",
-        sm: "h-5 min-w-5 rounded-[.25rem] px-[calc(--spacing(1)-1px)] text-xs sm:h-4 sm:min-w-4 sm:text-[.625rem]",
+    "&:disabled": {
+      pointerEvents: "none",
+      opacity: 0.64,
+    },
+    "& svg:not([class*='opacity-'])": { opacity: 0.8 },
+    "& svg:not([class*='size-'])": {
+      width: "0.875rem",
+      height: "0.875rem",
+      "@media (min-width: 40rem)": {
+        width: "0.75rem",
+        height: "0.75rem",
       },
-      variant: {
-        default:
-          "bg-primary text-primary-foreground [button&,a&]:hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-white [button&,a&]:hover:bg-destructive/90",
-        error:
-          "bg-destructive/8 text-destructive-foreground dark:bg-destructive/16",
-        info: "bg-info/8 text-info-foreground dark:bg-info/16",
-        outline:
-          "border-input bg-background text-foreground dark:bg-input/32 [button&,a&]:hover:bg-accent/50 dark:[button&,a&]:hover:bg-input/48",
-        secondary:
-          "bg-secondary text-secondary-foreground [button&,a&]:hover:bg-secondary/90",
-        success: "bg-success/8 text-success-foreground dark:bg-success/16",
-        warning: "bg-warning/8 text-warning-foreground dark:bg-warning/16",
+    },
+    "& svg": {
+      pointerEvents: "none",
+      flexShrink: 0,
+    },
+    "&:is(button, a)": {
+      cursor: "pointer",
+    },
+    "@media (pointer: coarse)": {
+      "&:is(button, a)::after": {
+        content: '""',
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        minHeight: "44px",
+        minWidth: "44px",
       },
     },
   },
-);
+  variants: {
+    size: {
+      default: {
+        height: "1.375rem",
+        minWidth: "1.375rem",
+        paddingX: "3px",
+        fontSize: "sm",
+        "@media (min-width: 40rem)": {
+          height: "1.125rem",
+          minWidth: "1.125rem",
+          fontSize: "xs",
+        },
+      },
+      lg: {
+        height: "1.625rem",
+        minWidth: "1.625rem",
+        paddingX: "5px",
+        fontSize: "base",
+        "@media (min-width: 40rem)": {
+          height: "1.375rem",
+          minWidth: "1.375rem",
+          fontSize: "sm",
+        },
+      },
+      sm: {
+        height: "1.25rem",
+        minWidth: "1.25rem",
+        borderRadius: "0.25rem",
+        paddingX: "3px",
+        fontSize: "xs",
+        "@media (min-width: 40rem)": {
+          height: "1rem",
+          minWidth: "1rem",
+          fontSize: "0.625rem",
+        },
+      },
+    },
+    variant: {
+      default: {
+        backgroundColor: "var(--primary)",
+        color: "var(--primary-foreground)",
+        "&:is(button, a):hover": {
+          backgroundColor: "color-mix(in srgb, var(--primary) 90%, transparent)",
+        },
+      },
+      destructive: {
+        backgroundColor: "var(--destructive)",
+        color: "white",
+        "&:is(button, a):hover": {
+          backgroundColor: "color-mix(in srgb, var(--destructive) 90%, transparent)",
+        },
+      },
+      error: {
+        backgroundColor: "color-mix(in srgb, var(--destructive) 8%, transparent)",
+        color: "var(--destructive-foreground)",
+        _dark: {
+          backgroundColor: "color-mix(in srgb, var(--destructive) 16%, transparent)",
+        },
+      },
+      info: {
+        backgroundColor: "color-mix(in srgb, var(--info) 8%, transparent)",
+        color: "var(--info-foreground)",
+        _dark: {
+          backgroundColor: "color-mix(in srgb, var(--info) 16%, transparent)",
+        },
+      },
+      outline: {
+        borderColor: "var(--input)",
+        backgroundColor: "var(--background)",
+        color: "var(--foreground)",
+        _dark: {
+          backgroundColor: "color-mix(in srgb, var(--input) 32%, transparent)",
+        },
+        "&:is(button, a):hover": {
+          backgroundColor: "color-mix(in srgb, var(--accent) 50%, transparent)",
+        },
+        _dark: {
+          backgroundColor: "color-mix(in srgb, var(--input) 32%, transparent)",
+          "&:is(button, a):hover": {
+            backgroundColor: "color-mix(in srgb, var(--input) 48%, transparent)",
+          },
+        },
+      },
+      secondary: {
+        backgroundColor: "var(--secondary)",
+        color: "var(--secondary-foreground)",
+        "&:is(button, a):hover": {
+          backgroundColor: "color-mix(in srgb, var(--secondary) 90%, transparent)",
+        },
+      },
+      success: {
+        backgroundColor: "color-mix(in srgb, var(--success) 8%, transparent)",
+        color: "var(--success-foreground)",
+        _dark: {
+          backgroundColor: "color-mix(in srgb, var(--success) 16%, transparent)",
+        },
+      },
+      warning: {
+        backgroundColor: "color-mix(in srgb, var(--warning) 8%, transparent)",
+        color: "var(--warning-foreground)",
+        _dark: {
+          backgroundColor: "color-mix(in srgb, var(--warning) 16%, transparent)",
+        },
+      },
+    },
+  },
+  defaultVariants: {
+    size: "default",
+    variant: "default",
+  },
+});
+
+type BadgeVariant = "default" | "destructive" | "error" | "info" | "outline" | "secondary" | "success" | "warning";
+type BadgeSize = "default" | "lg" | "sm";
 
 export interface BadgeProps extends useRender.ComponentProps<"span"> {
-  variant?: VariantProps<typeof badgeVariants>["variant"];
-  size?: VariantProps<typeof badgeVariants>["size"];
+  variant?: BadgeVariant;
+  size?: BadgeSize;
 }
 
 export function Badge({
@@ -53,7 +183,7 @@ export function Badge({
   ...props
 }: BadgeProps): React.ReactElement {
   const defaultProps = {
-    className: cn(badgeVariants({ className, size, variant })),
+    className: cx(badgeVariants({ size, variant }), className),
     "data-slot": "badge",
   };
 
