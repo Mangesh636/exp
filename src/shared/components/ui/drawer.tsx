@@ -143,11 +143,11 @@ const popupBaseStyle = css({
   "&[data-ending-style]": {
     transitionDuration: "calc(var(--drawer-swipe-strength) * 400ms)",
   },
-  ".dark &::before": {
-    boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
-  },
-  ".dark &[data-nested-drawer-open]": {
-    backgroundColor: "color-mix(in srgb, var(--popover), black calc(6% * (var(--nested-drawers) - var(--stack-progress))))",
+  _dark: {
+    "&::before": { boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)" },
+    "&[data-nested-drawer-open]": {
+      backgroundColor: "color-mix(in srgb, var(--popover), black calc(6% * (var(--nested-drawers) - var(--stack-progress))))",
+    },
   },
   ":where(html:not(.dark)) &": { backgroundClip: "padding-box" },
 });
