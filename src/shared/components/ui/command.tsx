@@ -83,10 +83,6 @@ const popupStyle = css({
   "& .\[\*\*\:data-\[slot\=scroll-area-viewport\]\:data-has-overflow-y\:pe-1\]": {
     paddingInlineEnd: "0.25rem",
   },
-  "&::before": {
-    content: '""',
-    boxShadow: "0 1px 0 color-mix(in srgb, black 4%, transparent)",
-  },
   _dark: {
     "&::before": { boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)" },
   },
