@@ -1,7 +1,7 @@
 "use client";
 
 import { Progress as ProgressPrimitive } from "@base-ui/react/progress";
-import { css } from "styled-system/css";
+import { css } from "../../../../styled-system/css";
 
 import type React from "react";
 
