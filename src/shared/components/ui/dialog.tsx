@@ -3,7 +3,7 @@
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { cn } from "cn";
+import { css, cx } from "styled-system/css";
 
 import type React from "react";
 
@@ -11,6 +11,152 @@ import { Cancel01Icon } from "@/shared/components/icons/interface-icon";
 import { Button } from "@/shared/components/ui/button";
 import { Icon } from "@/shared/components/ui/icon";
 import { ScrollArea } from "@/shared/components/ui/scroll-area";
+
+const backdropStyle = css({
+  position: "fixed",
+  inset: 0,
+  zIndex: 50,
+  backgroundColor: "rgb(0 0 0 / 0.32)",
+  backdropFilter: "blur(4px)",
+  transition: "all 200ms",
+  "&[data-ending-style], &[data-starting-style]": { opacity: 0 },
+  "@supports (-webkit-touch-callout: none)": { position: "absolute" },
+});
+
+const viewportStyle = css({
+  position: "fixed",
+  inset: 0,
+  zIndex: 50,
+  display: "grid",
+  gridTemplateRows: "1fr auto 3fr",
+  justifyItems: "center",
+  padding: "1rem",
+});
+
+const mobileViewportStyle = css({
+  "@media (max-width: 39.999rem)": {
+    gridTemplateRows: "1fr auto",
+    padding: 0,
+    paddingTop: "3rem",
+  },
+});
+
+const popupStyle = css({
+  position: "relative",
+  gridRowStart: 2,
+  display: "flex",
+  maxHeight: "100%",
+  minHeight: 0,
+  width: "100%",
+  minWidth: 0,
+  maxWidth: "32rem",
+  transformOrigin: "center",
+  flexDirection: "column",
+  borderWidth: "1px",
+  borderRadius: "1rem",
+  backgroundColor: "var(--popover)",
+  color: "var(--popover-foreground)",
+  opacity: "calc(1 - var(--nested-dialogs))",
+  boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.05)",
+  outline: "none",
+  transition: "scale 200ms ease-in-out, opacity 200ms ease-in-out, translate 200ms ease-in-out",
+  willChange: "transform",
+  "&::before": {
+    content: '""',
+    pointerEvents: "none",
+    position: "absolute",
+    inset: 0,
+    borderRadius: "calc(var(--radius-2xl) - 1px)",
+    boxShadow: "0 1px 0 color-mix(in srgb, black 4%, transparent)",
+  },
+  "&[data-ending-style], &[data-starting-style]": { opacity: 0 },
+  "@media (prefers-reduced-motion: reduce)": { transition: "opacity 200ms ease-in-out" },
+  "@media (min-width: 40rem)": {
+    scale: "calc(1 - 0.1 * var(--nested-dialogs))",
+    "&[data-ending-style], &[data-starting-style]": {
+      "@media (prefers-reduced-motion: no-preference)": { scale: "0.98" },
+    },
+  },
+  ".dark &::before": {
+    boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
+  },
+  ":where(html:not(.dark)) &": { backgroundClip: "padding-box" },
+});
+
+const mobilePopupStyle = css({
+  "@media (max-width: 39.999rem)": {
+    maxWidth: "none",
+    transformOrigin: "bottom",
+    borderRadius: 0,
+    borderInlineWidth: 0,
+    borderTopWidth: "1px",
+    borderBottomWidth: 0,
+    "&[data-ending-style], &[data-starting-style]": {
+      "@media (prefers-reduced-motion: no-preference)": { translate: "0 1rem" },
+    },
+    "&::before": { display: "none", borderRadius: 0 },
+  },
+});
+
+const headerStyle = css({
+  display: "flex",
+  flexDirection: "column",
+  gap: "0.5rem",
+  padding: "1.5rem",
+  ":where([data-slot='dialog-popup']:has([data-slot='dialog-panel'])) &": {
+    paddingBottom: "0.75rem",
+  },
+  "@media (max-width: 39.999rem)": { paddingBottom: "1rem" },
+});
+
+const footerStyle = css({
+  display: "flex",
+  flexDirection: "column-reverse",
+  gap: "0.5rem",
+  paddingInline: "1.5rem",
+  "@media (min-width: 40rem)": {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    borderBottomLeftRadius: "calc(var(--radius-2xl) - 1px)",
+    borderBottomRightRadius: "calc(var(--radius-2xl) - 1px)",
+  },
+});
+
+const footerDefaultStyle = css({
+  borderTopWidth: "1px",
+  backgroundColor: "color-mix(in srgb, var(--muted) 72%, transparent)",
+  paddingBlock: "1rem",
+});
+
+const footerBareStyle = css({
+  paddingTop: "1rem",
+  paddingBottom: "1.5rem",
+  ":where([data-slot='dialog-popup']:has([data-slot='dialog-panel'])) &": {
+    paddingTop: "0.75rem",
+  },
+});
+
+const titleStyle = css({
+  fontFamily: "var(--font-sans)",
+  fontSize: "1.25rem",
+  fontWeight: "bold",
+  lineHeight: 1,
+});
+
+const descriptionStyle = css({
+  color: "var(--muted-foreground)",
+  fontSize: "0.875rem",
+});
+
+const panelStyle = css({
+  padding: "1.5rem",
+  ":where([data-slot='dialog-popup']:has([data-slot='dialog-header'])) &": {
+    paddingTop: "0.25rem",
+  },
+  ":where([data-slot='dialog-popup']:has([data-slot='dialog-footer']:not(.border-t))) &": {
+    paddingBottom: "0.25rem",
+  },
+});
 
 export const DialogCreateHandle: typeof DialogPrimitive.createHandle =
   DialogPrimitive.createHandle;
@@ -38,10 +184,7 @@ export function DialogBackdrop({
 }: DialogPrimitive.Backdrop.Props): React.ReactElement {
   return (
     <DialogPrimitive.Backdrop
-      className={cn(
-        "fixed inset-0 z-50 bg-black/32 backdrop-blur-sm transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-[-webkit-touch-callout:none]:absolute",
-        className,
-      )}
+      className={cx(backdropStyle, className)}
       data-slot="dialog-backdrop"
       {...props}
     />
@@ -54,10 +197,7 @@ export function DialogViewport({
 }: DialogPrimitive.Viewport.Props): React.ReactElement {
   return (
     <DialogPrimitive.Viewport
-      className={cn(
-        "fixed inset-0 z-50 grid grid-rows-[1fr_auto_3fr] justify-items-center p-4",
-        className,
-      )}
+      className={cx(viewportStyle, className)}
       data-slot="dialog-viewport"
       {...props}
     />
@@ -81,17 +221,11 @@ export function DialogPopup({
   return (
     <DialogPortal {...portalProps}>
       <DialogBackdrop />
-      <DialogViewport
-        className={cn(
-          bottomStickOnMobile &&
-            "max-sm:grid-rows-[1fr_auto] max-sm:p-0 max-sm:pt-12",
-        )}
-      >
+      <DialogViewport className={bottomStickOnMobile ? mobileViewportStyle : undefined}>
         <DialogPrimitive.Popup
-          className={cn(
-            "relative row-start-2 flex max-h-full min-h-0 w-full min-w-0 max-w-lg origin-center flex-col rounded-2xl border bg-popover not-dark:bg-clip-padding text-popover-foreground opacity-[calc(1-var(--nested-dialogs))] shadow-lg/5 outline-none transition-[scale,opacity,translate] duration-200 ease-in-out will-change-transform before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-2xl)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-opacity sm:scale-[calc(1-0.1*var(--nested-dialogs))] motion-safe:sm:data-ending-style:scale-98 motion-safe:sm:data-starting-style:scale-98 dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
-            bottomStickOnMobile &&
-              "max-sm:max-w-none max-sm:origin-bottom max-sm:rounded-none max-sm:border-x-0 max-sm:border-t max-sm:border-b-0 motion-safe:max-sm:data-ending-style:translate-y-4 motion-safe:max-sm:data-starting-style:translate-y-4 max-sm:before:hidden max-sm:before:rounded-none",
+          className={cx(
+            popupStyle,
+            bottomStickOnMobile ? mobilePopupStyle : undefined,
             className,
           )}
           data-slot="dialog-popup"
@@ -101,7 +235,7 @@ export function DialogPopup({
           {showCloseButton && (
             <DialogPrimitive.Close
               aria-label="Close"
-              className="absolute inset-e-2 top-2"
+              className={css({ position: "absolute", insetInlineEnd: "0.5rem", top: "0.5rem" })}
               render={<Button size="icon" variant="ghost" />}
               {...closeProps}
             >
@@ -120,10 +254,7 @@ export function DialogHeader({
   ...props
 }: useRender.ComponentProps<"div">): React.ReactElement {
   const defaultProps = {
-    className: cn(
-      "flex flex-col gap-2 p-6 in-[[data-slot=dialog-popup]:has([data-slot=dialog-panel])]:pb-3 max-sm:pb-4",
-      className,
-    ),
+    className: cx(headerStyle, className),
     "data-slot": "dialog-header",
   };
 
@@ -143,11 +274,9 @@ export function DialogFooter({
   variant?: "default" | "bare";
 }): React.ReactElement {
   const defaultProps = {
-    className: cn(
-      "flex flex-col-reverse gap-2 px-6 sm:flex-row sm:justify-end sm:rounded-b-[calc(var(--radius-2xl)-1px)]",
-      variant === "default" && "border-t bg-muted/72 py-4",
-      variant === "bare" &&
-        "in-[[data-slot=dialog-popup]:has([data-slot=dialog-panel])]:pt-3 pt-4 pb-6",
+    className: cx(
+      footerStyle,
+      variant === "default" ? footerDefaultStyle : footerBareStyle,
       className,
     ),
     "data-slot": "dialog-footer",
@@ -166,7 +295,7 @@ export function DialogTitle({
 }: DialogPrimitive.Title.Props): React.ReactElement {
   return (
     <DialogPrimitive.Title
-      className={cn("font-bold font-sans text-xl leading-none", className)}
+      className={cx(titleStyle, className)}
       data-slot="dialog-title"
       {...props}
     />
@@ -179,7 +308,7 @@ export function DialogDescription({
 }: DialogPrimitive.Description.Props): React.ReactElement {
   return (
     <DialogPrimitive.Description
-      className={cn("text-muted-foreground text-sm", className)}
+      className={cx(descriptionStyle, className)}
       data-slot="dialog-description"
       {...props}
     />
@@ -195,10 +324,7 @@ export function DialogPanel({
   scrollFade?: boolean;
 }): React.ReactElement {
   const defaultProps = {
-    className: cn(
-      "p-6 in-[[data-slot=dialog-popup]:has([data-slot=dialog-header])]:pt-1 in-[[data-slot=dialog-popup]:has([data-slot=dialog-footer]:not(.border-t))]:pb-1",
-      className,
-    ),
+    className: cx(panelStyle, className),
     "data-slot": "dialog-panel",
   };
 
