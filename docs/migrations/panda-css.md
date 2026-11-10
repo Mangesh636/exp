@@ -38,14 +38,14 @@ Working branch: `codex/panda-css-migration`
 
 - [ ] `accordion.tsx`
 - [ ] `alert-dialog.tsx`
-- [ ] `alert.tsx`
+- [x] `alert.tsx`
 - [ ] `autocomplete.tsx`
 - [ ] `avatar.tsx`
 - [ ] `breadcrumb.tsx`
-- [ ] `button.tsx`
+- [x] `button.tsx`
 - [ ] `calendar.tsx`
 - [ ] `card.tsx`
-- [ ] `checkbox.tsx`
+- [x] `checkbox.tsx`
 - [ ] `combobox.tsx`
 - [ ] `command.tsx`
 - [ ] `composer.tsx`
@@ -56,7 +56,7 @@ Working branch: `codex/panda-css-migration`
 - [ ] `group.tsx`
 - [ ] `icon.tsx`
 - [ ] `input-group.tsx`
-- [ ] `input.tsx`
+- [x] `input.tsx`
 - [ ] `menu.tsx`
 - [ ] `number-field.tsx`
 - [ ] `otp-field.tsx`
