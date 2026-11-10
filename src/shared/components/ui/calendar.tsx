@@ -36,7 +36,7 @@ const buttonClassNames = css({
 
 const dayButtonClassNames = css({
   pointerEvents: "auto",
-  ":where([data-disabled]) &": { pointerEvents: "none" },
+  ":where([data-disabled]) &": { pointerEvents: "none", textDecorationLine: "line-through" },
   ":where(.range-middle) &": { borderRadius: 0 },
   ":where(.range-end:not(.range-start)) &": {
     borderStartEndRadius: 0,
@@ -60,7 +60,6 @@ const dayButtonClassNames = css({
   ":where([data-selected][data-outside]) &": {
     color: "var(--primary-foreground)",
   },
-  ":where([data-disabled]) &": { textDecorationLine: "line-through" },
   outline: "none",
   ":where([data-selected]:not(.range-middle)) &": {
     transitionProperty: "border-radius, box-shadow",
