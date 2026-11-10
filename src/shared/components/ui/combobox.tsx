@@ -30,7 +30,7 @@ const chipsInputStyle = css({
   color: "var(--foreground)",
   fontSize: "base",
   outline: "none",
-  ":where([data-slot='combobox-chip'] + &)": { paddingInlineStart: "0.125rem" },
+  _chipSibling: { paddingInlineStart: "0.125rem" },
   "@media (min-width: 40rem)": { fontSize: "sm" },
 });
 
@@ -130,7 +130,7 @@ const popupSurfaceStyle = css({
     boxShadow: "0 1px 0 color-mix(in srgb, black 4%, transparent)",
   },
   ":where(html:not(.dark)) &": { backgroundClip: "padding-box" },
-  ".dark &::before": { boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)" },
+  _dark: { "&::before": { boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)" } },
 });
 
 const popupContentStyle = css({
@@ -460,7 +460,7 @@ export function ComboboxGroup({
 }: ComboboxPrimitive.Group.Props): React.ReactElement {
   return (
     <ComboboxPrimitive.Group
-      className={cx(css({ "[[role=group] + &]": { marginTop: "0.375rem" } }), className)}
+      className={cx(css({ _groupSibling: { marginTop: "0.375rem" } }), className)}
       data-slot="combobox-group"
       {...props}
     />
