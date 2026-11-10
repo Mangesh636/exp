@@ -6,8 +6,8 @@ Working branch: `codex/panda-css-migration`
 
 - [x] All 54 styled shared UI components have been migrated to Panda CSS; the remaining 2 were audited as having no Tailwind styling to migrate. Preserve existing component APIs and visual behavior.
 - [ ] All CVA-based component variants are represented as Panda recipes.
-- [ ] Global tokens, light/dark themes, keyframes, and base styles are owned by Panda/CSS rather than Tailwind.
-- [ ] App-level Tailwind utilities are migrated.
+- [x] Global tokens, light/dark themes, and base styles are owned by Panda global styles; custom keyframes remain as standard CSS in `globals.css`.
+- [ ] Audit all app-level files for remaining Tailwind utility usage (the root layout's utilities have been replaced with Panda global styles).
 - [ ] Tailwind packages, directives, and Turbopack integration are removed only after no Tailwind usage remains.
 - [ ] `apps/design-system` provides a shadcn-style component gallery with previews, variants, states, and copyable examples.
 - [ ] Run Panda codegen, Biome, TypeScript, and production build locally; resolve all errors.
@@ -85,8 +85,8 @@ Working branch: `codex/panda-css-migration`
 ## Current implementation notes
 
 - Panda CSS config and PostCSS integration were already present on `main`; this migration extends the extraction include paths to cover `apps/**`.
-- Tailwind remains installed and active because components and global styles are still being migrated.
-- The current branch cannot be considered complete until local code generation, type checking, linting, build, and light/dark visual checks pass.
+- Tailwind dependencies remain temporarily until the repository-wide usage audit is complete and the lockfile can be regenerated.
+- TypeScript check: user reports `pnpm exec tsc --noEmit` now completes with no errors. Panda codegen, lint, production build, and light/dark visual checks are still pending.
 - The design-system showcase is intentionally deferred until the component migration and token layer are stable, so it documents the real shared components rather than parallel or placeholder implementations.
 - Batch completed: `combobox.tsx`, `command.tsx`, and `context-menu.tsx` now use Panda `css`/`cx`; public exports and Base UI primitive composition were retained. These are implementation-complete only and still require generated-CSS, type, and visual parity checks.
 
@@ -111,3 +111,6 @@ Working branch: `codex/panda-css-migration`
 - Follow-up import/configuration update: all 54 Panda-styled UI components now import generated helpers through the explicit relative path `../../../../styled-system/css`, matching their location under `src/shared/components/ui`. `panda.config.ts` retains both required presets, `preflight: true`, an empty exclude list, `styled-system` output, and content globs covering `src`, `pages`, and `apps`; comments now explain the Next.js source scan. Local codegen and application validation are still required.
 
 - TypeScript follow-up: added a shared `src/shared/lib/cx.ts` composer so Base UI state-aware `className` render functions are composed with Panda classes instead of being passed directly to Panda's string-only `cx`. Added typed Panda conditions for sibling, input-group, RTL, and active-label selectors; normalized dark-mode selectors; merged duplicate object keys; and corrected the touch-target `size` property. These fixes are committed, but local Panda codegen, TypeScript, lint, build, and visual checks are still pending.
+
+
+- Global-style migration: moved the light/dark semantic color variables, font variables, spacing/radius aliases, and base element styles into Panda's `globalCss`; added the neutral palette and font tokens to the Panda theme. Removed Tailwind's `@import`, `@custom-variant`, `@theme`, and `@apply` directives from `src/app/globals.css`, retaining only the project's standard CSS keyframes. Replaced the remaining Tailwind utility classes on the root layout with global styles. This change follows Panda's documented `globalCss` and token configuration model; code generation and visual parity still require local verification.
