@@ -1,7 +1,7 @@
 "use client";
 
 import { Meter as MeterPrimitive } from "@base-ui/react/meter";
-import { cn } from "cn";
+import { css } from "styled-system/css";
 
 import type React from "react";
 
@@ -12,7 +12,12 @@ export function Meter({
 }: MeterPrimitive.Root.Props): React.ReactElement {
   return (
     <MeterPrimitive.Root
-      className={cn("flex w-full flex-col gap-2", className)}
+      className={[
+        css({ display: "flex", width: "100%", flexDirection: "column", gap: "2" }),
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       {...props}
     >
       {children ? (
@@ -32,7 +37,12 @@ export function MeterLabel({
 }: MeterPrimitive.Label.Props): React.ReactElement {
   return (
     <MeterPrimitive.Label
-      className={cn("font-medium text-foreground text-sm", className)}
+      className={[
+        css({ fontWeight: "medium", color: "var(--foreground)", fontSize: "sm" }),
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="meter-label"
       {...props}
     />
@@ -45,7 +55,18 @@ export function MeterTrack({
 }: MeterPrimitive.Track.Props): React.ReactElement {
   return (
     <MeterPrimitive.Track
-      className={cn("block h-2 w-full overflow-hidden bg-input", className)}
+      className={[
+        css({
+          display: "block",
+          width: "100%",
+          height: "0.5rem",
+          overflow: "hidden",
+          backgroundColor: "var(--input)",
+        }),
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="meter-track"
       {...props}
     />
@@ -58,7 +79,16 @@ export function MeterIndicator({
 }: MeterPrimitive.Indicator.Props): React.ReactElement {
   return (
     <MeterPrimitive.Indicator
-      className={cn("bg-primary transition-all duration-500", className)}
+      className={[
+        css({
+          backgroundColor: "var(--primary)",
+          transitionProperty: "all",
+          transitionDuration: "500ms",
+        }),
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="meter-indicator"
       {...props}
     />
@@ -71,7 +101,16 @@ export function MeterValue({
 }: MeterPrimitive.Value.Props): React.ReactElement {
   return (
     <MeterPrimitive.Value
-      className={cn("text-foreground text-sm tabular-nums", className)}
+      className={[
+        css({
+          color: "var(--foreground)",
+          fontSize: "sm",
+          fontVariantNumeric: "tabular-nums",
+        }),
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-slot="meter-value"
       {...props}
     />
