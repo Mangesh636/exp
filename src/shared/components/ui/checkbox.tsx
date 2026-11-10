@@ -1,7 +1,7 @@
 "use client";
 
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox";
-import { cn } from "cn";
+import { css, cx } from "styled-system/css";
 
 import type React from "react";
 
@@ -11,15 +11,82 @@ export function Checkbox({
 }: CheckboxPrimitive.Root.Props): React.ReactElement {
   return (
     <CheckboxPrimitive.Root
-      className={cn(
-        "relative inline-flex size-4.5 shrink-0 items-center justify-center rounded-lg border border-input bg-background not-dark:bg-clip-padding shadow-xs/5 outline-none ring-ring transition-shadow before:pointer-events-none before:absolute before:inset-0 before:rounded-[3px] not-data-disabled:not-data-checked:not-aria-invalid:before:shadow-[0_1px_--theme(--color-black/4%)] focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-background aria-invalid:border-destructive/36 focus-visible:aria-invalid:border-destructive/64 focus-visible:aria-invalid:ring-destructive/48 data-disabled:cursor-not-allowed data-disabled:opacity-64 sm:size-4 dark:not-data-checked:bg-input/32 dark:aria-invalid:ring-destructive/24 dark:not-data-disabled:not-data-checked:not-aria-invalid:before:shadow-[0_-1px_--theme(--color-white/6%)] [[data-disabled],[data-checked],[aria-invalid]]:shadow-none",
+      className={cx(
+        css({
+          position: "relative",
+          display: "inline-flex",
+          width: "1.125rem",
+          height: "1.125rem",
+          flexShrink: 0,
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: "lg",
+          borderWidth: "1px",
+          borderColor: "var(--input)",
+          backgroundColor: "var(--background)",
+          backgroundClip: "padding-box",
+          boxShadow: "0 1px 2px rgb(0 0 0 / 0.05)",
+          outline: "none",
+          transitionProperty: "box-shadow",
+          "&:before": {
+            content: '""',
+            position: "absolute",
+            inset: 0,
+            borderRadius: "3px",
+            pointerEvents: "none",
+          },
+          "&:not([data-disabled]):not([data-checked]):not([aria-invalid='true']):before": {
+            boxShadow: "0 1px 0 color-mix(in srgb, black 4%, transparent)",
+          },
+          "&:focus-visible": {
+            boxShadow: "0 0 0 2px var(--ring), 0 0 0 3px var(--background)",
+          },
+          "&[aria-invalid='true']": {
+            borderColor: "color-mix(in srgb, var(--destructive) 36%, transparent)",
+          },
+          "&:focus-visible[aria-invalid='true']": {
+            borderColor: "color-mix(in srgb, var(--destructive) 64%, transparent)",
+            boxShadow: "0 0 0 2px color-mix(in srgb, var(--destructive) 48%, transparent), 0 0 0 3px var(--background)",
+          },
+          "&[data-disabled]": { cursor: "not-allowed", opacity: 0.64 },
+          "&[data-disabled], &[data-checked], &[aria-invalid='true']": {
+            boxShadow: "none",
+          },
+          _dark: {
+            backgroundClip: "border-box",
+            "&:not([data-checked])": {
+              backgroundColor: "color-mix(in srgb, var(--input) 32%, transparent)",
+            },
+            "&[aria-invalid='true']": {
+              boxShadow: "0 0 0 2px color-mix(in srgb, var(--destructive) 24%, transparent)",
+            },
+            "&:not([data-disabled]):not([data-checked]):not([aria-invalid='true']):before": {
+              boxShadow: "0 -1px 0 color-mix(in srgb, white 6%, transparent)",
+            },
+          },
+          "@media (min-width: 40rem)": {
+            width: "1rem",
+            height: "1rem",
+          },
+        }),
         className,
       )}
       data-slot="checkbox"
       {...props}
     >
       <CheckboxPrimitive.Indicator
-        className="absolute -inset-px flex items-center justify-center rounded-lg text-primary-foreground data-unchecked:hidden data-checked:bg-primary data-indeterminate:text-foreground"
+        className={css({
+          position: "absolute",
+          inset: "-1px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: "lg",
+          color: "var(--primary-foreground)",
+          "&[data-unchecked]": { display: "none" },
+          "&[data-checked]": { backgroundColor: "var(--primary)" },
+          "&[data-indeterminate]": { color: "var(--foreground)" },
+        })}
         data-slot="checkbox-indicator"
         render={(
           props: React.ComponentProps<"span">,
@@ -29,7 +96,7 @@ export function Checkbox({
             {state.indeterminate ? (
               <svg
                 aria-hidden="true"
-                className="size-3.5 sm:size-3"
+                className={css({ width: "0.875rem", height: "0.875rem", "@media (min-width: 40rem)": { width: "0.75rem", height: "0.75rem" } })}
                 fill="none"
                 height="24"
                 stroke="currentColor"
@@ -45,7 +112,7 @@ export function Checkbox({
             ) : (
               <svg
                 aria-hidden="true"
-                className="size-3.5 sm:size-3"
+                className={css({ width: "0.875rem", height: "0.875rem", "@media (min-width: 40rem)": { width: "0.75rem", height: "0.75rem" } })}
                 fill="none"
                 height="24"
                 stroke="currentColor"
