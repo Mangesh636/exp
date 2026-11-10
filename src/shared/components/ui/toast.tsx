@@ -1,7 +1,7 @@
 "use client";
 
 import { Toast } from "@base-ui/react/toast";
-import { cx, css } from "styled-system/css";
+import { cx, css } from "../../../../styled-system/css";
 
 import type React from "react";
 
