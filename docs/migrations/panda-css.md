@@ -53,9 +53,9 @@ Working branch: `codex/panda-css-migration`
 - [x] `context-menu.tsx`
 - [x] `dialog.tsx`
 - [x] `drawer.tsx`
-- [ ] `form.tsx`
-- [ ] `group.tsx`
-- [ ] `icon.tsx`
+- [x] `form.tsx` (audited: no Tailwind utilities; preserves caller-provided className)
+- [x] `group.tsx`
+- [x] `icon.tsx` (audited: no Tailwind utilities or component styling to migrate)
 - [ ] `input-group.tsx`
 - [ ] `menu.tsx`
 - [ ] `number-field.tsx`
@@ -86,3 +86,5 @@ Working branch: `codex/panda-css-migration`
 - Batch completed: `combobox.tsx`, `command.tsx`, and `context-menu.tsx` now use Panda `css`/`cx`; public exports and Base UI primitive composition were retained. These are implementation-complete only and still require generated-CSS, type, and visual parity checks.
 
 - Batch completed: `composer.tsx`, `dialog.tsx`, and `drawer.tsx` now use Panda `css`/`cx`. Composer editor hooks, content-editable/token portal behavior, Base UI dialog/drawer primitives, virtual-keyboard provider, swipe directions, nested drawer transforms, safe-area handling, and menu item APIs were retained in the conversion. These are implementation-complete only; generated CSS, type, runtime interaction, and visual parity checks remain pending.
+
+- Batch audited: `form.tsx` and `icon.tsx` already contain no Tailwind utility styling, so their APIs and implementation were intentionally left unchanged. `group.tsx` was converted to Panda recipes and `css`/`cx`; orientation variants, joined-control borders, focus layering, separator focus behavior, dark-mode styling, and existing exports were retained. Generated-CSS, type, and visual parity checks remain pending.
